@@ -162,9 +162,11 @@ All data used by this project contains aggregate operational counts. It does not
 │   ├── logs/
 │   └── models/
 ├── reports/
+├── .gitignore
 ├── app_utils.py
 ├── generate_sample_data.py
-└── main.py
+├── main.py
+└── requirements.txt
 ```
 
 ---
@@ -200,7 +202,7 @@ Activate it on Windows:
 
 ```bash
 python -m pip install --upgrade pip
-python -m pip install numpy pandas pyarrow plotly streamlit starlette "uvicorn[standard]"
+python -m pip install -r requirements.txt
 ```
 
 ---
