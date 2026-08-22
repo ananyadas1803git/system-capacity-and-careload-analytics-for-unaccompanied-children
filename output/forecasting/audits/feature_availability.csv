@@ -1,0 +1,70 @@
+feature,feature_group,source,available_when,included,reason
+current_total_system_load,compact,Total System Load,end of forecast-origin day t,True,available at or before forecast origin
+load_lag_1,compact,Total System Load,t-1 days,True,available at or before forecast origin
+load_lag_2,compact,Total System Load,t-2 days,True,available at or before forecast origin
+load_lag_3,compact,Total System Load,t-3 days,True,available at or before forecast origin
+load_lag_7,compact,Total System Load,t-7 days,True,available at or before forecast origin
+load_lag_14,compact,Total System Load,t-14 days,True,available at or before forecast origin
+load_lag_28,compact,Total System Load,t-28 days,True,available at or before forecast origin
+cbp_load_lag_1,compact,Children in CBP custody,t-1 days,True,available at or before forecast origin
+cbp_load_lag_7,compact,Children in CBP custody,t-7 days,True,available at or before forecast origin
+cbp_load_lag_14,compact,Children in CBP custody,t-14 days,True,available at or before forecast origin
+cbp_load_lag_28,compact,Children in CBP custody,t-28 days,True,available at or before forecast origin
+hhs_load_lag_1,compact,Children in HHS Care,t-1 days,True,available at or before forecast origin
+hhs_load_lag_7,compact,Children in HHS Care,t-7 days,True,available at or before forecast origin
+hhs_load_lag_14,compact,Children in HHS Care,t-14 days,True,available at or before forecast origin
+hhs_load_lag_28,compact,Children in HHS Care,t-28 days,True,available at or before forecast origin
+apprehension_lag_1,compact,Children apprehended and placed in CBP custody,t-1 days,True,available at or before forecast origin
+apprehension_lag_7,compact,Children apprehended and placed in CBP custody,t-7 days,True,available at or before forecast origin
+apprehension_lag_14,compact,Children apprehended and placed in CBP custody,t-14 days,True,available at or before forecast origin
+apprehension_lag_28,compact,Children apprehended and placed in CBP custody,t-28 days,True,available at or before forecast origin
+transfer_lag_1,compact,Children transferred out of CBP custody,t-1 days,True,available at or before forecast origin
+transfer_lag_7,compact,Children transferred out of CBP custody,t-7 days,True,available at or before forecast origin
+transfer_lag_14,compact,Children transferred out of CBP custody,t-14 days,True,available at or before forecast origin
+transfer_lag_28,compact,Children transferred out of CBP custody,t-28 days,True,available at or before forecast origin
+discharge_lag_1,compact,Children discharged from HHS Care,t-1 days,True,available at or before forecast origin
+discharge_lag_7,compact,Children discharged from HHS Care,t-7 days,True,available at or before forecast origin
+discharge_lag_14,compact,Children discharged from HHS Care,t-14 days,True,available at or before forecast origin
+discharge_lag_28,compact,Children discharged from HHS Care,t-28 days,True,available at or before forecast origin
+net_intake_lag_1,compact,Net Daily Intake,t-1 days,True,available at or before forecast origin
+net_intake_lag_7,compact,Net Daily Intake,t-7 days,True,available at or before forecast origin
+net_intake_lag_14,compact,Net Daily Intake,t-14 days,True,available at or before forecast origin
+net_intake_lag_28,compact,Net Daily Intake,t-28 days,True,available at or before forecast origin
+load_rolling_mean_7,compact,Total System Load,t-1 through t-7 days,True,available at or before forecast origin
+load_rolling_std_7,compact,Total System Load,t-1 through t-7 days,True,available at or before forecast origin
+load_rolling_slope_7,compact,Total System Load,t-1 through t-7 days,True,available at or before forecast origin
+load_ema_7,expanded,Total System Load,history through t-1,True,available at or before forecast origin
+net_rolling_mean_7,expanded,Net Daily Intake,t-1 through t-7 days,True,available at or before forecast origin
+net_rolling_std_7,expanded,Net Daily Intake,t-1 through t-7 days,True,available at or before forecast origin
+load_rolling_mean_14,compact,Total System Load,t-1 through t-14 days,True,available at or before forecast origin
+load_rolling_std_14,compact,Total System Load,t-1 through t-14 days,True,available at or before forecast origin
+load_rolling_slope_14,compact,Total System Load,t-1 through t-14 days,True,available at or before forecast origin
+load_ema_14,expanded,Total System Load,history through t-1,True,available at or before forecast origin
+net_rolling_mean_14,expanded,Net Daily Intake,t-1 through t-14 days,True,available at or before forecast origin
+net_rolling_std_14,expanded,Net Daily Intake,t-1 through t-14 days,True,available at or before forecast origin
+load_rolling_mean_28,expanded,Total System Load,t-1 through t-28 days,True,available at or before forecast origin
+load_rolling_std_28,expanded,Total System Load,t-1 through t-28 days,True,available at or before forecast origin
+load_rolling_slope_28,expanded,Total System Load,t-1 through t-28 days,True,available at or before forecast origin
+load_ema_28,expanded,Total System Load,history through t-1,True,available at or before forecast origin
+net_rolling_mean_28,expanded,Net Daily Intake,t-1 through t-28 days,True,available at or before forecast origin
+net_rolling_std_28,expanded,Net Daily Intake,t-1 through t-28 days,True,available at or before forecast origin
+cumulative_net_intake_7,compact,Net Daily Intake,t-1 through t-7 days,True,available at or before forecast origin
+cumulative_net_intake_14,compact,Net Daily Intake,t-1 through t-14 days,True,available at or before forecast origin
+load_momentum_1,compact,Total System Load,origin load t and t-1,True,available at or before forecast origin
+load_momentum_7,compact,Total System Load,origin load t and t-7,True,available at or before forecast origin
+load_acceleration,expanded,Total System Load,origin load t and earlier,True,available at or before forecast origin
+backlog_streak_at_origin,compact,Net Daily Intake,end of forecast-origin day t,True,available at or before forecast origin
+capacity_utilization,compact,configured planning reference,forecast origin t,True,available at or before forecast origin
+capacity_headroom,compact,configured planning reference,forecast origin t,True,available at or before forecast origin
+calendar_day_of_week,compact,Date,known calendar attribute of origin t,True,available at or before forecast origin
+calendar_is_weekend,compact,Date,known calendar attribute of origin t,True,available at or before forecast origin
+calendar_dow_sin,compact,Date,known calendar attribute of origin t,True,available at or before forecast origin
+calendar_dow_cos,compact,Date,known calendar attribute of origin t,True,available at or before forecast origin
+calendar_month_sin,compact,Date,known calendar attribute of origin t,True,available at or before forecast origin
+calendar_month_cos,compact,Date,known calendar attribute of origin t,True,available at or before forecast origin
+calendar_doy_sin,compact,Date,known calendar attribute of origin t,True,available at or before forecast origin
+calendar_doy_cos,compact,Date,known calendar attribute of origin t,True,available at or before forecast origin
+quality_is_imputed_date,compact,Is Imputed Date,quality audit completed at origin t,True,available at or before forecast origin
+quality_has_anomaly,compact,Anomaly_Any,quality audit completed at origin t,True,available at or before forecast origin
+target_total_load_t_plus_7d,excluded,Total System Load,t+7 days,False,future target; never permitted in model features
+target_change_7d,excluded,Total System Load,t+7 days,False,future-derived target; never permitted in model features

@@ -1,0 +1,26 @@
+feature,reason
+Children apprehended and placed in CBP custody,same-day operational field is not justified before origin close
+Children transferred out of CBP custody,same-day operational field is not justified before origin close
+Children discharged from HHS Care,same-day operational field is not justified before origin close
+Net Daily Intake,same-day operational field is not justified before origin close
+Children in CBP custody,same-day operational field is not justified before origin close
+Children in HHS Care,same-day operational field is not justified before origin close
+target_total_load_t_plus_7d,future target or future-derived field
+target_load_change_t_plus_7d,future target or future-derived field
+target_load_growth_t_plus_7d,future target or future-derived field
+target_net_intake_t_plus_7d,future target or future-derived field
+target_positive_pressure_t_plus_7d,future target or future-derived field
+target_cumulative_net_intake_next_7d,future target or future-derived field
+target_sustained_pressure_next_7d,future target or future-derived field
+load_lag_1,training correlation > 0.98 with current_total_system_load
+load_lag_2,training correlation > 0.98 with current_total_system_load
+load_lag_3,training correlation > 0.98 with current_total_system_load
+load_lag_7,training correlation > 0.98 with current_total_system_load
+hhs_load_lag_1,training correlation > 0.98 with current_total_system_load
+hhs_load_lag_7,training correlation > 0.98 with current_total_system_load
+hhs_load_lag_14,training correlation > 0.98 with load_lag_14
+hhs_load_lag_28,training correlation > 0.98 with load_lag_28
+load_rolling_mean_7,training correlation > 0.98 with current_total_system_load
+load_rolling_mean_14,training correlation > 0.98 with current_total_system_load
+capacity_utilization,training correlation > 0.98 with current_total_system_load
+capacity_headroom,training correlation > 0.98 with current_total_system_load

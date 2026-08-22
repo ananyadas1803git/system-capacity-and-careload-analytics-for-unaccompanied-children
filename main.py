@@ -417,6 +417,76 @@ def command_train_lightgbm(arguments: argparse.Namespace) -> int:
     return EXIT_SUCCESS
 
 
+def command_train_models(arguments: argparse.Namespace) -> int:
+    """Train and evaluate the complete leakage-safe forecasting framework."""
+
+    try:
+        from src.forecasting import (
+            ForecastConfig,
+            ForecastingFrameworkError,
+            experiment_summary,
+            train_forecasting_models,
+        )
+    except ImportError as exc:
+        raise CommandError(
+            "Forecasting dependencies are not installed. "
+            "Run: python -m pip install -r requirements.txt"
+        ) from exc
+    try:
+        result = train_forecasting_models(
+            ForecastConfig(
+                feature_path=arguments.features,
+                raw_path=arguments.raw_source,
+                provenance_path=arguments.provenance,
+                output_dir=arguments.output_dir,
+                random_seed=arguments.seed,
+                cv_splits=arguments.cv_splits,
+                cv_test_size=arguments.cv_validation_rows,
+                overwrite=arguments.force,
+            )
+        )
+    except (ForecastingFrameworkError, OSError, TypeError, ValueError) as exc:
+        raise CommandError(f"Forecasting experiment failed: {exc}") from exc
+    sys.stdout.write(
+        json.dumps(
+            json_safe(experiment_summary(result)),
+            indent=2,
+            ensure_ascii=False,
+            allow_nan=False,
+        )
+        + "\n"
+    )
+    return EXIT_SUCCESS
+
+
+def command_evaluate_models(arguments: argparse.Namespace) -> int:
+    """Display precomputed model metrics without initiating training."""
+
+    path = arguments.metrics.expanduser().resolve()
+    if not path.is_file():
+        raise CommandError(
+            f"Forecast metrics not found: {path}. Run: python main.py train-models"
+        )
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        raise CommandError(f"Unable to read forecast metrics: {exc}") from exc
+    summary = {
+        "target": payload.get("target"),
+        "development": payload.get("development"),
+        "holdout": payload.get("holdout"),
+        "models": {
+            name: {
+                "walk_forward": values.get("walk_forward"),
+                "holdout": values.get("holdout"),
+            }
+            for name, values in payload.get("models", {}).items()
+        },
+    }
+    sys.stdout.write(json.dumps(json_safe(summary), indent=2, allow_nan=False) + "\n")
+    return EXIT_SUCCESS
+
+
 def build_parser() -> argparse.ArgumentParser:
     """Construct the complete command-line parser."""
     parser = argparse.ArgumentParser(
@@ -576,6 +646,61 @@ def build_parser() -> argparse.ArgumentParser:
         help="Replace existing LightGBM artifacts; ridge artifacts remain protected.",
     )
     lightgbm.set_defaults(handler=command_train_lightgbm)
+
+    train_models = subparsers.add_parser(
+        "train-models",
+        help="Run the complete leakage-safe multi-model forecast experiment.",
+    )
+    train_models.add_argument(
+        "--features",
+        type=Path,
+        default=PROJECT_ROOT / "data" / "processed" / "uac_capacity_ml_features.parquet",
+        help="Processed daily Parquet feature artifact.",
+    )
+    train_models.add_argument(
+        "--raw-source",
+        type=Path,
+        default=DEFAULT_PROJECT_SOURCE,
+        help="Unmodified raw CSV used for provenance fingerprinting.",
+    )
+    train_models.add_argument(
+        "--provenance",
+        type=Path,
+        default=PROJECT_ROOT / "data" / "processed" / "preprocessing_report.json",
+        help="Preprocessing lineage report.",
+    )
+    train_models.add_argument(
+        "--output-dir",
+        type=Path,
+        default=PROJECT_ROOT / "output" / "forecasting",
+        help="Dedicated forecasting artifact directory.",
+    )
+    train_models.add_argument("--seed", type=int, default=42)
+    train_models.add_argument("--cv-splits", type=_positive_integer, default=5)
+    train_models.add_argument(
+        "--cv-validation-rows", type=_positive_integer, default=56
+    )
+    train_models.add_argument(
+        "--force",
+        action="store_true",
+        help="Replace only dedicated output/forecasting artifacts.",
+    )
+    train_models.set_defaults(handler=command_train_models)
+
+    evaluate_models = subparsers.add_parser(
+        "evaluate-models",
+        help="Print precomputed multi-model forecast metrics without training.",
+    )
+    evaluate_models.add_argument(
+        "--metrics",
+        type=Path,
+        default=PROJECT_ROOT
+        / "output"
+        / "forecasting"
+        / "metrics"
+        / "model_comparison_metrics.json",
+    )
+    evaluate_models.set_defaults(handler=command_evaluate_models)
     return parser
 
 

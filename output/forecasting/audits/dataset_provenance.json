@@ -1,0 +1,36 @@
+{
+  "classification": "unknown/unverified aggregate operational data",
+  "real_synthetic_or_mixed": "unknown",
+  "generalization_warning": "The filename and internal checksum establish local lineage only. No authoritative publisher URL, acquisition timestamp, or external signature is recorded; performance does not demonstrate generalization to real HHS operations.",
+  "source_file": "data/raw/HHS_Unaccompanied_Alien_Children_Program.csv",
+  "source_sha256": "061af0a97a1b3bda7a36f0ce8df08b6994847b0a4c402828cf2ef835d4947198",
+  "recorded_source_sha256": "061af0a97a1b3bda7a36f0ce8df08b6994847b0a4c402828cf2ef835d4947198",
+  "local_lineage_hash_matches": true,
+  "date_range": {
+    "start": "2023-01-12",
+    "end": "2025-12-21"
+  },
+  "processed_row_count": 1075,
+  "model_eligible_row_count": 1068,
+  "source_rows_reported": 1170,
+  "missing_date_count_before_processing": 355,
+  "missing_date_count_after_processing": 0,
+  "imputed_value_count": 1775,
+  "imputed_date_count": 355,
+  "duplicate_dates_after_processing": 0,
+  "target_available_rows": 1068,
+  "source_feature_columns": 164,
+  "candidate_feature_columns": 67,
+  "frequency_consistent_daily_after_processing": true,
+  "stock_flow_relationship": {
+    "identity_tested": "delta total load ~= apprehensions - discharges",
+    "median_absolute_reconciliation_error": 47.0,
+    "percent_within_10_children": 26.0707635009311,
+    "approximately_satisfied": false,
+    "structural_flow_candidate_skipped": true,
+    "skip_reason": "Stock-flow identity is not sufficiently verified for forecasting future transfers and discharges."
+  },
+  "contains_personal_or_child_level_data": false,
+  "data_granularity": "aggregate daily system counts",
+  "audited_at_utc": "2026-08-22T11:26:42.016949+00:00"
+}

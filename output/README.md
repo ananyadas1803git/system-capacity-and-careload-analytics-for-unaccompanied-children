@@ -8,9 +8,16 @@ This directory contains reproducible runtime artifacts, not source data.
 - `models/` contains the preserved NumPy ridge benchmark, the LightGBM text
   model, provenance metadata, evaluation metrics, and promotion decision.
 - `logs/` is reserved for runtime application or batch-pipeline logs.
+- `forecasting/` contains the versioned multi-model registry, serialized
+  candidates, fold and holdout metrics, OOF and holdout predictions, provenance
+  and leakage audits, prediction intervals, residual diagnostics, and the
+  standalone interactive research report.
 
 The ridge and LightGBM candidates forecast Total System Load seven days ahead.
 They are research benchmarks, not official HHS forecasts or operational
 capacity decisions. Regenerate analysis JSON with `python main.py analyze`,
 reports with `python main.py report`, ridge artifacts with notebook 05, and
 LightGBM artifacts with `python main.py train-lightgbm --force`.
+Regenerate the dedicated multi-model experiment with
+`python main.py train-models --force`; inspect it without retraining with
+`python main.py evaluate-models`.

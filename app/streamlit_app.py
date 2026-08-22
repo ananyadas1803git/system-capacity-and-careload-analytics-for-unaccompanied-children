@@ -454,6 +454,7 @@ def render_page_directory() -> None:
         ("💡 Insights", "pages/insights.py", "Evidence-based analytical findings"),
         ("🎯 KPIs", "pages/kpis.py", "KPI definitions, status, and comparisons"),
         ("📊 Trends", "pages/trends.py", "Longitudinal patterns and volatility"),
+        ("🔬 Forecasting", "pages/forecasting.py", "Precomputed seven-day model research"),
     )
     columns = st.columns(3)
     for index, (label, page, description) in enumerate(pages):

@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "checks": {
+    "target_and_future_features_excluded": true,
+    "current_load_available_at_origin": true,
+    "operational_flows_lagged": true,
+    "fold_preprocessing_fit_on_training_only": true,
+    "walk_forward_chronological": true,
+    "walk_forward_gap_is_seven": true,
+    "holdout_after_development_and_embargo": true,
+    "holdout_not_used_for_tuning": true,
+    "ensemble_weights_use_development_oof_only": true,
+    "hybrid_residuals_are_sarimax_oof_only": true
+  },
+  "forbidden_feature_matches": [],
+  "holdout_start": "2025-05-15",
+  "holdout_end": "2025-12-14",
+  "embargo_rows": 7,
+  "target_definition": "total_system_load[t+7] - total_system_load[t]",
+  "absolute_reconstruction": "total_system_load[t] + predicted_change_7d[t]",
+  "audit_created_at_utc": "2026-08-22T11:26:42.017034+00:00"
+}

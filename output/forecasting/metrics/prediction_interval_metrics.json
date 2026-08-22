@@ -1,0 +1,18 @@
+{
+  "interval_model": "lightgbm_quantile_change_forecast",
+  "nominal_coverage_percent": 80.0,
+  "raw_walk_forward_coverage_percent": 85.71428571428571,
+  "conformal_development_evaluation_coverage_percent": 100.0,
+  "conformal_calibration_rows": 224,
+  "conformal_evaluation_rows": 56,
+  "conformal_adjustment": 0.0,
+  "holdout_coverage_percent": 100.0,
+  "holdout_mean_width": 372.13109302279315,
+  "raw_walk_forward_crossing_rate_percent": 0.0,
+  "raw_holdout_crossing_rate_percent": 0.0,
+  "crossing_correction": "row-wise ascending sort before split-conformal expansion",
+  "holdout_coverage_normal_percent": 100.0,
+  "holdout_coverage_backlog_or_capacity_stress_percent": 100.0,
+  "holdout_coverage_anomaly_percent": null,
+  "holdout_coverage_imputed_percent": 100.0
+}

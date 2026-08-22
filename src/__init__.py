@@ -130,6 +130,38 @@ _LAZY_EXPORTS: dict[str, tuple[str, str]] = {
         "src.lightgbm_forecasting",
         "validate_artifact_schemas",
     ),
+    # Multi-model forecasting research framework.
+    "ForecastConfig": ("src.forecasting", "ForecastConfig"),
+    "ForecastExperimentResult": (
+        "src.forecasting",
+        "ForecastExperimentResult",
+    ),
+    "ForecastingFrameworkError": (
+        "src.forecasting",
+        "ForecastingFrameworkError",
+    ),
+    "FeatureProcessor": ("src.forecasting", "FeatureProcessor"),
+    "PreparedForecastDataset": (
+        "src.forecasting",
+        "PreparedForecastDataset",
+    ),
+    "prepare_forecast_dataset": (
+        "src.forecasting",
+        "prepare_forecast_dataset",
+    ),
+    "train_forecasting_models": (
+        "src.forecasting",
+        "train_forecasting_models",
+    ),
+    "experiment_summary": ("src.forecasting", "experiment_summary"),
+    "optimize_ensemble_weights": (
+        "src.forecasting",
+        "optimize_ensemble_weights",
+    ),
+    "validate_prediction_schema": (
+        "src.forecasting",
+        "validate_prediction_schema",
+    ),
     # KPI calculation.
     "TOTAL_CARE_KEY": ("src.kpi", "TOTAL_CARE_KEY"),
     "NET_PRESSURE_KEY": ("src.kpi", "NET_PRESSURE_KEY"),

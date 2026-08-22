@@ -85,6 +85,14 @@ PAGE_DEFINITIONS: tuple[PageDefinition, ...] = (
         filename="trends.py",
         sort_order=60,
     ),
+    PageDefinition(
+        key="forecasting",
+        title="Forecast Research",
+        icon="🔬",
+        description="Precomputed seven-day model comparison and diagnostics.",
+        filename="forecasting.py",
+        sort_order=70,
+    ),
 )
 
 PAGE_KEYS = tuple(page.key for page in PAGE_DEFINITIONS)

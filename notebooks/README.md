@@ -12,6 +12,7 @@ root or from this directory.
 | `04_feature_engineering.ipynb` | Build leakage-aware features, targets, and a model-audit manifest. |
 | `05_capacity_forecasting.ipynb` | Train a dependency-light seven-day ridge baseline chronologically. |
 | `06_model_evaluation.ipynb` | Compare the baseline with a naive forecast and inspect residuals. |
+| `07_multimodel_forecasting.ipynb` | Load precomputed multi-model artifacts, provenance, promotion, intervals, and diagnostics. |
 
 The official source contains aggregate operational counts rather than
 individual-level records. Even so, do not represent model outputs as official

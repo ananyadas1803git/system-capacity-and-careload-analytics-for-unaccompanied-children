@@ -1,11 +1,15 @@
 # Reproducible runtime dependencies for the dashboard, API, and analytics stack.
 # Supported Python version: 3.11 or newer.
 lightgbm==4.7.0
+catboost==1.2.8
+joblib==1.5.3
 numpy==2.5.2
 pandas==3.0.5
 plotly==6.9.0
 pyarrow==25.0.1
 scikit-learn==1.9.0
+statsmodels==0.14.6
 starlette==1.6.0
 streamlit==1.62.0
 uvicorn[standard]==0.52.4
+xgboost==3.3.0

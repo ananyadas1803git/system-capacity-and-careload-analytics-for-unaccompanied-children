@@ -1,0 +1,97 @@
+{
+  "registry_version": "2.0.0",
+  "created_at_utc": "2026-08-22T11:27:01.664791+00:00",
+  "champion": "validation_weighted_ensemble",
+  "promotion_status": "promote",
+  "models": {
+    "persistence": {
+      "status": "research_candidate",
+      "configuration": "persistence",
+      "artifact": null,
+      "walk_forward_mae": 188.1392857142857,
+      "holdout_mae": 37.546728971962615
+    },
+    "seven_day_drift": {
+      "status": "research_candidate",
+      "configuration": "seven_day_drift",
+      "artifact": null,
+      "walk_forward_mae": 132.00357142857143,
+      "holdout_mae": 26.869158878504674
+    },
+    "ridge": {
+      "status": "research_candidate",
+      "configuration": "ridge_a100_compact",
+      "artifact": "output/forecasting/models/candidates/ridge.joblib",
+      "walk_forward_mae": 261.52121945522566,
+      "holdout_mae": 88.89420823232652
+    },
+    "elastic_net": {
+      "status": "research_candidate",
+      "configuration": "elastic_a10_l20_compact",
+      "artifact": "output/forecasting/models/candidates/elastic_net.joblib",
+      "walk_forward_mae": 282.1079150918279,
+      "holdout_mae": 89.85558914914341
+    },
+    "lightgbm": {
+      "status": "research_candidate",
+      "configuration": "lgb_l1_shallow_compact",
+      "artifact": "output/forecasting/models/candidates/lightgbm.joblib",
+      "walk_forward_mae": 162.20649927176095,
+      "holdout_mae": 41.046712352035556
+    },
+    "catboost": {
+      "status": "research_candidate",
+      "configuration": "cat_mae_compact",
+      "artifact": "output/forecasting/models/candidates/catboost.joblib",
+      "walk_forward_mae": 148.28895083981752,
+      "holdout_mae": 45.34795762413467
+    },
+    "xgboost": {
+      "status": "research_candidate",
+      "configuration": "xgb_l1_compact",
+      "artifact": "output/forecasting/models/candidates/xgboost.joblib",
+      "walk_forward_mae": 166.6455824641245,
+      "holdout_mae": 35.83404654821503
+    },
+    "ets": {
+      "status": "research_candidate",
+      "configuration": "ets_weekly_additive",
+      "artifact": "output/forecasting/models/candidates/ets.joblib",
+      "walk_forward_mae": 220.94517517462205,
+      "holdout_mae": 72.20006000040546
+    },
+    "sarimax": {
+      "status": "research_candidate",
+      "configuration": "sarimax_111_1017",
+      "artifact": "output/forecasting/models/candidates/sarimax.joblib",
+      "walk_forward_mae": 216.45047045098127,
+      "holdout_mae": 102.59570120653467
+    },
+    "sarimax_boosting_hybrid": {
+      "status": "research_candidate",
+      "configuration": "sarimax_111_1017_plus_catboost",
+      "artifact": "output/forecasting/models/candidates/sarimax_boosting_hybrid.joblib",
+      "walk_forward_mae": 269.15814114884864,
+      "holdout_mae": 111.98245314197499
+    },
+    "validation_weighted_ensemble": {
+      "status": "champion",
+      "configuration": "oof_nonnegative_mae_grid",
+      "artifact": null,
+      "walk_forward_mae": 115.54743195654017,
+      "holdout_mae": 27.906103416668238
+    }
+  },
+  "data_fingerprint_sha256": "37eceafa74ad66b4faa89718368cd9547b7b0fec62e72fcb1e4f46a7b0ca4cd7",
+  "schema_fingerprint_sha256": "09541246b494ca743b9fe5eaad18b65eb2841f44a9446a362abe98cb619ff676",
+  "source_sha256": "061af0a97a1b3bda7a36f0ce8df08b6994847b0a4c402828cf2ef835d4947198",
+  "random_seed": 42,
+  "library_versions": {
+    "python": "3.13.9",
+    "scikit-learn": "1.9.0",
+    "statsmodels": "0.14.6",
+    "lightgbm": "4.7.0",
+    "catboost": "1.2.8",
+    "xgboost": "3.3.0"
+  }
+}

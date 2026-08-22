@@ -72,12 +72,12 @@ This project transforms daily aggregate counts into validated, decision-support 
 - Unified command-line interface
 - Feature engineering for forecasting
 - Leakage-aware chronological dataset splitting
-- Deterministic LightGBM change forecasting with quantile intervals
-- Expanding-window model selection with a seven-day embargo
+- Statistical, linear, gradient-boosting, hybrid, and ensemble forecasting
+- Five-fold expanding-window model selection with a seven-day embargo
 - Structured logging and audit utilities
 - HTML and JSON stakeholder reports
-- Six research notebooks
-- Preserved ridge, persistence, drift, and LightGBM benchmarks
+- Seven research notebooks
+- Preserved legacy ridge and LightGBM artifacts
 
 ---
 
@@ -94,9 +94,9 @@ flowchart LR
     E --> H[ASGI API]
     E --> I[HTML and JSON Reports]
     F --> J[Leakage-Safe Forecasting Pipeline]
-    J --> K[Ridge and Operational Baselines]
-    J --> L[LightGBM and Quantile Models]
-    J --> M[Model Artifacts and Evaluation]
+    J --> K[Operational and Statistical Baselines]
+    J --> L[Linear and Gradient-Boosted Models]
+    J --> M[Hybrid, Ensemble, Intervals, and Registry]
 ```
 
 ---
@@ -144,13 +144,15 @@ All data used by this project contains aggregate operational counts. It does not
 │       ├── capacity.py
 │       ├── insights.py
 │       ├── kpis.py
-│       └── trends.py
+│       ├── trends.py
+│       └── forecasting.py
 ├── backend/
 │   ├── analytics.py
 │   ├── api.py
 │   └── utils.py
 ├── src/
 │   ├── feature_engineering.py
+│   ├── forecasting.py
 │   ├── kpi.py
 │   ├── lightgbm_forecasting.py
 │   ├── logger.py
@@ -166,10 +168,12 @@ All data used by this project contains aggregate operational counts. It does not
 │   ├── charts/
 │   ├── exports/
 │   ├── logs/
-│   └── models/
+│   ├── models/
+│   └── forecasting/
 ├── reports/
 ├── tests/
-│   └── test_lightgbm_forecasting.py
+│   ├── test_lightgbm_forecasting.py
+│   └── test_forecasting_framework.py
 ├── .gitignore
 ├── app_utils.py
 ├── generate_sample_data.py
@@ -332,94 +336,137 @@ python main.py generate-data
 
 ---
 
-## Seven-Day LightGBM Forecasting
+## Seven-Day Multi-Model Forecasting
 
-The production candidate predicts the seven-day **change** in Total System Load
-rather than its absolute future level:
+The research framework predicts the seven-day **change** in Total System Load
+and reconstructs the absolute load from information known at the forecast origin:
 
 ```text
 target_change_7d = target_total_load_t_plus_7d - current_total_system_load
 final_forecast = current_total_system_load + predicted_change_7d
 ```
 
-Modeling the change focuses learning on near-term movement while retaining the
-known current load as the reconstruction anchor. Features are not scaled because
-LightGBM is tree-based.
+This target reduces the burden of learning the absolute level while preserving
+the origin-known current load as an explicit anchor. The original absolute
+target remains in the processed artifact for compatibility.
 
-Train the candidate from the repository root:
-
-```bash
-python main.py train-lightgbm
-```
-
-Use `--force` only when intentionally regenerating existing LightGBM artifacts:
+Run the complete experiment from the repository root:
 
 ```bash
-python main.py train-lightgbm --force
+python main.py train-models
 ```
+
+Regenerate only the dedicated multi-model artifacts intentionally with:
+
+```bash
+python main.py train-models --force
+```
+
+Inspect existing metrics without training:
+
+```bash
+python main.py evaluate-models
+```
+
+The legacy `python main.py train-lightgbm` command and all original ridge and
+LightGBM files remain available and unchanged.
+
+### Data provenance and limitations
+
+The modeling source is classified as **unknown/unverified aggregate operational
+data**, not confirmed real HHS data. The repository proves local lineage between
+the supplied raw CSV and processed artifacts with a matching SHA-256, but it has
+no authoritative publisher URL, acquisition timestamp, or external signature.
+Accordingly, these results do not demonstrate generalization to real HHS
+operations. The source contains daily aggregate counts only and no child-level
+or personal data.
+
+Processed coverage is 2023-01-12 through 2025-12-21: 1,075 daily rows after 355
+dates were inserted and 1,775 numeric values were imputed. The stock-flow audit
+found a median absolute reconciliation error of 47 children and only 26.07% of
+days within 10 children, so the optional structural-flow forecast was skipped.
 
 ### Validation strategy
 
-- The final 20% of complete observations is an untouched chronological holdout.
-- Seven observations are embargoed immediately before the holdout.
-- The earlier training period uses four expanding-window validation folds.
-- Every training/validation boundary includes a seven-day gap.
-- Five conservative, regularized hyperparameter candidates are compared by mean
-  validation MAE.
-- Random seeds, LightGBM data/feature seeds, single-threaded fitting, and
-  deterministic tree construction are fixed.
-- Promotion requires LightGBM to beat persistence on both mean walk-forward MAE
-  and untouched holdout MAE.
+- 847 observations from 2023-01-12 through 2025-05-07 form the development set.
+- Five expanding-window folds use equal 56-day validation periods and a seven-day gap.
+- Seven additional observations are embargoed before the final holdout.
+- The untouched 214-row holdout covers 2025-05-15 through 2025-12-14 forecast origins.
+- Feature groups, hyperparameters, residual-corrector choice, conformal
+  calibration, and ensemble weights use development data only.
+- Each fold independently fits median imputation, near-constant removal, and
+  correlation filtering; the final selected compact set contains 42 features.
+- The holdout is evaluated only after every configuration and ensemble weight is frozen.
 
 ### Leakage controls
 
-- Every `target_*` and future-derived field is excluded from model inputs.
-- Same-day transfers, discharges, intake, net-intake momentum, and operational
-  ratios are excluded.
-- Operational signals enter only through lags or rolling/EMA statistics shifted
-  to historical observations.
-- Current Total System Load is used only as a known origin feature and forecast
-  reconstruction anchor.
-- Feature order, schema, data values, and provenance are fingerprinted in model
-  metadata.
+- Every target, lead, and future-derived column is excluded from model inputs.
+- Same-day transfers, discharges, and apprehensions are excluded; their signals
+  enter only through lags and shifted historical summaries.
+- Current Total System Load is available at origin close and is used as a feature
+  and reconstruction anchor.
+- Feature availability and exclusion reasons are saved explicitly.
+- Fold preprocessing is fit on training rows only.
+- SARIMAX residual corrections use development-period out-of-fold residuals,
+  never in-sample residuals.
+- Ensemble weights are non-negative, sum to one, and are chosen only from OOF predictions.
+- Data, schema, source, configuration, and library versions are fingerprinted.
+
+### Models evaluated
+
+The common framework evaluates persistence, seven-day drift, ridge, Elastic
+Net, ETS/Holt-Winters, SARIMAX, LightGBM, CatBoost, XGBoost, a
+SARIMAX-plus-CatBoost OOF-residual hybrid, and a validation-weighted ensemble.
+Small CPU-friendly searches use fixed seeds and early stopping where supported.
 
 ### Actual evaluation results
 
-Results below were generated from the processed aggregate HHS source using 847
-training rows, a seven-day pre-holdout gap, 214 holdout rows, and 123 features.
+These values are read directly from the generated artifacts.
 
-| Model | MAE | RMSE | MAPE | R² | MAE improvement vs persistence |
-|---|---:|---:|---:|---:|---:|
-| Persistence/current load | 37.547 | 46.855 | 1.654% | 0.9316 | 0.000% |
-| Seven-day drift | **26.869** | **32.780** | **1.181%** | **0.9665** | **+28.438%** |
-| LightGBM change forecast | 61.794 | 73.036 | 2.761% | 0.8337 | -64.578% |
-| LightGBM quantile median | 44.842 | 60.579 | 2.024% | 0.8856 | -19.429% |
-| Preserved ridge benchmark | 197.199 | 223.123 | 8.736% | -0.5521 | -425.210% |
+| Model | CV MAE | CV SD | Worst fold | Holdout MAE | RMSE | MASE | Improvement vs persistence |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Persistence | 188.139 | 137.721 | 362.732 | 37.547 | 46.855 | 1.000 | 0.000% |
+| Seven-day drift | 132.004 | 70.873 | 237.625 | **26.869** | **32.780** | 0.716 | +28.438% |
+| Ridge | 261.521 | 134.478 | 412.376 | 88.894 | 101.592 | 2.368 | -136.756% |
+| Elastic Net | 282.108 | 150.752 | 487.894 | 89.856 | 102.910 | 2.393 | -139.317% |
+| ETS/Holt-Winters | 220.945 | 94.639 | 361.630 | 72.200 | 85.992 | 1.923 | -92.294% |
+| SARIMAX | 216.450 | 95.292 | 367.039 | 102.596 | 111.947 | 2.732 | -173.248% |
+| LightGBM | 162.206 | 115.259 | 348.899 | 41.047 | 51.533 | 1.093 | -9.322% |
+| CatBoost | 148.289 | 106.765 | 330.291 | 45.348 | 55.380 | 1.208 | -20.777% |
+| XGBoost | 166.646 | 123.234 | 374.019 | 35.834 | 47.353 | 0.954 | +4.561% |
+| SARIMAX + CatBoost residual hybrid | 269.158 | 214.760 | 572.062 | 111.982 | 122.167 | 2.982 | -198.248% |
+| Validation-weighted ensemble | **115.547** | **59.219** | **194.970** | 27.906 | 35.441 | **0.743** | **+25.676%** |
 
-Mean walk-forward MAE was **205.561 for LightGBM** and **190.625 for
-persistence**. The LightGBM 10th–90th percentile interval had 37.85% empirical
-coverage against a nominal 80% target.
+The ensemble was selected using development OOF MAE and frozen at 60% seven-day
+drift plus 40% CatBoost; a zero-weight LightGBM candidate was removed. It beat
+persistence in three of five folds, had a lower worst-fold error, and beat
+persistence on the untouched holdout. **Promotion decision: promote the
+validation-weighted ensemble.** Seven-day drift happened to have a slightly
+lower holdout MAE, but it was not selected after looking at the holdout; the
+development-selected ensemble remains the honest champion under the predefined rules.
 
-**Promotion decision: continue research.** LightGBM failed both required
-promotion conditions, so persistence remains the champion under the predefined
-rule. The seven-day drift baseline produced the best final-holdout result and is
-retained as an important research benchmark, but it does not change the stated
-LightGBM-versus-persistence promotion gate. Likely causes include the small
-sample, non-stationary care-load regimes, and unusually strong short-horizon
-persistence.
+### Prediction intervals
+
+LightGBM quantile models generate 10th, 50th, and 90th percentile forecasts.
+Raw walk-forward coverage was 85.71%; a development-only split-conformal check
+covered 100.00% of its 56-row calibration-evaluation tail. Final holdout coverage
+was 100.00% with a mean width of 372.13 children. The raw crossing rate was 0%
+for both development and holdout. These intervals are conservative and should
+not be interpreted as validated operational uncertainty bounds.
 
 ### Forecasting artifacts
 
 | Artifact | Location |
 |---|---|
-| LightGBM text model | `output/models/capacity_lightgbm_baseline.txt` |
-| Model metadata and provenance | `output/models/lightgbm_model_metadata.json` |
-| Evaluation and promotion decision | `output/models/lightgbm_evaluation_metrics.json` |
-| Holdout predictions and intervals | `output/exports/lightgbm_test_predictions.csv` |
-| Gain and split feature importance | `output/exports/lightgbm_feature_importance.csv` |
+| Model registry and serialized candidates | `output/forecasting/models/` |
+| Model comparison, folds, intervals, and promotion | `output/forecasting/metrics/` |
+| Development OOF and final holdout predictions | `output/forecasting/predictions/` |
+| Provenance, feature availability, and leakage audits | `output/forecasting/audits/` |
+| Residual, regime, correlation, and importance diagnostics | `output/forecasting/diagnostics/` |
+| Standalone interactive research report | `output/forecasting/forecast_model_report.html` |
 
-The original ridge model and its prediction/evaluation artifacts remain
-unchanged for benchmark reproducibility.
+The original ridge and single-model LightGBM artifacts under `output/models/`
+and `output/exports/` are preserved for benchmark reproducibility.
 
 ---
 
@@ -433,6 +480,7 @@ The notebooks provide a reproducible analytical workflow:
 4. Feature engineering
 5. Capacity forecasting
 6. Model evaluation
+7. Multi-model forecasting artifact analysis
 
 Reusable project logic remains in `src/`, while notebooks focus on research, experimentation, and interpretation.
 
@@ -462,19 +510,19 @@ The following components have been tested successfully:
 - Static linting
 - Dependency consistency
 - Main Streamlit dashboard
-- Six specialist Streamlit pages
+- Seven specialist Streamlit pages, including precomputed forecast research
 - Synthetic-data validation
 - Real and synthetic analytics
 - Data artifact generation
 - HTML and JSON report generation
 - All ASGI API endpoints
-- Eight focused LightGBM forecasting tests
-- Deterministic LightGBM training and artifact generation
+- Twenty-three focused forecasting tests
+- Deterministic LightGBM and multi-model training with artifact generation
 
 Run the forecasting tests with:
 
 ```bash
-python -m unittest -v tests.test_lightgbm_forecasting
+python -m unittest discover -s tests -v
 ```
 
 ---

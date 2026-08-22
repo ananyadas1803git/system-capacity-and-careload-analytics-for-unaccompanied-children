@@ -1,0 +1,57 @@
+{
+  "passed": true,
+  "champion_model": "validation_weighted_ensemble",
+  "selected_challenger": "validation_weighted_ensemble",
+  "recommendation": "promote",
+  "selection_rule": "lowest development-period OOF MAE; holdout used only as a promotion gate",
+  "checks": {
+    "mean_walk_forward_mae_better_than_persistence": true,
+    "holdout_mae_better_than_persistence": true,
+    "validation_fold_majority": true,
+    "worst_fold_within_limit": true,
+    "leakage_audit_passed": true,
+    "same_eligible_dates": true,
+    "reproducible_fixed_seed": true,
+    "real_and_synthetic_results_not_conflated": true
+  },
+  "fold_wins": 3,
+  "required_fold_wins": 3,
+  "fold_comparison": [
+    {
+      "fold": "1",
+      "challenger_mae": 135.29371426198628,
+      "persistence_mae": 127.16071428571429,
+      "won": false
+    },
+    {
+      "fold": "2",
+      "challenger_mae": 81.83101353810903,
+      "persistence_mae": 73.33928571428571,
+      "won": false
+    },
+    {
+      "fold": "3",
+      "challenger_mae": 194.96960663114086,
+      "persistence_mae": 362.73214285714283,
+      "won": true
+    },
+    {
+      "fold": "4",
+      "challenger_mae": 144.2949847194524,
+      "persistence_mae": 342.76785714285717,
+      "won": true
+    },
+    {
+      "fold": "5",
+      "challenger_mae": 21.3478406320122,
+      "persistence_mae": 34.69642857142857,
+      "won": true
+    }
+  ],
+  "aligned_development_rows": 280,
+  "challenger_walk_forward_mae": 115.54743195654017,
+  "aligned_persistence_walk_forward_mae": 188.1392857142857,
+  "challenger_holdout_mae": 27.906103416668238,
+  "persistence_holdout_mae": 37.546728971962615,
+  "rationale": "All predefined gates passed."
+}

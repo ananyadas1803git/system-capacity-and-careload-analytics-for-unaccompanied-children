@@ -1,0 +1,3 @@
+model_name,seven_day_drift,catboost
+seven_day_drift,1.0,0.4543828458163112
+catboost,0.4543828458163112,1.0
