@@ -1,6 +1,6 @@
 # System Capacity & Care Load Analytics for Unaccompanied Children
 
-![Python](https://img.shields.io/badge/Python-3.11%E2%80%933.13-3776AB?logo=python&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.13-3776AB?logo=python&logoColor=white)
 ![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B?logo=streamlit&logoColor=white)
 ![Plotly](https://img.shields.io/badge/Plotly-Interactive%20Charts-3F4F75?logo=plotly&logoColor=white)
 ![Starlette](https://img.shields.io/badge/Starlette-ASGI%20API-1B9AAA)
@@ -624,7 +624,11 @@ The following components have been tested successfully:
 - Data artifact generation
 - HTML and JSON report generation
 - All ASGI API endpoints
-- - Thirty-seven focused forecasting, orchestration, monitoring, and API tests
+- Thirty-seven focused forecasting, orchestration, monitoring, and API tests
+- Deterministic LightGBM and multi-model training with artifact generation
+
+Run the forecasting tests with:
+
 ```bash
 python -m unittest discover -s tests -v
 ```
