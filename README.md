@@ -624,11 +624,7 @@ The following components have been tested successfully:
 - Data artifact generation
 - HTML and JSON report generation
 - All ASGI API endpoints
-- Thirty-one focused forecasting, orchestration, monitoring, and API tests
-- Deterministic LightGBM and multi-model training with artifact generation
-
-Run the forecasting tests with:
-
+- - Thirty-seven focused forecasting, orchestration, monitoring, and API tests
 ```bash
 python -m unittest discover -s tests -v
 ```
