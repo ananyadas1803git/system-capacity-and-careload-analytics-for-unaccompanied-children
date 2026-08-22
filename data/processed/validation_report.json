@@ -1,0 +1,129 @@
+{
+  "source": "raw/HHS_Unaccompanied_Alien_Children_Program.csv",
+  "raw_source_audit": {
+    "status": "Failed",
+    "is_valid": false,
+    "quality_score": 68,
+    "source_rows": 1170,
+    "source_columns": 6,
+    "valid_date_rows": 720,
+    "reporting_start": "2023-01-12",
+    "reporting_end": "2025-12-21",
+    "expected_daily_rows": 1075,
+    "missing_calendar_dates": 355,
+    "flagged_row_count": 536,
+    "flagged_rows_truncated": false,
+    "error_count": 2,
+    "warning_count": 2,
+    "findings": [
+      {
+        "severity": "warning",
+        "category": "completeness",
+        "code": "EMPTY_ROWS",
+        "message": "Completely empty export-padding rows are present.",
+        "affected_rows": 450,
+        "columns": [],
+        "examples": []
+      },
+      {
+        "severity": "warning",
+        "category": "temporal",
+        "code": "NON_CHRONOLOGICAL_ORDER",
+        "message": "Rows are not ordered chronologically.",
+        "affected_rows": 0,
+        "columns": [],
+        "examples": []
+      },
+      {
+        "severity": "error",
+        "category": "temporal",
+        "code": "MISSING_CALENDAR_DATES",
+        "message": "The reporting period is not a complete daily time series.",
+        "affected_rows": 355,
+        "columns": [
+          "Date"
+        ],
+        "examples": [
+          "2023-01-13",
+          "2023-01-14",
+          "2023-01-15"
+        ]
+      },
+      {
+        "severity": "error",
+        "category": "logical",
+        "code": "TRANSFER_EXCEEDS_CBP",
+        "message": "Transfers exceed active CBP custody.",
+        "affected_rows": 86,
+        "columns": [
+          "Children transferred out of CBP custody",
+          "Children in CBP custody"
+        ],
+        "examples": []
+      }
+    ]
+  },
+  "processed_metrics_audit": {
+    "status": "Failed",
+    "is_valid": false,
+    "quality_score": 76,
+    "source_rows": 1075,
+    "source_columns": 20,
+    "valid_date_rows": 1075,
+    "reporting_start": "2023-01-12",
+    "reporting_end": "2025-12-21",
+    "expected_daily_rows": 1075,
+    "missing_calendar_dates": 0,
+    "flagged_row_count": 384,
+    "flagged_rows_truncated": false,
+    "error_count": 1,
+    "warning_count": 3,
+    "findings": [
+      {
+        "severity": "warning",
+        "category": "plausibility",
+        "code": "ROBUST_OUTLIERS:Children apprehended and placed in CBP custody",
+        "message": "Statistical outliers warrant source verification.",
+        "affected_rows": 158,
+        "columns": [
+          "Children apprehended and placed in CBP custody"
+        ],
+        "examples": []
+      },
+      {
+        "severity": "warning",
+        "category": "plausibility",
+        "code": "ROBUST_OUTLIERS:Children transferred out of CBP custody",
+        "message": "Statistical outliers warrant source verification.",
+        "affected_rows": 198,
+        "columns": [
+          "Children transferred out of CBP custody"
+        ],
+        "examples": []
+      },
+      {
+        "severity": "warning",
+        "category": "plausibility",
+        "code": "ROBUST_OUTLIERS:Children discharged from HHS Care",
+        "message": "Statistical outliers warrant source verification.",
+        "affected_rows": 199,
+        "columns": [
+          "Children discharged from HHS Care"
+        ],
+        "examples": []
+      },
+      {
+        "severity": "error",
+        "category": "logical",
+        "code": "TRANSFER_EXCEEDS_CBP",
+        "message": "Transfers exceed active CBP custody.",
+        "affected_rows": 86,
+        "columns": [
+          "Children transferred out of CBP custody",
+          "Children in CBP custody"
+        ],
+        "examples": []
+      }
+    ]
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "artifact": "uac_capacity_cleaned_daily.csv",
+  "source": "raw/HHS_Unaccompanied_Alien_Children_Program.csv",
+  "source_sha256": "061af0a97a1b3bda7a36f0ce8df08b6994847b0a4c402828cf2ef835d4947198",
+  "report": {
+    "source_name": "HHS_Unaccompanied_Alien_Children_Program.csv",
+    "source_rows": 1170,
+    "output_rows": 1075,
+    "source_columns": 6,
+    "output_columns": 13,
+    "reporting_start": "2023-01-12",
+    "reporting_end": "2025-12-21",
+    "empty_rows_removed": 450,
+    "invalid_date_rows_removed": 0,
+    "duplicate_rows_removed": 0,
+    "missing_dates_inserted": 355,
+    "numeric_values_imputed": 1775,
+    "negative_values_found": 0,
+    "logical_anomaly_rows": 86,
+    "error_count": 1,
+    "warning_count": 5,
+    "issues": [
+      {
+        "severity": "warning",
+        "code": "EMPTY_ROWS_REMOVED",
+        "message": "Completely empty export-padding rows were removed.",
+        "affected_rows": 450,
+        "column": null
+      },
+      {
+        "severity": "warning",
+        "code": "CHRONOLOGY_SORTED",
+        "message": "Rows were sorted into chronological order.",
+        "affected_rows": 0,
+        "column": null
+      },
+      {
+        "severity": "warning",
+        "code": "MISSING_DATES_INSERTED",
+        "message": "Missing calendar dates were inserted into the daily series.",
+        "affected_rows": 355,
+        "column": null
+      },
+      {
+        "severity": "warning",
+        "code": "NUMERIC_VALUES_IMPUTED",
+        "message": "Missing numeric values were filled using configured policies.",
+        "affected_rows": 355,
+        "column": null
+      },
+      {
+        "severity": "warning",
+        "code": "FRACTIONAL_COUNTS",
+        "message": "Fractional child counts were rounded to integers.",
+        "affected_rows": 483,
+        "column": null
+      },
+      {
+        "severity": "error",
+        "code": "TRANSFER_EXCEEDS_CBP",
+        "message": "Transfers exceed active CBP custody.",
+        "affected_rows": 86,
+        "column": "Children transferred out of CBP custody"
+      }
+    ]
+  }
+}
