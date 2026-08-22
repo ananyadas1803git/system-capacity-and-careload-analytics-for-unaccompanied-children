@@ -1,0 +1,5240 @@
+{
+  "metadata": {
+    "report_title": "System Capacity & Care Load Analytics",
+    "report_subtitle": "Unaccompanied Children Program",
+    "agency_framework": "U.S. Department of Health and Human Services Framework",
+    "classification": "FOR ANALYTICAL USE",
+    "source_label": "HHS_Unaccompanied_Alien_Children_Program.csv",
+    "synthetic_data": false,
+    "generated_at_utc": "2026-08-22T07:53:40.970749+00:00",
+    "period_start": "2023-01-12",
+    "period_end": "2025-12-21",
+    "granularity": "Daily",
+    "daily_observations": 1075,
+    "validation_status": "Failed",
+    "validation_quality_score": 76,
+    "methodology_note": "Counts describe operational system load and flow; they are not individual-level clinical records or official capacity ceilings."
+  },
+  "executive_summary": "From 2023-01-12 through 2025-12-21, the system recorded an average active care load of 6,232 children and a peak of 11,762 on 2023-12-20. The latest total load was 2,502, while latest net intake was -3. The latest discharge offset ratio was 116.7%. Dataset validation status: Failed (76/100).",
+  "insights": [
+    {
+      "severity": "critical",
+      "title": "Critical: Total Children Under Care",
+      "message": "System load is rising relative to its prior comparison window. Current value: 2,502.",
+      "evidence": "KPI as of 2025-12-21"
+    },
+    {
+      "severity": "watch",
+      "title": "Watch: Care Load Volatility Index",
+      "message": "Daily care-load changes are unusually variable. Current value: 1.13%.",
+      "evidence": "KPI as of 2025-12-21"
+    },
+    {
+      "severity": "watch",
+      "title": "Watch: Backlog Accumulation Rate",
+      "message": "A sustained positive-net-intake episode requires review. Current value: 5 day(s).",
+      "evidence": "KPI as of 2025-12-21"
+    },
+    {
+      "severity": "positive",
+      "title": "Latest flow balance shows relief",
+      "message": "Latest HHS discharges meet or exceed transfers into HHS care.",
+      "evidence": "Latest net daily intake: -3"
+    },
+    {
+      "severity": "critical",
+      "title": "Logical data anomalies require review",
+      "message": "At least one transfer or discharge value exceeds its active care-load constraint.",
+      "evidence": "Flagged analytical rows: 86"
+    }
+  ],
+  "kpis": [
+    {
+      "KPI": "Total Children Under Care",
+      "Value": "2,502",
+      "Status": "critical",
+      "Direction": "increase",
+      "Comparison Value": 2328.5666666666666,
+      "Delta": 173.4333333333334,
+      "Delta Percent": 7.448072490945792,
+      "Unit": "children",
+      "As Of": "2025-12-21",
+      "Formula": "Children in CBP custody + Children in HHS Care"
+    },
+    {
+      "KPI": "Net Intake Pressure",
+      "Value": "-3",
+      "Status": "favorable",
+      "Direction": "decrease",
+      "Comparison Value": -0.23333333333333334,
+      "Delta": -2.7666666666666666,
+      "Delta Percent": -1185.7142857142856,
+      "Unit": "children/day",
+      "As Of": "2025-12-21",
+      "Formula": "Transfers out of CBP custody - Discharges from HHS Care"
+    },
+    {
+      "KPI": "Care Load Volatility Index",
+      "Value": "1.13%",
+      "Status": "watch",
+      "Direction": "increase",
+      "Comparison Value": 0.36381547357253624,
+      "Delta": 0.761809993351632,
+      "Delta Percent": 209.3946103696288,
+      "Unit": "%",
+      "As Of": "2025-12-21",
+      "Formula": "Population SD of daily Total System Load growth (%)"
+    },
+    {
+      "KPI": "Backlog Accumulation Rate",
+      "Value": "5 day(s)",
+      "Status": "watch",
+      "Direction": "increase",
+      "Comparison Value": 2.0,
+      "Delta": 3.0,
+      "Delta Percent": 150.0,
+      "Unit": "consecutive days",
+      "As Of": "2025-12-21",
+      "Formula": "Longest consecutive run where Net Daily Intake > 0"
+    },
+    {
+      "KPI": "Discharge Offset Ratio",
+      "Value": "116.7%",
+      "Status": "favorable",
+      "Direction": "increase",
+      "Comparison Value": 1.0307692307692307,
+      "Delta": 0.13589743589743608,
+      "Delta Percent": 13.18407960199007,
+      "Unit": "ratio",
+      "As Of": "2025-12-21",
+      "Formula": "Discharges from HHS Care / (Transfers out of CBP custody + 1)"
+    }
+  ],
+  "operational_summary": [
+    {
+      "Measure": "Reporting period start",
+      "Value": "2023-01-12"
+    },
+    {
+      "Measure": "Reporting period end",
+      "Value": "2025-12-21"
+    },
+    {
+      "Measure": "Daily observations",
+      "Value": "1,075"
+    },
+    {
+      "Measure": "Average system load",
+      "Value": "6,231.77"
+    },
+    {
+      "Measure": "Peak system load",
+      "Value": "11,762"
+    },
+    {
+      "Measure": "Peak system load date",
+      "Value": "2023-12-20"
+    },
+    {
+      "Measure": "Cumulative net intake",
+      "Value": "-32,212"
+    },
+    {
+      "Measure": "Positive-pressure days",
+      "Value": "238"
+    },
+    {
+      "Measure": "Current backlog streak (days)",
+      "Value": "0"
+    },
+    {
+      "Measure": "Elevated backlog episodes",
+      "Value": "40"
+    },
+    {
+      "Measure": "Total transfers",
+      "Value": "92,641"
+    },
+    {
+      "Measure": "Total discharges",
+      "Value": "124,853"
+    },
+    {
+      "Measure": "Logical anomaly rows",
+      "Value": "86"
+    },
+    {
+      "Measure": "Imputed dates",
+      "Value": "355"
+    }
+  ],
+  "validation": {
+    "summary": {
+      "status": "Failed",
+      "is_valid": false,
+      "quality_score": 76,
+      "source_rows": 1075,
+      "source_columns": 16,
+      "valid_date_rows": 1075,
+      "reporting_start": "2023-01-12",
+      "reporting_end": "2025-12-21",
+      "expected_daily_rows": 1075,
+      "missing_calendar_dates": 0,
+      "flagged_row_count": 384,
+      "flagged_rows_truncated": false,
+      "error_count": 1,
+      "warning_count": 3,
+      "findings": [
+        {
+          "severity": "warning",
+          "category": "plausibility",
+          "code": "ROBUST_OUTLIERS:Children apprehended and placed in CBP custody",
+          "message": "Statistical outliers warrant source verification.",
+          "affected_rows": 158,
+          "columns": [
+            "Children apprehended and placed in CBP custody"
+          ],
+          "examples": []
+        },
+        {
+          "severity": "warning",
+          "category": "plausibility",
+          "code": "ROBUST_OUTLIERS:Children transferred out of CBP custody",
+          "message": "Statistical outliers warrant source verification.",
+          "affected_rows": 198,
+          "columns": [
+            "Children transferred out of CBP custody"
+          ],
+          "examples": []
+        },
+        {
+          "severity": "warning",
+          "category": "plausibility",
+          "code": "ROBUST_OUTLIERS:Children discharged from HHS Care",
+          "message": "Statistical outliers warrant source verification.",
+          "affected_rows": 199,
+          "columns": [
+            "Children discharged from HHS Care"
+          ],
+          "examples": []
+        },
+        {
+          "severity": "error",
+          "category": "logical",
+          "code": "TRANSFER_EXCEEDS_CBP",
+          "message": "Transfers exceed active CBP custody.",
+          "affected_rows": 86,
+          "columns": [
+            "Children transferred out of CBP custody",
+            "Children in CBP custody"
+          ],
+          "examples": []
+        }
+      ]
+    },
+    "findings": [
+      {
+        "Severity": "error",
+        "Category": "logical",
+        "Code": "TRANSFER_EXCEEDS_CBP",
+        "Message": "Transfers exceed active CBP custody.",
+        "Affected Rows": 86,
+        "Columns": "Children transferred out of CBP custody, Children in CBP custody",
+        "Examples": ""
+      },
+      {
+        "Severity": "warning",
+        "Category": "plausibility",
+        "Code": "ROBUST_OUTLIERS:Children apprehended and placed in CBP custody",
+        "Message": "Statistical outliers warrant source verification.",
+        "Affected Rows": 158,
+        "Columns": "Children apprehended and placed in CBP custody",
+        "Examples": ""
+      },
+      {
+        "Severity": "warning",
+        "Category": "plausibility",
+        "Code": "ROBUST_OUTLIERS:Children discharged from HHS Care",
+        "Message": "Statistical outliers warrant source verification.",
+        "Affected Rows": 199,
+        "Columns": "Children discharged from HHS Care",
+        "Examples": ""
+      },
+      {
+        "Severity": "warning",
+        "Category": "plausibility",
+        "Code": "ROBUST_OUTLIERS:Children transferred out of CBP custody",
+        "Message": "Statistical outliers warrant source verification.",
+        "Affected Rows": 198,
+        "Columns": "Children transferred out of CBP custody",
+        "Examples": ""
+      }
+    ]
+  },
+  "backlog_episodes": [
+    {
+      "Episode Start": "2024-04-21T00:00:00",
+      "Episode End": "2024-04-25T00:00:00",
+      "Duration (Days)": 5,
+      "Cumulative Net Intake": 582,
+      "Peak Daily Pressure": 173,
+      "Average Daily Pressure": 116.4,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-04-28T00:00:00",
+      "Episode End": "2024-05-02T00:00:00",
+      "Duration (Days)": 5,
+      "Cumulative Net Intake": 446,
+      "Peak Daily Pressure": 115,
+      "Average Daily Pressure": 89.2,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-12-01T00:00:00",
+      "Episode End": "2024-12-05T00:00:00",
+      "Duration (Days)": 5,
+      "Cumulative Net Intake": 383,
+      "Peak Daily Pressure": 135,
+      "Average Daily Pressure": 76.6,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-08-18T00:00:00",
+      "Episode End": "2024-08-22T00:00:00",
+      "Duration (Days)": 5,
+      "Cumulative Net Intake": 239,
+      "Peak Daily Pressure": 133,
+      "Average Daily Pressure": 47.8,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-03-23T00:00:00",
+      "Episode End": "2025-03-27T00:00:00",
+      "Duration (Days)": 5,
+      "Cumulative Net Intake": 36,
+      "Peak Daily Pressure": 13,
+      "Average Daily Pressure": 7.2,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-02-05T00:00:00",
+      "Episode End": "2024-02-08T00:00:00",
+      "Duration (Days)": 4,
+      "Cumulative Net Intake": 399,
+      "Peak Daily Pressure": 145,
+      "Average Daily Pressure": 99.75,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-05-27T00:00:00",
+      "Episode End": "2024-05-30T00:00:00",
+      "Duration (Days)": 4,
+      "Cumulative Net Intake": 339,
+      "Peak Daily Pressure": 149,
+      "Average Daily Pressure": 84.75,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-03-04T00:00:00",
+      "Episode End": "2024-03-07T00:00:00",
+      "Duration (Days)": 4,
+      "Cumulative Net Intake": 310,
+      "Peak Daily Pressure": 131,
+      "Average Daily Pressure": 77.5,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-09-02T00:00:00",
+      "Episode End": "2024-09-05T00:00:00",
+      "Duration (Days)": 4,
+      "Cumulative Net Intake": 293,
+      "Peak Daily Pressure": 105,
+      "Average Daily Pressure": 73.25,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-11-25T00:00:00",
+      "Episode End": "2024-11-28T00:00:00",
+      "Duration (Days)": 4,
+      "Cumulative Net Intake": 276,
+      "Peak Daily Pressure": 102,
+      "Average Daily Pressure": 69.0,
+      "Elevated": true,
+      "Status": "Closed"
+    }
+  ],
+  "anomalies": [
+    {
+      "Date": "2023-01-24T00:00:00",
+      "Children in CBP custody": 42,
+      "Children transferred out of CBP custody": 47,
+      "Children in HHS Care": 7433,
+      "Children discharged from HHS Care": 175,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-01-25T00:00:00",
+      "Children in CBP custody": 22,
+      "Children transferred out of CBP custody": 41,
+      "Children in HHS Care": 7538,
+      "Children discharged from HHS Care": 180,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-02-02T00:00:00",
+      "Children in CBP custody": 13,
+      "Children transferred out of CBP custody": 23,
+      "Children in HHS Care": 7879,
+      "Children discharged from HHS Care": 298,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-02-22T00:00:00",
+      "Children in CBP custody": 215,
+      "Children transferred out of CBP custody": 230,
+      "Children in HHS Care": 7978,
+      "Children discharged from HHS Care": 232,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-02-23T00:00:00",
+      "Children in CBP custody": 162,
+      "Children transferred out of CBP custody": 178,
+      "Children in HHS Care": 7914,
+      "Children discharged from HHS Care": 386,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-03-01T00:00:00",
+      "Children in CBP custody": 158,
+      "Children transferred out of CBP custody": 193,
+      "Children in HHS Care": 7930,
+      "Children discharged from HHS Care": 307,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-04-03T00:00:00",
+      "Children in CBP custody": 139,
+      "Children transferred out of CBP custody": 168,
+      "Children in HHS Care": 8054,
+      "Children discharged from HHS Care": 284,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-04-25T00:00:00",
+      "Children in CBP custody": 230,
+      "Children transferred out of CBP custody": 242,
+      "Children in HHS Care": 8017,
+      "Children discharged from HHS Care": 202,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-05-04T00:00:00",
+      "Children in CBP custody": 253,
+      "Children transferred out of CBP custody": 286,
+      "Children in HHS Care": 8790,
+      "Children discharged from HHS Care": 332,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-05-17T00:00:00",
+      "Children in CBP custody": 162,
+      "Children transferred out of CBP custody": 193,
+      "Children in HHS Care": 8569,
+      "Children discharged from HHS Care": 307,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-05-18T00:00:00",
+      "Children in CBP custody": 122,
+      "Children transferred out of CBP custody": 152,
+      "Children in HHS Care": 8474,
+      "Children discharged from HHS Care": 351,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-05-23T00:00:00",
+      "Children in CBP custody": 66,
+      "Children transferred out of CBP custody": 94,
+      "Children in HHS Care": 7788,
+      "Children discharged from HHS Care": 246,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-05-29T00:00:00",
+      "Children in CBP custody": 60,
+      "Children transferred out of CBP custody": 71,
+      "Children in HHS Care": 6996,
+      "Children discharged from HHS Care": 207,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-05-31T00:00:00",
+      "Children in CBP custody": 80,
+      "Children transferred out of CBP custody": 82,
+      "Children in HHS Care": 7053,
+      "Children discharged from HHS Care": 210,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-06-11T00:00:00",
+      "Children in CBP custody": 152,
+      "Children transferred out of CBP custody": 168,
+      "Children in HHS Care": 6007,
+      "Children discharged from HHS Care": 238,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-06-12T00:00:00",
+      "Children in CBP custody": 118,
+      "Children transferred out of CBP custody": 136,
+      "Children in HHS Care": 6021,
+      "Children discharged from HHS Care": 177,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-06-13T00:00:00",
+      "Children in CBP custody": 64,
+      "Children transferred out of CBP custody": 117,
+      "Children in HHS Care": 6061,
+      "Children discharged from HHS Care": 146,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-06-15T00:00:00",
+      "Children in CBP custody": 75,
+      "Children transferred out of CBP custody": 97,
+      "Children in HHS Care": 6038,
+      "Children discharged from HHS Care": 272,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-07-05T00:00:00",
+      "Children in CBP custody": 215,
+      "Children transferred out of CBP custody": 230,
+      "Children in HHS Care": 6193,
+      "Children discharged from HHS Care": 167,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-07-06T00:00:00",
+      "Children in CBP custody": 162,
+      "Children transferred out of CBP custody": 178,
+      "Children in HHS Care": 6239,
+      "Children discharged from HHS Care": 205,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-07-12T00:00:00",
+      "Children in CBP custody": 158,
+      "Children transferred out of CBP custody": 193,
+      "Children in HHS Care": 6521,
+      "Children discharged from HHS Care": 210,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-08-09T00:00:00",
+      "Children in CBP custody": 139,
+      "Children transferred out of CBP custody": 168,
+      "Children in HHS Care": 8888,
+      "Children discharged from HHS Care": 251,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-09-06T00:00:00",
+      "Children in CBP custody": 230,
+      "Children transferred out of CBP custody": 242,
+      "Children in HHS Care": 10356,
+      "Children discharged from HHS Care": 291,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-09-17T00:00:00",
+      "Children in CBP custody": 253,
+      "Children transferred out of CBP custody": 286,
+      "Children in HHS Care": 10799,
+      "Children discharged from HHS Care": 427,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-09-28T00:00:00",
+      "Children in CBP custody": 162,
+      "Children transferred out of CBP custody": 193,
+      "Children in HHS Care": 10984,
+      "Children discharged from HHS Care": 447,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-10-01T00:00:00",
+      "Children in CBP custody": 122,
+      "Children transferred out of CBP custody": 152,
+      "Children in HHS Care": 10598,
+      "Children discharged from HHS Care": 493,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-10-04T00:00:00",
+      "Children in CBP custody": 66,
+      "Children transferred out of CBP custody": 94,
+      "Children in HHS Care": 10963,
+      "Children discharged from HHS Care": 330,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-10-10T00:00:00",
+      "Children in CBP custody": 60,
+      "Children transferred out of CBP custody": 71,
+      "Children in HHS Care": 10910,
+      "Children discharged from HHS Care": 257,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-10-12T00:00:00",
+      "Children in CBP custody": 80,
+      "Children transferred out of CBP custody": 82,
+      "Children in HHS Care": 10992,
+      "Children discharged from HHS Care": 398,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-10-23T00:00:00",
+      "Children in CBP custody": 152,
+      "Children transferred out of CBP custody": 168,
+      "Children in HHS Care": 9436,
+      "Children discharged from HHS Care": 327,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-10-24T00:00:00",
+      "Children in CBP custody": 118,
+      "Children transferred out of CBP custody": 136,
+      "Children in HHS Care": 9396,
+      "Children discharged from HHS Care": 300,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-10-25T00:00:00",
+      "Children in CBP custody": 64,
+      "Children transferred out of CBP custody": 117,
+      "Children in HHS Care": 9351,
+      "Children discharged from HHS Care": 293,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-10-29T00:00:00",
+      "Children in CBP custody": 75,
+      "Children transferred out of CBP custody": 97,
+      "Children in HHS Care": 8925,
+      "Children discharged from HHS Care": 418,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-11-02T00:00:00",
+      "Children in CBP custody": 208,
+      "Children transferred out of CBP custody": 256,
+      "Children in HHS Care": 9442,
+      "Children discharged from HHS Care": 330,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-11-12T00:00:00",
+      "Children in CBP custody": 160,
+      "Children transferred out of CBP custody": 233,
+      "Children in HHS Care": 9477,
+      "Children discharged from HHS Care": 313,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-11-14T00:00:00",
+      "Children in CBP custody": 181,
+      "Children transferred out of CBP custody": 182,
+      "Children in HHS Care": 9665,
+      "Children discharged from HHS Care": 247,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-11-15T00:00:00",
+      "Children in CBP custody": 157,
+      "Children transferred out of CBP custody": 201,
+      "Children in HHS Care": 9762,
+      "Children discharged from HHS Care": 316,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-11-26T00:00:00",
+      "Children in CBP custody": 196,
+      "Children transferred out of CBP custody": 205,
+      "Children in HHS Care": 9845,
+      "Children discharged from HHS Care": 312,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-12-04T00:00:00",
+      "Children in CBP custody": 208,
+      "Children transferred out of CBP custody": 256,
+      "Children in HHS Care": 10635,
+      "Children discharged from HHS Care": 273,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-12-11T00:00:00",
+      "Children in CBP custody": 160,
+      "Children transferred out of CBP custody": 233,
+      "Children in HHS Care": 10998,
+      "Children discharged from HHS Care": 304,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-12-13T00:00:00",
+      "Children in CBP custody": 181,
+      "Children transferred out of CBP custody": 182,
+      "Children in HHS Care": 11192,
+      "Children discharged from HHS Care": 335,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-12-14T00:00:00",
+      "Children in CBP custody": 157,
+      "Children transferred out of CBP custody": 201,
+      "Children in HHS Care": 11242,
+      "Children discharged from HHS Care": 396,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-12-25T00:00:00",
+      "Children in CBP custody": 196,
+      "Children transferred out of CBP custody": 205,
+      "Children in HHS Care": 11144,
+      "Children discharged from HHS Care": 347,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-01-04T00:00:00",
+      "Children in CBP custody": 152,
+      "Children transferred out of CBP custody": 168,
+      "Children in HHS Care": 10558,
+      "Children discharged from HHS Care": 362,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-01-07T00:00:00",
+      "Children in CBP custody": 118,
+      "Children transferred out of CBP custody": 136,
+      "Children in HHS Care": 9670,
+      "Children discharged from HHS Care": 367,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-01-08T00:00:00",
+      "Children in CBP custody": 64,
+      "Children transferred out of CBP custody": 117,
+      "Children in HHS Care": 9670,
+      "Children discharged from HHS Care": 367,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-01-10T00:00:00",
+      "Children in CBP custody": 75,
+      "Children transferred out of CBP custody": 97,
+      "Children in HHS Care": 9144,
+      "Children discharged from HHS Care": 349,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-01-24T00:00:00",
+      "Children in CBP custody": 196,
+      "Children transferred out of CBP custody": 205,
+      "Children in HHS Care": 8212,
+      "Children discharged from HHS Care": 243,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-01-30T00:00:00",
+      "Children in CBP custody": 198,
+      "Children transferred out of CBP custody": 208,
+      "Children in HHS Care": 8182,
+      "Children discharged from HHS Care": 187,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-02-12T00:00:00",
+      "Children in CBP custody": 430,
+      "Children transferred out of CBP custody": 440,
+      "Children in HHS Care": 8092,
+      "Children discharged from HHS Care": 234,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-03-19T00:00:00",
+      "Children in CBP custody": 202,
+      "Children transferred out of CBP custody": 256,
+      "Children in HHS Care": 8390,
+      "Children discharged from HHS Care": 197,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-04-28T00:00:00",
+      "Children in CBP custody": 349,
+      "Children transferred out of CBP custody": 365,
+      "Children in HHS Care": 7298,
+      "Children discharged from HHS Care": 250,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-05-15T00:00:00",
+      "Children in CBP custody": 285,
+      "Children transferred out of CBP custody": 341,
+      "Children in HHS Care": 7589,
+      "Children discharged from HHS Care": 265,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-05-23T00:00:00",
+      "Children in CBP custody": 272,
+      "Children transferred out of CBP custody": 314,
+      "Children in HHS Care": 7494,
+      "Children discharged from HHS Care": 227,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-06-03T00:00:00",
+      "Children in CBP custody": 244,
+      "Children transferred out of CBP custody": 257,
+      "Children in HHS Care": 7596,
+      "Children discharged from HHS Care": 224,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-06-12T00:00:00",
+      "Children in CBP custody": 266,
+      "Children transferred out of CBP custody": 274,
+      "Children in HHS Care": 7548,
+      "Children discharged from HHS Care": 212,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-06-27T00:00:00",
+      "Children in CBP custody": 208,
+      "Children transferred out of CBP custody": 256,
+      "Children in HHS Care": 7248,
+      "Children discharged from HHS Care": 268,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-07-07T00:00:00",
+      "Children in CBP custody": 160,
+      "Children transferred out of CBP custody": 233,
+      "Children in HHS Care": 6599,
+      "Children discharged from HHS Care": 213,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-07-09T00:00:00",
+      "Children in CBP custody": 181,
+      "Children transferred out of CBP custody": 182,
+      "Children in HHS Care": 6651,
+      "Children discharged from HHS Care": 130,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-07-10T00:00:00",
+      "Children in CBP custody": 157,
+      "Children transferred out of CBP custody": 201,
+      "Children in HHS Care": 6649,
+      "Children discharged from HHS Care": 177,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-07-21T00:00:00",
+      "Children in CBP custody": 196,
+      "Children transferred out of CBP custody": 205,
+      "Children in HHS Care": 6058,
+      "Children discharged from HHS Care": 262,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-07-25T00:00:00",
+      "Children in CBP custody": 198,
+      "Children transferred out of CBP custody": 208,
+      "Children in HHS Care": 5954,
+      "Children discharged from HHS Care": 194,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-07-29T00:00:00",
+      "Children in CBP custody": 210,
+      "Children transferred out of CBP custody": 219,
+      "Children in HHS Care": 5819,
+      "Children discharged from HHS Care": 163,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-07-30T00:00:00",
+      "Children in CBP custody": 203,
+      "Children transferred out of CBP custody": 208,
+      "Children in HHS Care": 5930,
+      "Children discharged from HHS Care": 92,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-09-13T00:00:00",
+      "Children in CBP custody": 200,
+      "Children transferred out of CBP custody": 212,
+      "Children in HHS Care": 6326,
+      "Children discharged from HHS Care": 279,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-09-18T00:00:00",
+      "Children in CBP custody": 213,
+      "Children transferred out of CBP custody": 217,
+      "Children in HHS Care": 6245,
+      "Children discharged from HHS Care": 149,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-10-02T00:00:00",
+      "Children in CBP custody": 215,
+      "Children transferred out of CBP custody": 230,
+      "Children in HHS Care": 6091,
+      "Children discharged from HHS Care": 173,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-10-03T00:00:00",
+      "Children in CBP custody": 162,
+      "Children transferred out of CBP custody": 178,
+      "Children in HHS Care": 6118,
+      "Children discharged from HHS Care": 193,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-10-10T00:00:00",
+      "Children in CBP custody": 158,
+      "Children transferred out of CBP custody": 193,
+      "Children in HHS Care": 6075,
+      "Children discharged from HHS Care": 159,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-11-11T00:00:00",
+      "Children in CBP custody": 139,
+      "Children transferred out of CBP custody": 168,
+      "Children in HHS Care": 5963,
+      "Children discharged from HHS Care": 145,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-12-03T00:00:00",
+      "Children in CBP custody": 230,
+      "Children transferred out of CBP custody": 242,
+      "Children in HHS Care": 6192,
+      "Children discharged from HHS Care": 107,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-12-12T00:00:00",
+      "Children in CBP custody": 253,
+      "Children transferred out of CBP custody": 286,
+      "Children in HHS Care": 6481,
+      "Children discharged from HHS Care": 194,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-12-25T00:00:00",
+      "Children in CBP custody": 162,
+      "Children transferred out of CBP custody": 193,
+      "Children in HHS Care": 6689,
+      "Children discharged from HHS Care": 107,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-12-26T00:00:00",
+      "Children in CBP custody": 122,
+      "Children transferred out of CBP custody": 152,
+      "Children in HHS Care": 6707,
+      "Children discharged from HHS Care": 135,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2025-01-01T00:00:00",
+      "Children in CBP custody": 66,
+      "Children transferred out of CBP custody": 94,
+      "Children in HHS Care": 6405,
+      "Children discharged from HHS Care": 144,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2025-01-06T00:00:00",
+      "Children in CBP custody": 60,
+      "Children transferred out of CBP custody": 71,
+      "Children in HHS Care": 5769,
+      "Children discharged from HHS Care": 190,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2025-01-08T00:00:00",
+      "Children in CBP custody": 80,
+      "Children transferred out of CBP custody": 82,
+      "Children in HHS Care": 5605,
+      "Children discharged from HHS Care": 184,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2025-01-19T00:00:00",
+      "Children in CBP custody": 152,
+      "Children transferred out of CBP custody": 168,
+      "Children in HHS Care": 4628,
+      "Children discharged from HHS Care": 176,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2025-01-20T00:00:00",
+      "Children in CBP custody": 118,
+      "Children transferred out of CBP custody": 136,
+      "Children in HHS Care": 4638,
+      "Children discharged from HHS Care": 127,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2025-01-21T00:00:00",
+      "Children in CBP custody": 64,
+      "Children transferred out of CBP custody": 117,
+      "Children in HHS Care": 4728,
+      "Children discharged from HHS Care": 54,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2025-01-23T00:00:00",
+      "Children in CBP custody": 75,
+      "Children transferred out of CBP custody": 97,
+      "Children in HHS Care": 4621,
+      "Children discharged from HHS Care": 174,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2025-01-30T00:00:00",
+      "Children in CBP custody": 42,
+      "Children transferred out of CBP custody": 47,
+      "Children in HHS Care": 3923,
+      "Children discharged from HHS Care": 159,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2025-02-02T00:00:00",
+      "Children in CBP custody": 22,
+      "Children transferred out of CBP custody": 41,
+      "Children in HHS Care": 3483,
+      "Children discharged from HHS Care": 168,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2025-02-09T00:00:00",
+      "Children in CBP custody": 13,
+      "Children transferred out of CBP custody": 23,
+      "Children in HHS Care": 2878,
+      "Children discharged from HHS Care": 99,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2025-02-13T00:00:00",
+      "Children in CBP custody": 10,
+      "Children transferred out of CBP custody": 23,
+      "Children in HHS Care": 2703,
+      "Children discharged from HHS Care": 72,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2025-02-27T00:00:00",
+      "Children in CBP custody": 15,
+      "Children transferred out of CBP custody": 17,
+      "Children in HHS Care": 2391,
+      "Children discharged from HHS Care": 37,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    }
+  ],
+  "daily_appendix": [
+    {
+      "Date": "2025-12-21T00:00:00",
+      "Total System Load": 2502,
+      "Net Daily Intake": -3,
+      "Care Load Growth Rate": -0.2789956157831841,
+      "Discharge Offset Ratio": 1.1666666666666667,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-12-20T00:00:00",
+      "Total System Load": 2509,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.23856858846919016,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-12-19T00:00:00",
+      "Total System Load": 2515,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.2775574940523384,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-12-18T00:00:00",
+      "Total System Load": 2522,
+      "Net Daily Intake": -10,
+      "Care Load Growth Rate": 0.398089171974525,
+      "Discharge Offset Ratio": 2.2857142857142856,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-12-17T00:00:00",
+      "Total System Load": 2512,
+      "Net Daily Intake": 1,
+      "Care Load Growth Rate": -0.3965107057890549,
+      "Discharge Offset Ratio": 0.8333333333333334,
+      "Backlog Accumulation Rate": 3
+    },
+    {
+      "Date": "2025-12-16T00:00:00",
+      "Total System Load": 2522,
+      "Net Daily Intake": 6,
+      "Care Load Growth Rate": 0.398089171974525,
+      "Discharge Offset Ratio": 0.5625,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2025-12-15T00:00:00",
+      "Total System Load": 2512,
+      "Net Daily Intake": 2,
+      "Care Load Growth Rate": 0.6007208650380402,
+      "Discharge Offset Ratio": 0.7,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-12-14T00:00:00",
+      "Total System Load": 2497,
+      "Net Daily Intake": -4,
+      "Care Load Growth Rate": 0.16044925792217946,
+      "Discharge Offset Ratio": 1.6,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-12-13T00:00:00",
+      "Total System Load": 2493,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.2009646302250756,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-12-12T00:00:00",
+      "Total System Load": 2488,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.16103059581320522,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-12-11T00:00:00",
+      "Total System Load": 2484,
+      "Net Daily Intake": -1,
+      "Care Load Growth Rate": -0.3610108303249149,
+      "Discharge Offset Ratio": 1.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-12-10T00:00:00",
+      "Total System Load": 2493,
+      "Net Daily Intake": -4,
+      "Care Load Growth Rate": 0.8087343307723316,
+      "Discharge Offset Ratio": 1.5,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-12-09T00:00:00",
+      "Total System Load": 2473,
+      "Net Daily Intake": -1,
+      "Care Load Growth Rate": 0.2432103769760774,
+      "Discharge Offset Ratio": 1.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-12-08T00:00:00",
+      "Total System Load": 2467,
+      "Net Daily Intake": 5,
+      "Care Load Growth Rate": 0.570729718711771,
+      "Discharge Offset Ratio": 0.4,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2025-12-07T00:00:00",
+      "Total System Load": 2453,
+      "Net Daily Intake": 1,
+      "Care Load Growth Rate": -0.04074979625101616,
+      "Discharge Offset Ratio": 0.8571428571428571,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-12-06T00:00:00",
+      "Total System Load": 2454,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.08143322475570036,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-12-05T00:00:00",
+      "Total System Load": 2456,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.040700040700036855,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-12-04T00:00:00",
+      "Total System Load": 2457,
+      "Net Daily Intake": -6,
+      "Care Load Growth Rate": 0.244798041615657,
+      "Discharge Offset Ratio": 1.625,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-12-03T00:00:00",
+      "Total System Load": 2451,
+      "Net Daily Intake": 1,
+      "Care Load Growth Rate": 0.4096681687832948,
+      "Discharge Offset Ratio": 0.7777777777777778,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-12-02T00:00:00",
+      "Total System Load": 2441,
+      "Net Daily Intake": -2,
+      "Care Load Growth Rate": 0.20525451559934016,
+      "Discharge Offset Ratio": 1.1428571428571428,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-12-01T00:00:00",
+      "Total System Load": 2436,
+      "Net Daily Intake": -5,
+      "Care Load Growth Rate": 0.12330456226881115,
+      "Discharge Offset Ratio": 1.8,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-11-30T00:00:00",
+      "Total System Load": 2433,
+      "Net Daily Intake": 10,
+      "Care Load Growth Rate": 0.2885408079142726,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-11-29T00:00:00",
+      "Total System Load": 2426,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.24793388429751317,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-11-28T00:00:00",
+      "Total System Load": 2420,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.2900953170327458,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-11-27T00:00:00",
+      "Total System Load": 2413,
+      "Net Daily Intake": 1,
+      "Care Load Growth Rate": -0.20678246484697738,
+      "Discharge Offset Ratio": 0.7777777777777778,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-11-26T00:00:00",
+      "Total System Load": 2418,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.16515276630884035,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-11-25T00:00:00",
+      "Total System Load": 2422,
+      "Net Daily Intake": 3,
+      "Care Load Growth Rate": 0.45624222314393226,
+      "Discharge Offset Ratio": 0.7333333333333333,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-11-24T00:00:00",
+      "Total System Load": 2411,
+      "Net Daily Intake": -4,
+      "Care Load Growth Rate": -0.41305245766212195,
+      "Discharge Offset Ratio": 1.3,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-11-23T00:00:00",
+      "Total System Load": 2421,
+      "Net Daily Intake": 21,
+      "Care Load Growth Rate": 0.33153750518026825,
+      "Discharge Offset Ratio": 0.043478260869565216,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-11-22T00:00:00",
+      "Total System Load": 2413,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.33264033264033266,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-11-21T00:00:00",
+      "Total System Load": 2405,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.3337505214851877,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-11-20T00:00:00",
+      "Total System Load": 2397,
+      "Net Daily Intake": -1,
+      "Care Load Growth Rate": 1.0539629005059004,
+      "Discharge Offset Ratio": 1.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-11-19T00:00:00",
+      "Total System Load": 2372,
+      "Net Daily Intake": -7,
+      "Care Load Growth Rate": -0.46160302140159093,
+      "Discharge Offset Ratio": 2.5,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-11-18T00:00:00",
+      "Total System Load": 2383,
+      "Net Daily Intake": -4,
+      "Care Load Growth Rate": 0.2102607232968845,
+      "Discharge Offset Ratio": 1.3333333333333333,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-11-17T00:00:00",
+      "Total System Load": 2378,
+      "Net Daily Intake": -2,
+      "Care Load Growth Rate": 0.6773920406435208,
+      "Discharge Offset Ratio": 1.1428571428571428,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-11-16T00:00:00",
+      "Total System Load": 2362,
+      "Net Daily Intake": -2,
+      "Care Load Growth Rate": 0.2972399150743099,
+      "Discharge Offset Ratio": 1.25,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-11-15T00:00:00",
+      "Total System Load": 2355,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.21276595744681437,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-11-14T00:00:00",
+      "Total System Load": 2350,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.2987622705932669,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-11-13T00:00:00",
+      "Total System Load": 2343,
+      "Net Daily Intake": 11,
+      "Care Load Growth Rate": -0.29787234042553123,
+      "Discharge Offset Ratio": 0.29411764705882354,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2025-11-12T00:00:00",
+      "Total System Load": 2350,
+      "Net Daily Intake": 13,
+      "Care Load Growth Rate": 0.7286755250750065,
+      "Discharge Offset Ratio": 0.3333333333333333,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-11-11T00:00:00",
+      "Total System Load": 2333,
+      "Net Daily Intake": -2,
+      "Care Load Growth Rate": 0.12875536480687622,
+      "Discharge Offset Ratio": 1.0769230769230769,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-11-10T00:00:00",
+      "Total System Load": 2330,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.12892135797164528,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-11-09T00:00:00",
+      "Total System Load": 2327,
+      "Net Daily Intake": 1,
+      "Care Load Growth Rate": 0.4315925766076756,
+      "Discharge Offset Ratio": 0.6666666666666666,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-11-08T00:00:00",
+      "Total System Load": 2317,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.4334633723450443,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-11-07T00:00:00",
+      "Total System Load": 2307,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.4353504571179778,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-11-06T00:00:00",
+      "Total System Load": 2297,
+      "Net Daily Intake": -10,
+      "Care Load Growth Rate": -0.6917423259835687,
+      "Discharge Offset Ratio": 1.9,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-11-05T00:00:00",
+      "Total System Load": 2313,
+      "Net Daily Intake": 1,
+      "Care Load Growth Rate": 0.43421623968735723,
+      "Discharge Offset Ratio": 0.7777777777777778,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-11-04T00:00:00",
+      "Total System Load": 2303,
+      "Net Daily Intake": -2,
+      "Care Load Growth Rate": 0.2612102742707956,
+      "Discharge Offset Ratio": 1.1428571428571428,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-11-03T00:00:00",
+      "Total System Load": 2297,
+      "Net Daily Intake": -7,
+      "Care Load Growth Rate": -0.04351610095735259,
+      "Discharge Offset Ratio": 2.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-11-02T00:00:00",
+      "Total System Load": 2298,
+      "Net Daily Intake": 3,
+      "Care Load Growth Rate": -0.08695652173913437,
+      "Discharge Offset Ratio": 0.6363636363636364,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-11-01T00:00:00",
+      "Total System Load": 2300,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.08688097306689402,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-10-31T00:00:00",
+      "Total System Load": 2302,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.08680555555555802,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-10-30T00:00:00",
+      "Total System Load": 2304,
+      "Net Daily Intake": 2,
+      "Care Load Growth Rate": -0.04338394793925726,
+      "Discharge Offset Ratio": 0.8,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-10-29T00:00:00",
+      "Total System Load": 2305,
+      "Net Daily Intake": -13,
+      "Care Load Growth Rate": -0.12998266897746857,
+      "Discharge Offset Ratio": 3.4,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-10-28T00:00:00",
+      "Total System Load": 2308,
+      "Net Daily Intake": 5,
+      "Care Load Growth Rate": -0.2161694768698652,
+      "Discharge Offset Ratio": 0.5,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-10-27T00:00:00",
+      "Total System Load": 2313,
+      "Net Daily Intake": -3,
+      "Care Load Growth Rate": 0.08654262224145892,
+      "Discharge Offset Ratio": 1.2222222222222223,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-10-26T00:00:00",
+      "Total System Load": 2311,
+      "Net Daily Intake": 2,
+      "Care Load Growth Rate": 0.2603036876355658,
+      "Discharge Offset Ratio": 0.7692307692307693,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-10-25T00:00:00",
+      "Total System Load": 2305,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.2609830361026466,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-10-24T00:00:00",
+      "Total System Load": 2299,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.2616659398168242,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-10-23T00:00:00",
+      "Total System Load": 2293,
+      "Net Daily Intake": 8,
+      "Care Load Growth Rate": -0.43421623968736833,
+      "Discharge Offset Ratio": 0.6666666666666666,
+      "Backlog Accumulation Rate": 3
+    },
+    {
+      "Date": "2025-10-22T00:00:00",
+      "Total System Load": 2303,
+      "Net Daily Intake": 1,
+      "Care Load Growth Rate": 0.5676855895196509,
+      "Discharge Offset Ratio": 0.8571428571428571,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2025-10-21T00:00:00",
+      "Total System Load": 2290,
+      "Net Daily Intake": 8,
+      "Care Load Growth Rate": 0.35056967572304476,
+      "Discharge Offset Ratio": 0.5,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-10-20T00:00:00",
+      "Total System Load": 2282,
+      "Net Daily Intake": -1,
+      "Care Load Growth Rate": 0.484368119771017,
+      "Discharge Offset Ratio": 1.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-10-19T00:00:00",
+      "Total System Load": 2271,
+      "Net Daily Intake": 10,
+      "Care Load Growth Rate": 0.04405286343611703,
+      "Discharge Offset Ratio": 0.3888888888888889,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-10-18T00:00:00",
+      "Total System Load": 2270,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.13233348037053894,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-10-17T00:00:00",
+      "Total System Load": 2267,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.044130626654892424,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-10-16T00:00:00",
+      "Total System Load": 2266,
+      "Net Daily Intake": 6,
+      "Care Load Growth Rate": 0.5323868677906018,
+      "Discharge Offset Ratio": 0.5625,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-10-15T00:00:00",
+      "Total System Load": 2254,
+      "Net Daily Intake": -5,
+      "Care Load Growth Rate": -0.4856512141280356,
+      "Discharge Offset Ratio": 1.3636363636363635,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-10-14T00:00:00",
+      "Total System Load": 2265,
+      "Net Daily Intake": 8,
+      "Care Load Growth Rate": 0.8010680907877266,
+      "Discharge Offset Ratio": 0.47058823529411764,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2025-10-13T00:00:00",
+      "Total System Load": 2247,
+      "Net Daily Intake": 1,
+      "Care Load Growth Rate": 0.0,
+      "Discharge Offset Ratio": 0.75,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-10-12T00:00:00",
+      "Total System Load": 2247,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.04448398576512025,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-10-11T00:00:00",
+      "Total System Load": 2248,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.044503782821547766,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-10-10T00:00:00",
+      "Total System Load": 2247,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.0,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-10-09T00:00:00",
+      "Total System Load": 2247,
+      "Net Daily Intake": 1,
+      "Care Load Growth Rate": 0.2677376171352108,
+      "Discharge Offset Ratio": 0.8571428571428571,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-10-08T00:00:00",
+      "Total System Load": 2241,
+      "Net Daily Intake": -2,
+      "Care Load Growth Rate": 0.3133393017009878,
+      "Discharge Offset Ratio": 1.0625,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-10-07T00:00:00",
+      "Total System Load": 2234,
+      "Net Daily Intake": -6,
+      "Care Load Growth Rate": 0.6306306306306242,
+      "Discharge Offset Ratio": 2.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-10-06T00:00:00",
+      "Total System Load": 2220,
+      "Net Daily Intake": 5,
+      "Care Load Growth Rate": 0.5434782608695565,
+      "Discharge Offset Ratio": 0.625,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-10-05T00:00:00",
+      "Total System Load": 2208,
+      "Net Daily Intake": -3,
+      "Care Load Growth Rate": -0.13568521031207537,
+      "Discharge Offset Ratio": 1.1428571428571428,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-10-04T00:00:00",
+      "Total System Load": 2211,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.045207956600357146,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-10-03T00:00:00",
+      "Total System Load": 2212,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.13544018058690988,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-10-02T00:00:00",
+      "Total System Load": 2215,
+      "Net Daily Intake": -1,
+      "Care Load Growth Rate": 0.8652094717668479,
+      "Discharge Offset Ratio": 1.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-10-01T00:00:00",
+      "Total System Load": 2196,
+      "Net Daily Intake": -2,
+      "Care Load Growth Rate": 0.22820629849384932,
+      "Discharge Offset Ratio": 1.0769230769230769,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-09-30T00:00:00",
+      "Total System Load": 2191,
+      "Net Daily Intake": 5,
+      "Care Load Growth Rate": 0.3664681630783262,
+      "Discharge Offset Ratio": 0.5384615384615384,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-09-29T00:00:00",
+      "Total System Load": 2183,
+      "Net Daily Intake": -1,
+      "Care Load Growth Rate": 0.36781609195402076,
+      "Discharge Offset Ratio": 1.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-09-28T00:00:00",
+      "Total System Load": 2175,
+      "Net Daily Intake": 3,
+      "Care Load Growth Rate": 0.13812154696133394,
+      "Discharge Offset Ratio": 0.6923076923076923,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-09-27T00:00:00",
+      "Total System Load": 2172,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.09216589861751334,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-09-26T00:00:00",
+      "Total System Load": 2170,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.13844023996307797,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-09-25T00:00:00",
+      "Total System Load": 2167,
+      "Net Daily Intake": -6,
+      "Care Load Growth Rate": -0.4136029411764719,
+      "Discharge Offset Ratio": 1.3846153846153846,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-09-24T00:00:00",
+      "Total System Load": 2176,
+      "Net Daily Intake": -5,
+      "Care Load Growth Rate": -0.22925263640531934,
+      "Discharge Offset Ratio": 1.3076923076923077,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-09-23T00:00:00",
+      "Total System Load": 2181,
+      "Net Daily Intake": -5,
+      "Care Load Growth Rate": 0.0,
+      "Discharge Offset Ratio": 1.3636363636363635,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-09-22T00:00:00",
+      "Total System Load": 2181,
+      "Net Daily Intake": 4,
+      "Care Load Growth Rate": 0.5532503457814641,
+      "Discharge Offset Ratio": 0.6666666666666666,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2025-09-21T00:00:00",
+      "Total System Load": 2169,
+      "Net Daily Intake": 8,
+      "Care Load Growth Rate": 0.3237742830712209,
+      "Discharge Offset Ratio": 0.35714285714285715,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-09-20T00:00:00",
+      "Total System Load": 2162,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.32482598607888047,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-09-19T00:00:00",
+      "Total System Load": 2155,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.3258845437616342,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-09-18T00:00:00",
+      "Total System Load": 2148,
+      "Net Daily Intake": -3,
+      "Care Load Growth Rate": 0.6560449859418949,
+      "Discharge Offset Ratio": 1.1666666666666667,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-09-17T00:00:00",
+      "Total System Load": 2134,
+      "Net Daily Intake": -8,
+      "Care Load Growth Rate": 0.5181347150259086,
+      "Discharge Offset Ratio": 2.1666666666666665,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-09-16T00:00:00",
+      "Total System Load": 2123,
+      "Net Daily Intake": 5,
+      "Care Load Growth Rate": -0.46882325363337696,
+      "Discharge Offset Ratio": 0.6666666666666666,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-09-15T00:00:00",
+      "Total System Load": 2133,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.5183788878416529,
+      "Discharge Offset Ratio": 0.9090909090909091,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-09-14T00:00:00",
+      "Total System Load": 2122,
+      "Net Daily Intake": 8,
+      "Care Load Growth Rate": 0.5687203791469253,
+      "Discharge Offset Ratio": 0.35714285714285715,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-09-13T00:00:00",
+      "Total System Load": 2110,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.6199332379589917,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-09-12T00:00:00",
+      "Total System Load": 2097,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.575539568345329,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-09-11T00:00:00",
+      "Total System Load": 2085,
+      "Net Daily Intake": 23,
+      "Care Load Growth Rate": 0.6274131274131234,
+      "Discharge Offset Ratio": 0.2,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-09-10T00:00:00",
+      "Total System Load": 2072,
+      "Net Daily Intake": -4,
+      "Care Load Growth Rate": 0.3389830508474523,
+      "Discharge Offset Ratio": 1.2,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-09-09T00:00:00",
+      "Total System Load": 2065,
+      "Net Daily Intake": -3,
+      "Care Load Growth Rate": 0.7317073170731714,
+      "Discharge Offset Ratio": 1.1666666666666667,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-09-08T00:00:00",
+      "Total System Load": 2050,
+      "Net Daily Intake": -1,
+      "Care Load Growth Rate": 0.24449877750611915,
+      "Discharge Offset Ratio": 1.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-09-07T00:00:00",
+      "Total System Load": 2045,
+      "Net Daily Intake": 2,
+      "Care Load Growth Rate": -0.146484375,
+      "Discharge Offset Ratio": 0.7,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-09-06T00:00:00",
+      "Total System Load": 2048,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.19493177387914784,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-09-05T00:00:00",
+      "Total System Load": 2052,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.14598540145985828,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-09-04T00:00:00",
+      "Total System Load": 2055,
+      "Net Daily Intake": -12,
+      "Care Load Growth Rate": 0.341796875,
+      "Discharge Offset Ratio": 4.666666666666667,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-09-03T00:00:00",
+      "Total System Load": 2048,
+      "Net Daily Intake": 1,
+      "Care Load Growth Rate": -0.3406326034063212,
+      "Discharge Offset Ratio": 0.8333333333333334,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-09-02T00:00:00",
+      "Total System Load": 2055,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.7846983815595898,
+      "Discharge Offset Ratio": 0.9,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-09-01T00:00:00",
+      "Total System Load": 2039,
+      "Net Daily Intake": 12,
+      "Care Load Growth Rate": 0.2458210422812135,
+      "Discharge Offset Ratio": 0.2777777777777778,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-08-31T00:00:00",
+      "Total System Load": 2034,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.2958579881656709,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-08-30T00:00:00",
+      "Total System Load": 2028,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.29673590504450953,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-08-29T00:00:00",
+      "Total System Load": 2022,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.24789291026277027,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-08-28T00:00:00",
+      "Total System Load": 2017,
+      "Net Daily Intake": -11,
+      "Care Load Growth Rate": 0.49825610363727346,
+      "Discharge Offset Ratio": 2.4285714285714284,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-08-27T00:00:00",
+      "Total System Load": 2007,
+      "Net Daily Intake": -10,
+      "Care Load Growth Rate": -0.14925373134327957,
+      "Discharge Offset Ratio": 1.9,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-08-26T00:00:00",
+      "Total System Load": 2010,
+      "Net Daily Intake": 5,
+      "Care Load Growth Rate": 0.0,
+      "Discharge Offset Ratio": 0.7142857142857143,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-08-25T00:00:00",
+      "Total System Load": 2010,
+      "Net Daily Intake": -3,
+      "Care Load Growth Rate": 0.3996003996004083,
+      "Discharge Offset Ratio": 1.2222222222222223,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-08-24T00:00:00",
+      "Total System Load": 2002,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.29880478087649376,
+      "Discharge Offset Ratio": 0.8333333333333334,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-08-23T00:00:00",
+      "Total System Load": 2008,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.34739454094292466,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-08-22T00:00:00",
+      "Total System Load": 2015,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.2968827313211242,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-08-21T00:00:00",
+      "Total System Load": 2021,
+      "Net Daily Intake": -13,
+      "Care Load Growth Rate": 0.0,
+      "Discharge Offset Ratio": 2.3333333333333335,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-08-20T00:00:00",
+      "Total System Load": 2021,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.29776674937964653,
+      "Discharge Offset Ratio": 0.9090909090909091,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-08-19T00:00:00",
+      "Total System Load": 2015,
+      "Net Daily Intake": -8,
+      "Care Load Growth Rate": 0.4987531172069737,
+      "Discharge Offset Ratio": 2.75,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-08-18T00:00:00",
+      "Total System Load": 2005,
+      "Net Daily Intake": -8,
+      "Care Load Growth Rate": 0.0,
+      "Discharge Offset Ratio": 2.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-08-17T00:00:00",
+      "Total System Load": 2005,
+      "Net Daily Intake": -1,
+      "Care Load Growth Rate": -0.24875621890547706,
+      "Discharge Offset Ratio": 1.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-08-16T00:00:00",
+      "Total System Load": 2010,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.29761904761904656,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-08-15T00:00:00",
+      "Total System Load": 2016,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.24740227610093868,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-08-14T00:00:00",
+      "Total System Load": 2021,
+      "Net Daily Intake": -7,
+      "Care Load Growth Rate": 0.0990589400693409,
+      "Discharge Offset Ratio": 2.2,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-08-13T00:00:00",
+      "Total System Load": 2019,
+      "Net Daily Intake": -5,
+      "Care Load Growth Rate": -0.8836524300441795,
+      "Discharge Offset Ratio": 1.3076923076923077,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-08-12T00:00:00",
+      "Total System Load": 2037,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.7418397626112849,
+      "Discharge Offset Ratio": 0.9,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-08-11T00:00:00",
+      "Total System Load": 2022,
+      "Net Daily Intake": -12,
+      "Care Load Growth Rate": -0.09881422924901129,
+      "Discharge Offset Ratio": 3.2,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-08-10T00:00:00",
+      "Total System Load": 2024,
+      "Net Daily Intake": -4,
+      "Care Load Growth Rate": -0.3937007874015741,
+      "Discharge Offset Ratio": 1.3333333333333333,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-08-09T00:00:00",
+      "Total System Load": 2032,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.440960313571781,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-08-08T00:00:00",
+      "Total System Load": 2041,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.3904343582235237,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-08-07T00:00:00",
+      "Total System Load": 2049,
+      "Net Daily Intake": -11,
+      "Care Load Growth Rate": -0.1948368241597609,
+      "Discharge Offset Ratio": 2.4285714285714284,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-08-06T00:00:00",
+      "Total System Load": 2053,
+      "Net Daily Intake": -10,
+      "Care Load Growth Rate": -0.4847309743092554,
+      "Discharge Offset Ratio": 3.25,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-08-05T00:00:00",
+      "Total System Load": 2063,
+      "Net Daily Intake": -4,
+      "Care Load Growth Rate": 0.04849660523762456,
+      "Discharge Offset Ratio": 1.2727272727272727,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-08-04T00:00:00",
+      "Total System Load": 2062,
+      "Net Daily Intake": -3,
+      "Care Load Growth Rate": -0.6265060240963849,
+      "Discharge Offset Ratio": 1.1666666666666667,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-08-03T00:00:00",
+      "Total System Load": 2075,
+      "Net Daily Intake": -2,
+      "Care Load Growth Rate": 0.14478764478764727,
+      "Discharge Offset Ratio": 1.25,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-08-02T00:00:00",
+      "Total System Load": 2072,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.09661835748793202,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-08-01T00:00:00",
+      "Total System Load": 2070,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.14513788098693414,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-07-31T00:00:00",
+      "Total System Load": 2067,
+      "Net Daily Intake": -9,
+      "Care Load Growth Rate": -0.5293551491819093,
+      "Discharge Offset Ratio": 2.142857142857143,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-07-30T00:00:00",
+      "Total System Load": 2078,
+      "Net Daily Intake": -12,
+      "Care Load Growth Rate": -0.09615384615384581,
+      "Discharge Offset Ratio": 3.2,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-07-29T00:00:00",
+      "Total System Load": 2080,
+      "Net Daily Intake": -9,
+      "Care Load Growth Rate": -0.43082814743896636,
+      "Discharge Offset Ratio": 3.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-07-28T00:00:00",
+      "Total System Load": 2089,
+      "Net Daily Intake": -11,
+      "Care Load Growth Rate": -0.5238095238095264,
+      "Discharge Offset Ratio": 3.5,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-07-27T00:00:00",
+      "Total System Load": 2100,
+      "Net Daily Intake": -2,
+      "Care Load Growth Rate": -0.23752969121140222,
+      "Discharge Offset Ratio": 1.3333333333333333,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-07-26T00:00:00",
+      "Total System Load": 2105,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.1896633475580889,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-07-25T00:00:00",
+      "Total System Load": 2109,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.23651844843898262,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-07-24T00:00:00",
+      "Total System Load": 2114,
+      "Net Daily Intake": -22,
+      "Care Load Growth Rate": -0.8442776735459678,
+      "Discharge Offset Ratio": 3.625,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-07-23T00:00:00",
+      "Total System Load": 2132,
+      "Net Daily Intake": -9,
+      "Care Load Growth Rate": 0.09389671361501595,
+      "Discharge Offset Ratio": 2.3333333333333335,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-07-22T00:00:00",
+      "Total System Load": 2130,
+      "Net Daily Intake": -13,
+      "Care Load Growth Rate": -0.42075736325385416,
+      "Discharge Offset Ratio": 4.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-07-21T00:00:00",
+      "Total System Load": 2139,
+      "Net Daily Intake": -9,
+      "Care Load Growth Rate": -0.37261294829995517,
+      "Discharge Offset Ratio": 2.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-07-20T00:00:00",
+      "Total System Load": 2147,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.32497678737233304,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-07-19T00:00:00",
+      "Total System Load": 2154,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.3239241092086953,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-07-18T00:00:00",
+      "Total System Load": 2161,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.36883356385430943,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-07-17T00:00:00",
+      "Total System Load": 2169,
+      "Net Daily Intake": -15,
+      "Care Load Growth Rate": -0.18407731247124248,
+      "Discharge Offset Ratio": 5.666666666666667,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-07-16T00:00:00",
+      "Total System Load": 2173,
+      "Net Daily Intake": -11,
+      "Care Load Growth Rate": -0.275355667737498,
+      "Discharge Offset Ratio": 11.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-07-15T00:00:00",
+      "Total System Load": 2179,
+      "Net Daily Intake": -12,
+      "Care Load Growth Rate": -0.5022831050228271,
+      "Discharge Offset Ratio": 2.8333333333333335,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-07-14T00:00:00",
+      "Total System Load": 2190,
+      "Net Daily Intake": -25,
+      "Care Load Growth Rate": -1.2178619756427644,
+      "Discharge Offset Ratio": 13.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-07-13T00:00:00",
+      "Total System Load": 2217,
+      "Net Daily Intake": -6,
+      "Care Load Growth Rate": -0.7165248544558911,
+      "Discharge Offset Ratio": 2.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-07-12T00:00:00",
+      "Total System Load": 2233,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.6672597864768703,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-07-11T00:00:00",
+      "Total System Load": 2248,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.7067137809187329,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-07-10T00:00:00",
+      "Total System Load": 2264,
+      "Net Daily Intake": -36,
+      "Care Load Growth Rate": -1.5224010439321423,
+      "Discharge Offset Ratio": 9.75,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-07-09T00:00:00",
+      "Total System Load": 2299,
+      "Net Daily Intake": -32,
+      "Care Load Growth Rate": -0.9905254091300608,
+      "Discharge Offset Ratio": 32.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-07-08T00:00:00",
+      "Total System Load": 2322,
+      "Net Daily Intake": -12,
+      "Care Load Growth Rate": -0.5567451820128522,
+      "Discharge Offset Ratio": 2.2222222222222223,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-07-07T00:00:00",
+      "Total System Load": 2335,
+      "Net Daily Intake": -12,
+      "Care Load Growth Rate": -0.5959982971477262,
+      "Discharge Offset Ratio": 2.2222222222222223,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-07-06T00:00:00",
+      "Total System Load": 2349,
+      "Net Daily Intake": -6,
+      "Care Load Growth Rate": -0.4661016949152552,
+      "Discharge Offset Ratio": 2.6666666666666665,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-07-05T00:00:00",
+      "Total System Load": 2360,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.42194092827003704,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-07-04T00:00:00",
+      "Total System Load": 2370,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.5037783375314908,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-07-03T00:00:00",
+      "Total System Load": 2382,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.45967404931048783,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-07-02T00:00:00",
+      "Total System Load": 2393,
+      "Net Daily Intake": -29,
+      "Care Load Growth Rate": -0.498960498960499,
+      "Discharge Offset Ratio": 3.8,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-07-01T00:00:00",
+      "Total System Load": 2405,
+      "Net Daily Intake": -16,
+      "Care Load Growth Rate": -0.9880609304240395,
+      "Discharge Offset Ratio": 3.142857142857143,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-06-30T00:00:00",
+      "Total System Load": 2429,
+      "Net Daily Intake": -8,
+      "Care Load Growth Rate": -0.04115226337448874,
+      "Discharge Offset Ratio": 1.7777777777777777,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-06-29T00:00:00",
+      "Total System Load": 2430,
+      "Net Daily Intake": -13,
+      "Care Load Growth Rate": -0.3281378178835115,
+      "Discharge Offset Ratio": 2.5,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-06-28T00:00:00",
+      "Total System Load": 2438,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.40849673202614234,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-06-27T00:00:00",
+      "Total System Load": 2448,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.32573289902280145,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-06-26T00:00:00",
+      "Total System Load": 2456,
+      "Net Daily Intake": -28,
+      "Care Load Growth Rate": -1.0475423045930743,
+      "Discharge Offset Ratio": 4.375,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-06-25T00:00:00",
+      "Total System Load": 2482,
+      "Net Daily Intake": -22,
+      "Care Load Growth Rate": -1.0761259465922657,
+      "Discharge Offset Ratio": 8.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-06-24T00:00:00",
+      "Total System Load": 2509,
+      "Net Daily Intake": -11,
+      "Care Load Growth Rate": -0.03984063745019473,
+      "Discharge Offset Ratio": 2.6666666666666665,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-06-23T00:00:00",
+      "Total System Load": 2510,
+      "Net Daily Intake": -12,
+      "Care Load Growth Rate": -0.4363347877826218,
+      "Discharge Offset Ratio": 2.8333333333333335,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-06-22T00:00:00",
+      "Total System Load": 2521,
+      "Net Daily Intake": -2,
+      "Care Load Growth Rate": 0.0,
+      "Discharge Offset Ratio": 1.1666666666666667,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-06-21T00:00:00",
+      "Total System Load": 2521,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.03968253968253954,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-06-20T00:00:00",
+      "Total System Load": 2520,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.0,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-06-19T00:00:00",
+      "Total System Load": 2520,
+      "Net Daily Intake": -11,
+      "Care Load Growth Rate": -0.5524861878453025,
+      "Discharge Offset Ratio": 2.25,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-06-18T00:00:00",
+      "Total System Load": 2534,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.5104043973301886,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-06-17T00:00:00",
+      "Total System Load": 2547,
+      "Net Daily Intake": -4,
+      "Care Load Growth Rate": 0.03927729772190691,
+      "Discharge Offset Ratio": 1.2727272727272727,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-06-16T00:00:00",
+      "Total System Load": 2546,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.039292730844797674,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-06-15T00:00:00",
+      "Total System Load": 2545,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.039308176100627534,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-06-14T00:00:00",
+      "Total System Load": 2544,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.07867820613689513,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-06-13T00:00:00",
+      "Total System Load": 2542,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.0393545848091259,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-06-12T00:00:00",
+      "Total System Load": 2541,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.03937007874015297,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-06-11T00:00:00",
+      "Total System Load": 2540,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.03938558487592836,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-06-10T00:00:00",
+      "Total System Load": 2539,
+      "Net Daily Intake": -5,
+      "Care Load Growth Rate": 0.07883326763893361,
+      "Discharge Offset Ratio": 1.5,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-06-09T00:00:00",
+      "Total System Load": 2537,
+      "Net Daily Intake": 5,
+      "Care Load Growth Rate": 0.5548949663099378,
+      "Discharge Offset Ratio": 0.6,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2025-06-08T00:00:00",
+      "Total System Load": 2523,
+      "Net Daily Intake": 2,
+      "Care Load Growth Rate": -0.07920792079207928,
+      "Discharge Offset Ratio": 0.8125,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-06-07T00:00:00",
+      "Total System Load": 2525,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.0791452314997998,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-06-06T00:00:00",
+      "Total System Load": 2527,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.07908264136021748,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-06-05T00:00:00",
+      "Total System Load": 2529,
+      "Net Daily Intake": -16,
+      "Care Load Growth Rate": -0.11848341232227888,
+      "Discharge Offset Ratio": 3.5,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-06-04T00:00:00",
+      "Total System Load": 2532,
+      "Net Daily Intake": -7,
+      "Care Load Growth Rate": -0.3933910306844979,
+      "Discharge Offset Ratio": 1.6,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-06-03T00:00:00",
+      "Total System Load": 2542,
+      "Net Daily Intake": -4,
+      "Care Load Growth Rate": 0.19708316909736734,
+      "Discharge Offset Ratio": 1.25,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-06-02T00:00:00",
+      "Total System Load": 2537,
+      "Net Daily Intake": -11,
+      "Care Load Growth Rate": -0.5877742946708508,
+      "Discharge Offset Ratio": 2.6666666666666665,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-06-01T00:00:00",
+      "Total System Load": 2552,
+      "Net Daily Intake": 4,
+      "Care Load Growth Rate": 0.07843137254901489,
+      "Discharge Offset Ratio": 0.7058823529411765,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-05-31T00:00:00",
+      "Total System Load": 2550,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.15710919088767206,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-05-30T00:00:00",
+      "Total System Load": 2546,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.07861635220125507,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-05-29T00:00:00",
+      "Total System Load": 2544,
+      "Net Daily Intake": 4,
+      "Care Load Growth Rate": 0.23640661938533203,
+      "Discharge Offset Ratio": 0.6875,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-05-28T00:00:00",
+      "Total System Load": 2538,
+      "Net Daily Intake": -2,
+      "Care Load Growth Rate": 0.39556962025315556,
+      "Discharge Offset Ratio": 1.0769230769230769,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-05-27T00:00:00",
+      "Total System Load": 2528,
+      "Net Daily Intake": -4,
+      "Care Load Growth Rate": 0.15847860538826808,
+      "Discharge Offset Ratio": 1.375,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-05-26T00:00:00",
+      "Total System Load": 2524,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.11900039666798978,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-05-25T00:00:00",
+      "Total System Load": 2521,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.19872813990460259,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-05-24T00:00:00",
+      "Total System Load": 2516,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.11937922801432688,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-05-23T00:00:00",
+      "Total System Load": 2513,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.15942606616181632,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-05-22T00:00:00",
+      "Total System Load": 2509,
+      "Net Daily Intake": 2,
+      "Care Load Growth Rate": -0.7908264136022192,
+      "Discharge Offset Ratio": 0.8333333333333334,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-05-21T00:00:00",
+      "Total System Load": 2529,
+      "Net Daily Intake": -5,
+      "Care Load Growth Rate": 0.9177972865123785,
+      "Discharge Offset Ratio": 1.2857142857142858,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-05-20T00:00:00",
+      "Total System Load": 2506,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.8856682769726287,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-05-19T00:00:00",
+      "Total System Load": 2484,
+      "Net Daily Intake": 11,
+      "Care Load Growth Rate": 0.7707910750507141,
+      "Discharge Offset Ratio": 0.3333333333333333,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2025-05-18T00:00:00",
+      "Total System Load": 2465,
+      "Net Daily Intake": 5,
+      "Care Load Growth Rate": 0.32560032560031704,
+      "Discharge Offset Ratio": 0.6,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-05-17T00:00:00",
+      "Total System Load": 2457,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.32666394446712044,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-05-16T00:00:00",
+      "Total System Load": 2449,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.32773453502663585,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-05-15T00:00:00",
+      "Total System Load": 2441,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.7013201320132056,
+      "Discharge Offset Ratio": 0.9333333333333333,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-05-14T00:00:00",
+      "Total System Load": 2424,
+      "Net Daily Intake": 3,
+      "Care Load Growth Rate": 0.04127115146512761,
+      "Discharge Offset Ratio": 0.7333333333333333,
+      "Backlog Accumulation Rate": 4
+    },
+    {
+      "Date": "2025-05-13T00:00:00",
+      "Total System Load": 2423,
+      "Net Daily Intake": 1,
+      "Care Load Growth Rate": -0.08247422680411898,
+      "Discharge Offset Ratio": 0.8461538461538461,
+      "Backlog Accumulation Rate": 3
+    },
+    {
+      "Date": "2025-05-12T00:00:00",
+      "Total System Load": 2425,
+      "Net Daily Intake": 7,
+      "Care Load Growth Rate": 0.8316008316008316,
+      "Discharge Offset Ratio": 0.4666666666666667,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2025-05-11T00:00:00",
+      "Total System Load": 2405,
+      "Net Daily Intake": 9,
+      "Care Load Growth Rate": 0.29190992493743906,
+      "Discharge Offset Ratio": 0.23076923076923078,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-05-10T00:00:00",
+      "Total System Load": 2398,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.2508361204013321,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-05-09T00:00:00",
+      "Total System Load": 2392,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.2935010482180367,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-05-08T00:00:00",
+      "Total System Load": 2385,
+      "Net Daily Intake": 5,
+      "Care Load Growth Rate": 0.8456659619450413,
+      "Discharge Offset Ratio": 0.6470588235294118,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2025-05-07T00:00:00",
+      "Total System Load": 2365,
+      "Net Daily Intake": 5,
+      "Care Load Growth Rate": -0.295109612141653,
+      "Discharge Offset Ratio": 0.625,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-05-06T00:00:00",
+      "Total System Load": 2372,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.1263157894736855,
+      "Discharge Offset Ratio": 0.9411764705882353,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-05-05T00:00:00",
+      "Total System Load": 2375,
+      "Net Daily Intake": 3,
+      "Care Load Growth Rate": 0.3803888419273038,
+      "Discharge Offset Ratio": 0.8095238095238095,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2025-05-04T00:00:00",
+      "Total System Load": 2366,
+      "Net Daily Intake": 5,
+      "Care Load Growth Rate": 0.4244482173174857,
+      "Discharge Offset Ratio": 0.45454545454545453,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-05-03T00:00:00",
+      "Total System Load": 2356,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.34071550255536653,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-05-02T00:00:00",
+      "Total System Load": 2348,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.42771599657827064,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-05-01T00:00:00",
+      "Total System Load": 2338,
+      "Net Daily Intake": -2,
+      "Care Load Growth Rate": -0.21340162185232714,
+      "Discharge Offset Ratio": 1.0666666666666667,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-04-30T00:00:00",
+      "Total System Load": 2343,
+      "Net Daily Intake": -3,
+      "Care Load Growth Rate": 0.6011163589523472,
+      "Discharge Offset Ratio": 1.2,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-04-29T00:00:00",
+      "Total System Load": 2329,
+      "Net Daily Intake": -4,
+      "Care Load Growth Rate": -0.17145306472353683,
+      "Discharge Offset Ratio": 1.25,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-04-28T00:00:00",
+      "Total System Load": 2333,
+      "Net Daily Intake": 4,
+      "Care Load Growth Rate": -0.34173430158052076,
+      "Discharge Offset Ratio": 0.6153846153846154,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2025-04-27T00:00:00",
+      "Total System Load": 2341,
+      "Net Daily Intake": 8,
+      "Care Load Growth Rate": 0.5152425933877103,
+      "Discharge Offset Ratio": 0.3076923076923077,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-04-26T00:00:00",
+      "Total System Load": 2329,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.6047516198704139,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-04-25T00:00:00",
+      "Total System Load": 2315,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.521059487624842,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-04-24T00:00:00",
+      "Total System Load": 2303,
+      "Net Daily Intake": -6,
+      "Care Load Growth Rate": -0.860955660783469,
+      "Discharge Offset Ratio": 1.625,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-04-23T00:00:00",
+      "Total System Load": 2323,
+      "Net Daily Intake": -7,
+      "Care Load Growth Rate": -0.0430292598967319,
+      "Discharge Offset Ratio": 2.2,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-04-22T00:00:00",
+      "Total System Load": 2324,
+      "Net Daily Intake": -3,
+      "Care Load Growth Rate": -0.385769395627944,
+      "Discharge Offset Ratio": 1.1333333333333333,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-04-21T00:00:00",
+      "Total System Load": 2333,
+      "Net Daily Intake": -1,
+      "Care Load Growth Rate": 0.5603448275862011,
+      "Discharge Offset Ratio": 1.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-04-20T00:00:00",
+      "Total System Load": 2320,
+      "Net Daily Intake": 2,
+      "Care Load Growth Rate": 0.08628127696290733,
+      "Discharge Offset Ratio": 0.5714285714285714,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-04-19T00:00:00",
+      "Total System Load": 2318,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.08635578583764403,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-04-18T00:00:00",
+      "Total System Load": 2316,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.08643042350906516,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-04-17T00:00:00",
+      "Total System Load": 2314,
+      "Net Daily Intake": -4,
+      "Care Load Growth Rate": -0.30159414045669575,
+      "Discharge Offset Ratio": 1.2727272727272727,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-04-16T00:00:00",
+      "Total System Load": 2321,
+      "Net Daily Intake": -3,
+      "Care Load Growth Rate": 0.694143167028205,
+      "Discharge Offset Ratio": 1.3333333333333333,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-04-15T00:00:00",
+      "Total System Load": 2305,
+      "Net Daily Intake": 5,
+      "Care Load Growth Rate": -0.12998266897746857,
+      "Discharge Offset Ratio": 0.5384615384615384,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-04-14T00:00:00",
+      "Total System Load": 2308,
+      "Net Daily Intake": -4,
+      "Care Load Growth Rate": -0.04330879168471524,
+      "Discharge Offset Ratio": 1.3,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-04-13T00:00:00",
+      "Total System Load": 2309,
+      "Net Daily Intake": 7,
+      "Care Load Growth Rate": 0.43497172683775176,
+      "Discharge Offset Ratio": 0.2727272727272727,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-04-12T00:00:00",
+      "Total System Load": 2299,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.4368719965050172,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-04-11T00:00:00",
+      "Total System Load": 2289,
+      "Net Daily Intake": -1,
+      "Care Load Growth Rate": -0.04366812227074579,
+      "Discharge Offset Ratio": 1.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-04-10T00:00:00",
+      "Total System Load": 2290,
+      "Net Daily Intake": 11,
+      "Care Load Growth Rate": 0.8810572687224738,
+      "Discharge Offset Ratio": 0.3333333333333333,
+      "Backlog Accumulation Rate": 4
+    },
+    {
+      "Date": "2025-04-09T00:00:00",
+      "Total System Load": 2270,
+      "Net Daily Intake": 5,
+      "Care Load Growth Rate": -0.30742204655248573,
+      "Discharge Offset Ratio": 0.45454545454545453,
+      "Backlog Accumulation Rate": 3
+    },
+    {
+      "Date": "2025-04-08T00:00:00",
+      "Total System Load": 2277,
+      "Net Daily Intake": 3,
+      "Care Load Growth Rate": 0.7968127490039834,
+      "Discharge Offset Ratio": 0.6923076923076923,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2025-04-07T00:00:00",
+      "Total System Load": 2259,
+      "Net Daily Intake": 4,
+      "Care Load Growth Rate": 0.48932384341637825,
+      "Discharge Offset Ratio": 0.5,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-04-06T00:00:00",
+      "Total System Load": 2248,
+      "Net Daily Intake": -4,
+      "Care Load Growth Rate": 0.0,
+      "Discharge Offset Ratio": 1.375,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-04-05T00:00:00",
+      "Total System Load": 2248,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.04446420631392112,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-04-04T00:00:00",
+      "Total System Load": 2249,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.0,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-04-03T00:00:00",
+      "Total System Load": 2249,
+      "Net Daily Intake": 10,
+      "Care Load Growth Rate": 0.44662795891021734,
+      "Discharge Offset Ratio": 0.42105263157894735,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2025-04-02T00:00:00",
+      "Total System Load": 2239,
+      "Net Daily Intake": 13,
+      "Care Load Growth Rate": 0.5388414907947947,
+      "Discharge Offset Ratio": 0.17647058823529413,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-04-01T00:00:00",
+      "Total System Load": 2227,
+      "Net Daily Intake": -5,
+      "Care Load Growth Rate": 0.4057709648331853,
+      "Discharge Offset Ratio": 1.5,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-03-31T00:00:00",
+      "Total System Load": 2218,
+      "Net Daily Intake": 3,
+      "Care Load Growth Rate": 0.45289855072463414,
+      "Discharge Offset Ratio": 0.5555555555555556,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2025-03-30T00:00:00",
+      "Total System Load": 2208,
+      "Net Daily Intake": 3,
+      "Care Load Growth Rate": 0.45495905368517775,
+      "Discharge Offset Ratio": 0.3333333333333333,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-03-29T00:00:00",
+      "Total System Load": 2198,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.4570383912248621,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-03-28T00:00:00",
+      "Total System Load": 2188,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.45913682277318735,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-03-27T00:00:00",
+      "Total System Load": 2178,
+      "Net Daily Intake": 11,
+      "Care Load Growth Rate": -0.09174311926605228,
+      "Discharge Offset Ratio": 0.14285714285714285,
+      "Backlog Accumulation Rate": 5
+    },
+    {
+      "Date": "2025-03-26T00:00:00",
+      "Total System Load": 2180,
+      "Net Daily Intake": 13,
+      "Care Load Growth Rate": 0.7393715341959428,
+      "Discharge Offset Ratio": 0.125,
+      "Backlog Accumulation Rate": 4
+    },
+    {
+      "Date": "2025-03-25T00:00:00",
+      "Total System Load": 2164,
+      "Net Daily Intake": 1,
+      "Care Load Growth Rate": 0.5576208178438735,
+      "Discharge Offset Ratio": 0.75,
+      "Backlog Accumulation Rate": 3
+    },
+    {
+      "Date": "2025-03-24T00:00:00",
+      "Total System Load": 2152,
+      "Net Daily Intake": 4,
+      "Care Load Growth Rate": -0.6004618937644368,
+      "Discharge Offset Ratio": 0.5833333333333334,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2025-03-23T00:00:00",
+      "Total System Load": 2165,
+      "Net Daily Intake": 7,
+      "Care Load Growth Rate": 0.32437442075996525,
+      "Discharge Offset Ratio": 0.2,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-03-22T00:00:00",
+      "Total System Load": 2158,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.32543003254299485,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-03-21T00:00:00",
+      "Total System Load": 2151,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.32649253731342753,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-03-20T00:00:00",
+      "Total System Load": 2144,
+      "Net Daily Intake": 4,
+      "Care Load Growth Rate": 0.14012143858010973,
+      "Discharge Offset Ratio": 0.5833333333333334,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2025-03-19T00:00:00",
+      "Total System Load": 2141,
+      "Net Daily Intake": 5,
+      "Care Load Growth Rate": -0.09332711152589823,
+      "Discharge Offset Ratio": 0.6,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-03-18T00:00:00",
+      "Total System Load": 2143,
+      "Net Daily Intake": -2,
+      "Care Load Growth Rate": 0.8470588235294008,
+      "Discharge Offset Ratio": 1.1428571428571428,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-03-17T00:00:00",
+      "Total System Load": 2125,
+      "Net Daily Intake": -8,
+      "Care Load Growth Rate": -0.04703668861711918,
+      "Discharge Offset Ratio": 8.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-03-16T00:00:00",
+      "Total System Load": 2126,
+      "Net Daily Intake": 3,
+      "Care Load Growth Rate": -0.187793427230043,
+      "Discharge Offset Ratio": 0.5555555555555556,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-03-15T00:00:00",
+      "Total System Load": 2130,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.09380863039399889,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-03-14T00:00:00",
+      "Total System Load": 2132,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.1872659176029967,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-03-13T00:00:00",
+      "Total System Load": 2136,
+      "Net Daily Intake": 3,
+      "Care Load Growth Rate": 0.2346316283434957,
+      "Discharge Offset Ratio": 0.6,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-03-12T00:00:00",
+      "Total System Load": 2131,
+      "Net Daily Intake": -6,
+      "Care Load Growth Rate": 0.18805829807240215,
+      "Discharge Offset Ratio": 2.6666666666666665,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-03-11T00:00:00",
+      "Total System Load": 2127,
+      "Net Daily Intake": -13,
+      "Care Load Growth Rate": -1.207617278216444,
+      "Discharge Offset Ratio": 2.5,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-03-10T00:00:00",
+      "Total System Load": 2153,
+      "Net Daily Intake": -15,
+      "Care Load Growth Rate": -0.4162812210915856,
+      "Discharge Offset Ratio": 2.5555555555555554,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-03-09T00:00:00",
+      "Total System Load": 2162,
+      "Net Daily Intake": -15,
+      "Care Load Growth Rate": -1.2785388127853903,
+      "Discharge Offset Ratio": 1.875,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-03-08T00:00:00",
+      "Total System Load": 2190,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -1.2178619756427644,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-03-07T00:00:00",
+      "Total System Load": 2217,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -1.2472160356347461,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-03-06T00:00:00",
+      "Total System Load": 2245,
+      "Net Daily Intake": -27,
+      "Care Load Growth Rate": -0.5757307351638596,
+      "Discharge Offset Ratio": 4.714285714285714,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-03-05T00:00:00",
+      "Total System Load": 2258,
+      "Net Daily Intake": -36,
+      "Care Load Growth Rate": -1.6978667827601268,
+      "Discharge Offset Ratio": 8.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-03-04T00:00:00",
+      "Total System Load": 2297,
+      "Net Daily Intake": -20,
+      "Care Load Growth Rate": -0.8203799654576849,
+      "Discharge Offset Ratio": 2.727272727272727,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-03-03T00:00:00",
+      "Total System Load": 2316,
+      "Net Daily Intake": -7,
+      "Care Load Growth Rate": -0.21542438604049696,
+      "Discharge Offset Ratio": 1.3157894736842106,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-03-02T00:00:00",
+      "Total System Load": 2321,
+      "Net Daily Intake": -27,
+      "Care Load Growth Rate": -1.1919965942954414,
+      "Discharge Offset Ratio": 6.2,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-03-01T00:00:00",
+      "Total System Load": 2349,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -1.2195121951219523,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-02-28T00:00:00",
+      "Total System Load": 2378,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -1.163757273482957,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-02-27T00:00:00",
+      "Total System Load": 2406,
+      "Net Daily Intake": -20,
+      "Care Load Growth Rate": -1.0690789473684181,
+      "Discharge Offset Ratio": 2.0555555555555554,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-02-26T00:00:00",
+      "Total System Load": 2432,
+      "Net Daily Intake": -22,
+      "Care Load Growth Rate": 0.49586776859504855,
+      "Discharge Offset Ratio": 11.5,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-02-25T00:00:00",
+      "Total System Load": 2420,
+      "Net Daily Intake": -16,
+      "Care Load Growth Rate": -0.6160164271047264,
+      "Discharge Offset Ratio": 2.875,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-02-24T00:00:00",
+      "Total System Load": 2435,
+      "Net Daily Intake": -10,
+      "Care Load Growth Rate": -0.16400164001639794,
+      "Discharge Offset Ratio": 1.6,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-02-23T00:00:00",
+      "Total System Load": 2439,
+      "Net Daily Intake": -27,
+      "Care Load Growth Rate": -1.4147130153597365,
+      "Discharge Offset Ratio": 3.888888888888889,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-02-22T00:00:00",
+      "Total System Load": 2474,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -1.4342629482071767,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-02-21T00:00:00",
+      "Total System Load": 2510,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -1.3752455795677854,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-02-20T00:00:00",
+      "Total System Load": 2545,
+      "Net Daily Intake": -17,
+      "Care Load Growth Rate": 0.0,
+      "Discharge Offset Ratio": 2.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-02-19T00:00:00",
+      "Total System Load": 2545,
+      "Net Daily Intake": -2,
+      "Care Load Growth Rate": -0.3913894324853229,
+      "Discharge Offset Ratio": 1.0555555555555556,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-02-18T00:00:00",
+      "Total System Load": 2555,
+      "Net Daily Intake": 2,
+      "Care Load Growth Rate": 0.23538642604943316,
+      "Discharge Offset Ratio": 0.75,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-02-17T00:00:00",
+      "Total System Load": 2549,
+      "Net Daily Intake": -1,
+      "Care Load Growth Rate": -1.5830115830115843,
+      "Discharge Offset Ratio": 1.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-02-16T00:00:00",
+      "Total System Load": 2590,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -1.5957446808510634,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-02-15T00:00:00",
+      "Total System Load": 2632,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -1.4970059880239472,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-02-14T00:00:00",
+      "Total System Load": 2672,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -1.5112421673424303,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-02-13T00:00:00",
+      "Total System Load": 2713,
+      "Net Daily Intake": -49,
+      "Care Load Growth Rate": -2.128427128427124,
+      "Discharge Offset Ratio": 3.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-02-12T00:00:00",
+      "Total System Load": 2772,
+      "Net Daily Intake": -46,
+      "Care Load Growth Rate": -1.7369727047146455,
+      "Discharge Offset Ratio": 3.142857142857143,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-02-11T00:00:00",
+      "Total System Load": 2821,
+      "Net Daily Intake": -38,
+      "Care Load Growth Rate": -1.0869565217391353,
+      "Discharge Offset Ratio": 3.8461538461538463,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-02-10T00:00:00",
+      "Total System Load": 2852,
+      "Net Daily Intake": -48,
+      "Care Load Growth Rate": -1.3490141819439638,
+      "Discharge Offset Ratio": 3.9375,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-02-09T00:00:00",
+      "Total System Load": 2891,
+      "Net Daily Intake": -76,
+      "Care Load Growth Rate": -3.5690460306871286,
+      "Discharge Offset Ratio": 4.125,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-02-08T00:00:00",
+      "Total System Load": 2998,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -3.47714101738571,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-02-07T00:00:00",
+      "Total System Load": 3106,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -3.3302209772797964,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-02-06T00:00:00",
+      "Total System Load": 3213,
+      "Net Daily Intake": -118,
+      "Care Load Growth Rate": -3.397474443776305,
+      "Discharge Offset Ratio": 5.178571428571429,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-02-05T00:00:00",
+      "Total System Load": 3326,
+      "Net Daily Intake": -68,
+      "Care Load Growth Rate": -2.5490770583064704,
+      "Discharge Offset Ratio": 2.810810810810811,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-02-04T00:00:00",
+      "Total System Load": 3413,
+      "Net Daily Intake": -45,
+      "Care Load Growth Rate": -1.0150812064965153,
+      "Discharge Offset Ratio": 2.466666666666667,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-02-03T00:00:00",
+      "Total System Load": 3448,
+      "Net Daily Intake": -91,
+      "Care Load Growth Rate": -1.6262482168330927,
+      "Discharge Offset Ratio": 8.5,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-02-02T00:00:00",
+      "Total System Load": 3505,
+      "Net Daily Intake": -127,
+      "Care Load Growth Rate": -4.2088002186389755,
+      "Discharge Offset Ratio": 4.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-02-01T00:00:00",
+      "Total System Load": 3659,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -3.9884544738913674,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-01-31T00:00:00",
+      "Total System Load": 3811,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -3.883984867591428,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-01-30T00:00:00",
+      "Total System Load": 3965,
+      "Net Daily Intake": -112,
+      "Care Load Growth Rate": -2.961331375428289,
+      "Discharge Offset Ratio": 3.3125,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-01-29T00:00:00",
+      "Total System Load": 4086,
+      "Net Daily Intake": -60,
+      "Care Load Growth Rate": -1.423401688781667,
+      "Discharge Offset Ratio": 2.475,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-01-28T00:00:00",
+      "Total System Load": 4145,
+      "Net Daily Intake": -62,
+      "Care Load Growth Rate": -1.6373991457047987,
+      "Discharge Offset Ratio": 2.525,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-01-27T00:00:00",
+      "Total System Load": 4214,
+      "Net Daily Intake": -93,
+      "Care Load Growth Rate": -1.817334575955265,
+      "Discharge Offset Ratio": 3.6285714285714286,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-01-26T00:00:00",
+      "Total System Load": 4292,
+      "Net Daily Intake": -171,
+      "Care Load Growth Rate": -3.0494691664784246,
+      "Discharge Offset Ratio": 15.166666666666666,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-01-25T00:00:00",
+      "Total System Load": 4427,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -2.937952203464156,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-01-24T00:00:00",
+      "Total System Load": 4561,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -2.874787052810901,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-01-23T00:00:00",
+      "Total System Load": 4696,
+      "Net Daily Intake": -77,
+      "Care Load Growth Rate": -2.451184046530952,
+      "Discharge Offset Ratio": 1.7755102040816326,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-01-22T00:00:00",
+      "Total System Load": 4814,
+      "Net Daily Intake": -31,
+      "Care Load Growth Rate": 0.45909849749583564,
+      "Discharge Offset Ratio": 1.5660377358490567,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-01-21T00:00:00",
+      "Total System Load": 4792,
+      "Net Daily Intake": 63,
+      "Care Load Growth Rate": 0.7569386038688064,
+      "Discharge Offset Ratio": 0.4576271186440678,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2025-01-20T00:00:00",
+      "Total System Load": 4756,
+      "Net Daily Intake": 9,
+      "Care Load Growth Rate": -0.5020920502092019,
+      "Discharge Offset Ratio": 0.927007299270073,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2025-01-19T00:00:00",
+      "Total System Load": 4780,
+      "Net Daily Intake": -8,
+      "Care Load Growth Rate": -2.029104324656694,
+      "Discharge Offset Ratio": 1.0414201183431953,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-01-18T00:00:00",
+      "Total System Load": 4879,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -1.988750502209724,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-01-17T00:00:00",
+      "Total System Load": 4978,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -1.9499704549931107,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-01-16T00:00:00",
+      "Total System Load": 5077,
+      "Net Daily Intake": -28,
+      "Care Load Growth Rate": 0.23692003948667661,
+      "Discharge Offset Ratio": 1.2045454545454546,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-01-15T00:00:00",
+      "Total System Load": 5065,
+      "Net Daily Intake": -57,
+      "Care Load Growth Rate": -0.3148986419996058,
+      "Discharge Offset Ratio": 1.5185185185185186,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-01-14T00:00:00",
+      "Total System Load": 5081,
+      "Net Daily Intake": -46,
+      "Care Load Growth Rate": -0.877877487319545,
+      "Discharge Offset Ratio": 1.4787234042553192,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-01-13T00:00:00",
+      "Total System Load": 5126,
+      "Net Daily Intake": -79,
+      "Care Load Growth Rate": -1.3282001924927789,
+      "Discharge Offset Ratio": 1.7572815533980584,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-01-12T00:00:00",
+      "Total System Load": 5195,
+      "Net Daily Intake": -155,
+      "Care Load Growth Rate": -2.45963199399174,
+      "Discharge Offset Ratio": 2.9012345679012346,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-01-11T00:00:00",
+      "Total System Load": 5326,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -2.418468303407839,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-01-10T00:00:00",
+      "Total System Load": 5458,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -2.3438897835033057,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-01-09T00:00:00",
+      "Total System Load": 5589,
+      "Net Daily Intake": -96,
+      "Care Load Growth Rate": -1.6886543535620024,
+      "Discharge Offset Ratio": 2.3768115942028984,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-01-08T00:00:00",
+      "Total System Load": 5685,
+      "Net Daily Intake": -102,
+      "Care Load Growth Rate": -1.7455928102315887,
+      "Discharge Offset Ratio": 2.216867469879518,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-01-07T00:00:00",
+      "Total System Load": 5786,
+      "Net Daily Intake": -68,
+      "Care Load Growth Rate": -0.7376908560645101,
+      "Discharge Offset Ratio": 2.015151515151515,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-01-06T00:00:00",
+      "Total System Load": 5829,
+      "Net Daily Intake": -119,
+      "Care Load Growth Rate": -2.1158690176322437,
+      "Discharge Offset Ratio": 2.638888888888889,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-01-05T00:00:00",
+      "Total System Load": 5955,
+      "Net Daily Intake": -121,
+      "Care Load Growth Rate": -2.232802495485142,
+      "Discharge Offset Ratio": 2.8461538461538463,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-01-04T00:00:00",
+      "Total System Load": 6091,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -2.168326373273366,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-01-03T00:00:00",
+      "Total System Load": 6226,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -2.1376925495127264,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-01-02T00:00:00",
+      "Total System Load": 6362,
+      "Net Daily Intake": -117,
+      "Care Load Growth Rate": -1.6844382630196275,
+      "Discharge Offset Ratio": 3.1481481481481484,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2025-01-01T00:00:00",
+      "Total System Load": 6471,
+      "Net Daily Intake": -50,
+      "Care Load Growth Rate": -1.0701727564592534,
+      "Discharge Offset Ratio": 1.5157894736842106,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-12-31T00:00:00",
+      "Total System Load": 6541,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -1.043872919818456,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-12-30T00:00:00",
+      "Total System Load": 6610,
+      "Net Daily Intake": -38,
+      "Care Load Growth Rate": -0.37678975131876236,
+      "Discharge Offset Ratio": 1.2642857142857142,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-12-29T00:00:00",
+      "Total System Load": 6635,
+      "Net Daily Intake": -83,
+      "Care Load Growth Rate": -0.970149253731345,
+      "Discharge Offset Ratio": 1.6119402985074627,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-12-28T00:00:00",
+      "Total System Load": 6700,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.9461856889414588,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-12-27T00:00:00",
+      "Total System Load": 6764,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.9518231073363581,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-12-26T00:00:00",
+      "Total System Load": 6829,
+      "Net Daily Intake": 17,
+      "Care Load Growth Rate": -0.3211210042329604,
+      "Discharge Offset Ratio": 0.8823529411764706,
+      "Backlog Accumulation Rate": 3
+    },
+    {
+      "Date": "2024-12-25T00:00:00",
+      "Total System Load": 6851,
+      "Net Daily Intake": 86,
+      "Care Load Growth Rate": -1.082876118971987,
+      "Discharge Offset Ratio": 0.5515463917525774,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2024-12-24T00:00:00",
+      "Total System Load": 6926,
+      "Net Daily Intake": 56,
+      "Care Load Growth Rate": 1.2277111955568465,
+      "Discharge Offset Ratio": 0.7311320754716981,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2024-12-23T00:00:00",
+      "Total System Load": 6842,
+      "Net Daily Intake": -54,
+      "Care Load Growth Rate": -0.11678832116788218,
+      "Discharge Offset Ratio": 1.297752808988764,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-12-22T00:00:00",
+      "Total System Load": 6850,
+      "Net Daily Intake": -32,
+      "Care Load Growth Rate": -0.7821552723059066,
+      "Discharge Offset Ratio": 1.130801687763713,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-12-21T00:00:00",
+      "Total System Load": 6904,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.7760850819200971,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-12-20T00:00:00",
+      "Total System Load": 6958,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.770108385624646,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-12-19T00:00:00",
+      "Total System Load": 7012,
+      "Net Daily Intake": -34,
+      "Care Load Growth Rate": 1.8741827691413526,
+      "Discharge Offset Ratio": 1.1609756097560975,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-12-18T00:00:00",
+      "Total System Load": 6883,
+      "Net Daily Intake": 76,
+      "Care Load Growth Rate": 0.9829812206572752,
+      "Discharge Offset Ratio": 0.6350710900473934,
+      "Backlog Accumulation Rate": 3
+    },
+    {
+      "Date": "2024-12-17T00:00:00",
+      "Total System Load": 6816,
+      "Net Daily Intake": 96,
+      "Care Load Growth Rate": 1.1125945705384943,
+      "Discharge Offset Ratio": 0.6088709677419355,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2024-12-16T00:00:00",
+      "Total System Load": 6741,
+      "Net Daily Intake": 40,
+      "Care Load Growth Rate": -0.05930318754633346,
+      "Discharge Offset Ratio": 0.7842105263157895,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2024-12-15T00:00:00",
+      "Total System Load": 6745,
+      "Net Daily Intake": -5,
+      "Care Load Growth Rate": 0.05933837709539702,
+      "Discharge Offset Ratio": 1.018181818181818,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-12-14T00:00:00",
+      "Total System Load": 6741,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.04452359750668489,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-12-13T00:00:00",
+      "Total System Load": 6738,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.05940005940006099,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-12-12T00:00:00",
+      "Total System Load": 6734,
+      "Net Daily Intake": 92,
+      "Care Load Growth Rate": -0.31088082901554737,
+      "Discharge Offset Ratio": 0.6759581881533101,
+      "Backlog Accumulation Rate": 3
+    },
+    {
+      "Date": "2024-12-11T00:00:00",
+      "Total System Load": 6755,
+      "Net Daily Intake": 80,
+      "Care Load Growth Rate": 1.793248945147674,
+      "Discharge Offset Ratio": 0.6523605150214592,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2024-12-10T00:00:00",
+      "Total System Load": 6636,
+      "Net Daily Intake": 64,
+      "Care Load Growth Rate": 0.8051040559015732,
+      "Discharge Offset Ratio": 0.6962616822429907,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2024-12-09T00:00:00",
+      "Total System Load": 6583,
+      "Net Daily Intake": -22,
+      "Care Load Growth Rate": 0.8270791851738402,
+      "Discharge Offset Ratio": 1.1372549019607843,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-12-08T00:00:00",
+      "Total System Load": 6529,
+      "Net Daily Intake": 11,
+      "Care Load Growth Rate": -0.3206106870229042,
+      "Discharge Offset Ratio": 0.9347826086956522,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2024-12-07T00:00:00",
+      "Total System Load": 6550,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.3347534996956836,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-12-06T00:00:00",
+      "Total System Load": 6572,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.31851964204459016,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-12-05T00:00:00",
+      "Total System Load": 6593,
+      "Net Daily Intake": 58,
+      "Care Load Growth Rate": 1.2127724900214965,
+      "Discharge Offset Ratio": 0.7177033492822966,
+      "Backlog Accumulation Rate": 5
+    },
+    {
+      "Date": "2024-12-04T00:00:00",
+      "Total System Load": 6514,
+      "Net Daily Intake": 45,
+      "Care Load Growth Rate": 1.4325755216443525,
+      "Discharge Offset Ratio": 0.7142857142857143,
+      "Backlog Accumulation Rate": 4
+    },
+    {
+      "Date": "2024-12-03T00:00:00",
+      "Total System Load": 6422,
+      "Net Daily Intake": 135,
+      "Care Load Growth Rate": 0.48505711156312525,
+      "Discharge Offset Ratio": 0.4403292181069959,
+      "Backlog Accumulation Rate": 3
+    },
+    {
+      "Date": "2024-12-02T00:00:00",
+      "Total System Load": 6391,
+      "Net Daily Intake": 107,
+      "Care Load Growth Rate": 1.573426573426584,
+      "Discharge Offset Ratio": 0.515695067264574,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2024-12-01T00:00:00",
+      "Total System Load": 6292,
+      "Net Daily Intake": 38,
+      "Care Load Growth Rate": 0.2709163346613641,
+      "Discharge Offset Ratio": 0.7925531914893617,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2024-11-30T00:00:00",
+      "Total System Load": 6275,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.23961661341853624,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-11-29T00:00:00",
+      "Total System Load": 6260,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.27230498157937433,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-11-28T00:00:00",
+      "Total System Load": 6243,
+      "Net Daily Intake": 94,
+      "Care Load Growth Rate": 0.224755177396041,
+      "Discharge Offset Ratio": 0.6008403361344538,
+      "Backlog Accumulation Rate": 4
+    },
+    {
+      "Date": "2024-11-27T00:00:00",
+      "Total System Load": 6229,
+      "Net Daily Intake": 13,
+      "Care Load Growth Rate": 2.1482453263365064,
+      "Discharge Offset Ratio": 0.9377777777777778,
+      "Backlog Accumulation Rate": 3
+    },
+    {
+      "Date": "2024-11-26T00:00:00",
+      "Total System Load": 6098,
+      "Net Daily Intake": 102,
+      "Care Load Growth Rate": 1.4304723885562254,
+      "Discharge Offset Ratio": 0.5209302325581395,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2024-11-25T00:00:00",
+      "Total System Load": 6012,
+      "Net Daily Intake": 67,
+      "Care Load Growth Rate": 1.0929880612073228,
+      "Discharge Offset Ratio": 0.6548223350253807,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2024-11-24T00:00:00",
+      "Total System Load": 5947,
+      "Net Daily Intake": -15,
+      "Care Load Growth Rate": -0.6515202138322795,
+      "Discharge Offset Ratio": 1.072538860103627,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-11-23T00:00:00",
+      "Total System Load": 5986,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.6473029045643175,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-11-22T00:00:00",
+      "Total System Load": 6025,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.6431398416886558,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-11-21T00:00:00",
+      "Total System Load": 6064,
+      "Net Daily Intake": -37,
+      "Care Load Growth Rate": -0.44327696601543787,
+      "Discharge Offset Ratio": 1.206896551724138,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-11-20T00:00:00",
+      "Total System Load": 6091,
+      "Net Daily Intake": 33,
+      "Care Load Growth Rate": 0.6277878737815934,
+      "Discharge Offset Ratio": 0.8131868131868132,
+      "Backlog Accumulation Rate": 3
+    },
+    {
+      "Date": "2024-11-19T00:00:00",
+      "Total System Load": 6053,
+      "Net Daily Intake": 6,
+      "Care Load Growth Rate": 0.5147791431418192,
+      "Discharge Offset Ratio": 0.954248366013072,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2024-11-18T00:00:00",
+      "Total System Load": 6022,
+      "Net Daily Intake": 25,
+      "Care Load Growth Rate": -0.06637902422834685,
+      "Discharge Offset Ratio": 0.8414634146341463,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2024-11-17T00:00:00",
+      "Total System Load": 6026,
+      "Net Daily Intake": -46,
+      "Care Load Growth Rate": -1.1969175274635147,
+      "Discharge Offset Ratio": 1.3,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-11-16T00:00:00",
+      "Total System Load": 6099,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -1.1667476908118646,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-11-15T00:00:00",
+      "Total System Load": 6171,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -1.1691223574631593,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-11-14T00:00:00",
+      "Total System Load": 6244,
+      "Net Daily Intake": 38,
+      "Care Load Growth Rate": 0.5313154081468374,
+      "Discharge Offset Ratio": 0.8151658767772512,
+      "Backlog Accumulation Rate": 4
+    },
+    {
+      "Date": "2024-11-13T00:00:00",
+      "Total System Load": 6211,
+      "Net Daily Intake": 24,
+      "Care Load Growth Rate": 0.016103059581329404,
+      "Discharge Offset Ratio": 0.8579545454545454,
+      "Backlog Accumulation Rate": 3
+    },
+    {
+      "Date": "2024-11-12T00:00:00",
+      "Total System Load": 6210,
+      "Net Daily Intake": 1,
+      "Care Load Growth Rate": 1.7699115044247815,
+      "Discharge Offset Ratio": 0.9857142857142858,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2024-11-11T00:00:00",
+      "Total System Load": 6102,
+      "Net Daily Intake": 23,
+      "Care Load Growth Rate": -0.861088545897648,
+      "Discharge Offset Ratio": 0.8579881656804734,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2024-11-10T00:00:00",
+      "Total System Load": 6155,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.8856682769726287,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-11-09T00:00:00",
+      "Total System Load": 6210,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.8462398211719568,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-11-08T00:00:00",
+      "Total System Load": 6263,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.8391386953768176,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-11-07T00:00:00",
+      "Total System Load": 6316,
+      "Net Daily Intake": 15,
+      "Care Load Growth Rate": -0.40996531062755803,
+      "Discharge Offset Ratio": 0.917098445595855,
+      "Backlog Accumulation Rate": 4
+    },
+    {
+      "Date": "2024-11-06T00:00:00",
+      "Total System Load": 6342,
+      "Net Daily Intake": 39,
+      "Care Load Growth Rate": 0.8267090620031725,
+      "Discharge Offset Ratio": 0.7740112994350282,
+      "Backlog Accumulation Rate": 3
+    },
+    {
+      "Date": "2024-11-05T00:00:00",
+      "Total System Load": 6290,
+      "Net Daily Intake": 33,
+      "Care Load Growth Rate": 1.1904761904761862,
+      "Discharge Offset Ratio": 0.7875,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2024-11-04T00:00:00",
+      "Total System Load": 6216,
+      "Net Daily Intake": 25,
+      "Care Load Growth Rate": 0.8927122220418804,
+      "Discharge Offset Ratio": 0.8354430379746836,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2024-11-03T00:00:00",
+      "Total System Load": 6161,
+      "Net Daily Intake": -27,
+      "Care Load Growth Rate": -1.2502003526206118,
+      "Discharge Offset Ratio": 1.1645569620253164,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-11-02T00:00:00",
+      "Total System Load": 6239,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -1.219126029132367,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-11-01T00:00:00",
+      "Total System Load": 6316,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -1.2198936502971547,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-10-31T00:00:00",
+      "Total System Load": 6394,
+      "Net Daily Intake": -4,
+      "Care Load Growth Rate": -0.4824902723735369,
+      "Discharge Offset Ratio": 1.0172413793103448,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-10-30T00:00:00",
+      "Total System Load": 6425,
+      "Net Daily Intake": 18,
+      "Care Load Growth Rate": 0.6579978066739711,
+      "Discharge Offset Ratio": 0.8938547486033519,
+      "Backlog Accumulation Rate": 3
+    },
+    {
+      "Date": "2024-10-29T00:00:00",
+      "Total System Load": 6383,
+      "Net Daily Intake": 103,
+      "Care Load Growth Rate": 1.6401273885350287,
+      "Discharge Offset Ratio": 0.5478260869565217,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2024-10-28T00:00:00",
+      "Total System Load": 6280,
+      "Net Daily Intake": 37,
+      "Care Load Growth Rate": -0.11134086209638738,
+      "Discharge Offset Ratio": 0.8041237113402062,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2024-10-27T00:00:00",
+      "Total System Load": 6287,
+      "Net Daily Intake": -34,
+      "Care Load Growth Rate": -0.332910589727331,
+      "Discharge Offset Ratio": 1.2075471698113207,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-10-26T00:00:00",
+      "Total System Load": 6308,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.3475513428120025,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-10-25T00:00:00",
+      "Total System Load": 6330,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.31496062992125706,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-10-24T00:00:00",
+      "Total System Load": 6350,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.329618584209701,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-10-23T00:00:00",
+      "Total System Load": 6371,
+      "Net Daily Intake": 48,
+      "Care Load Growth Rate": 0.7591333227898067,
+      "Discharge Offset Ratio": 0.7379679144385026,
+      "Backlog Accumulation Rate": 4
+    },
+    {
+      "Date": "2024-10-22T00:00:00",
+      "Total System Load": 6323,
+      "Net Daily Intake": 37,
+      "Care Load Growth Rate": 2.2146783058519137,
+      "Discharge Offset Ratio": 0.7414965986394558,
+      "Backlog Accumulation Rate": 3
+    },
+    {
+      "Date": "2024-10-21T00:00:00",
+      "Total System Load": 6186,
+      "Net Daily Intake": 59,
+      "Care Load Growth Rate": -0.12915724895059544,
+      "Discharge Offset Ratio": 0.719626168224299,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2024-10-20T00:00:00",
+      "Total System Load": 6194,
+      "Net Daily Intake": 19,
+      "Care Load Growth Rate": -0.6097560975609762,
+      "Discharge Offset Ratio": 0.9069767441860465,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2024-10-19T00:00:00",
+      "Total System Load": 6232,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.574345883854499,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-10-18T00:00:00",
+      "Total System Load": 6268,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.602600697748179,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-10-17T00:00:00",
+      "Total System Load": 6306,
+      "Net Daily Intake": 46,
+      "Care Load Growth Rate": -0.23730422401518902,
+      "Discharge Offset Ratio": 0.7729468599033816,
+      "Backlog Accumulation Rate": 4
+    },
+    {
+      "Date": "2024-10-16T00:00:00",
+      "Total System Load": 6321,
+      "Net Daily Intake": 21,
+      "Care Load Growth Rate": 1.6074586079408482,
+      "Discharge Offset Ratio": 0.8543046357615894,
+      "Backlog Accumulation Rate": 3
+    },
+    {
+      "Date": "2024-10-15T00:00:00",
+      "Total System Load": 6221,
+      "Net Daily Intake": 52,
+      "Care Load Growth Rate": 1.170922101154659,
+      "Discharge Offset Ratio": 0.66875,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2024-10-14T00:00:00",
+      "Total System Load": 6149,
+      "Net Daily Intake": 54,
+      "Care Load Growth Rate": 0.5395683453237377,
+      "Discharge Offset Ratio": 0.6583850931677019,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2024-10-13T00:00:00",
+      "Total System Load": 6116,
+      "Net Daily Intake": -18,
+      "Care Load Growth Rate": -0.6336311941510964,
+      "Discharge Offset Ratio": 1.0880829015544042,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-10-12T00:00:00",
+      "Total System Load": 6155,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.6296415886341666,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-10-11T00:00:00",
+      "Total System Load": 6194,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.6257019091930105,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-10-10T00:00:00",
+      "Total System Load": 6233,
+      "Net Daily Intake": 34,
+      "Care Load Growth Rate": -0.4790036723614888,
+      "Discharge Offset Ratio": 0.8195876288659794,
+      "Backlog Accumulation Rate": 4
+    },
+    {
+      "Date": "2024-10-09T00:00:00",
+      "Total System Load": 6263,
+      "Net Daily Intake": 32,
+      "Care Load Growth Rate": 0.175943698016634,
+      "Discharge Offset Ratio": 0.8058823529411765,
+      "Backlog Accumulation Rate": 3
+    },
+    {
+      "Date": "2024-10-08T00:00:00",
+      "Total System Load": 6252,
+      "Net Daily Intake": 43,
+      "Care Load Growth Rate": 1.5264696329977179,
+      "Discharge Offset Ratio": 0.7365269461077845,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2024-10-07T00:00:00",
+      "Total System Load": 6158,
+      "Net Daily Intake": 23,
+      "Care Load Growth Rate": -0.5008886734529039,
+      "Discharge Offset Ratio": 0.864406779661017,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2024-10-06T00:00:00",
+      "Total System Load": 6189,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.4823926676314483,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-10-05T00:00:00",
+      "Total System Load": 6219,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.48007681228996457,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-10-04T00:00:00",
+      "Total System Load": 6249,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.49363057324840476,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-10-03T00:00:00",
+      "Total System Load": 6280,
+      "Net Daily Intake": -15,
+      "Care Load Growth Rate": -0.4123057405645447,
+      "Discharge Offset Ratio": 1.0782122905027933,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-10-02T00:00:00",
+      "Total System Load": 6306,
+      "Net Daily Intake": 57,
+      "Care Load Growth Rate": -0.7554296506137814,
+      "Discharge Offset Ratio": 0.7489177489177489,
+      "Backlog Accumulation Rate": 3
+    },
+    {
+      "Date": "2024-10-01T00:00:00",
+      "Total System Load": 6354,
+      "Net Daily Intake": 80,
+      "Care Load Growth Rate": 1.6314779270633295,
+      "Discharge Offset Ratio": 0.6284403669724771,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2024-09-30T00:00:00",
+      "Total System Load": 6252,
+      "Net Daily Intake": 46,
+      "Care Load Growth Rate": 1.8572825024437911,
+      "Discharge Offset Ratio": 0.745945945945946,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2024-09-29T00:00:00",
+      "Total System Load": 6138,
+      "Net Daily Intake": -24,
+      "Care Load Growth Rate": -0.808015513897864,
+      "Discharge Offset Ratio": 1.1493506493506493,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-09-28T00:00:00",
+      "Total System Load": 6188,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.8174386920980936,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-09-27T00:00:00",
+      "Total System Load": 6239,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.7950389569088889,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-09-26T00:00:00",
+      "Total System Load": 6289,
+      "Net Daily Intake": -13,
+      "Care Load Growth Rate": 0.223107569721126,
+      "Discharge Offset Ratio": 1.069364161849711,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-09-25T00:00:00",
+      "Total System Load": 6275,
+      "Net Daily Intake": 51,
+      "Care Load Growth Rate": -0.11142948105699046,
+      "Discharge Offset Ratio": 0.7647058823529411,
+      "Backlog Accumulation Rate": 3
+    },
+    {
+      "Date": "2024-09-24T00:00:00",
+      "Total System Load": 6282,
+      "Net Daily Intake": 29,
+      "Care Load Growth Rate": 1.2409347300563978,
+      "Discharge Offset Ratio": 0.8265895953757225,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2024-09-23T00:00:00",
+      "Total System Load": 6205,
+      "Net Daily Intake": 8,
+      "Care Load Growth Rate": -0.28924955809095376,
+      "Discharge Offset Ratio": 0.9482758620689655,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2024-09-22T00:00:00",
+      "Total System Load": 6223,
+      "Net Daily Intake": -36,
+      "Care Load Growth Rate": -1.284898477157359,
+      "Discharge Offset Ratio": 1.2160493827160495,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-09-21T00:00:00",
+      "Total System Load": 6304,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -1.2685982772122184,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-09-20T00:00:00",
+      "Total System Load": 6385,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -1.2527064645839747,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-09-19T00:00:00",
+      "Total System Load": 6466,
+      "Net Daily Intake": -19,
+      "Care Load Growth Rate": 0.12387736141219463,
+      "Discharge Offset Ratio": 1.1058823529411765,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-09-18T00:00:00",
+      "Total System Load": 6458,
+      "Net Daily Intake": 68,
+      "Care Load Growth Rate": -1.1177461338233052,
+      "Discharge Offset Ratio": 0.6834862385321101,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2024-09-17T00:00:00",
+      "Total System Load": 6531,
+      "Net Daily Intake": -21,
+      "Care Load Growth Rate": 1.4445479962721386,
+      "Discharge Offset Ratio": 1.1428571428571428,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-09-16T00:00:00",
+      "Total System Load": 6438,
+      "Net Daily Intake": -4,
+      "Care Load Growth Rate": -0.24790827393864623,
+      "Discharge Offset Ratio": 1.0186335403726707,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-09-15T00:00:00",
+      "Total System Load": 6454,
+      "Net Daily Intake": -43,
+      "Care Load Growth Rate": -0.5546995377503805,
+      "Discharge Offset Ratio": 1.25,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-09-14T00:00:00",
+      "Total System Load": 6490,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.5516395954642928,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-09-13T00:00:00",
+      "Total System Load": 6526,
+      "Net Daily Intake": -67,
+      "Care Load Growth Rate": -1.7168674698795128,
+      "Discharge Offset Ratio": 1.3098591549295775,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-09-12T00:00:00",
+      "Total System Load": 6640,
+      "Net Daily Intake": -10,
+      "Care Load Growth Rate": -0.270351456893958,
+      "Discharge Offset Ratio": 1.042654028436019,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-09-11T00:00:00",
+      "Total System Load": 6658,
+      "Net Daily Intake": 13,
+      "Care Load Growth Rate": 0.16548819016097838,
+      "Discharge Offset Ratio": 0.9204545454545454,
+      "Backlog Accumulation Rate": 3
+    },
+    {
+      "Date": "2024-09-10T00:00:00",
+      "Total System Load": 6647,
+      "Net Daily Intake": 32,
+      "Care Load Growth Rate": 0.28666264333132574,
+      "Discharge Offset Ratio": 0.8176795580110497,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2024-09-09T00:00:00",
+      "Total System Load": 6628,
+      "Net Daily Intake": 49,
+      "Care Load Growth Rate": 0.928886858535094,
+      "Discharge Offset Ratio": 0.7382198952879581,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2024-09-08T00:00:00",
+      "Total System Load": 6567,
+      "Net Daily Intake": -57,
+      "Care Load Growth Rate": -0.560266505148399,
+      "Discharge Offset Ratio": 1.3393939393939394,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-09-07T00:00:00",
+      "Total System Load": 6604,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.5571450082818896,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-09-06T00:00:00",
+      "Total System Load": 6641,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.5540581012279167,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-09-05T00:00:00",
+      "Total System Load": 6678,
+      "Net Daily Intake": 54,
+      "Care Load Growth Rate": 1.089918256130784,
+      "Discharge Offset Ratio": 0.6875,
+      "Backlog Accumulation Rate": 4
+    },
+    {
+      "Date": "2024-09-04T00:00:00",
+      "Total System Load": 6606,
+      "Net Daily Intake": 105,
+      "Care Load Growth Rate": 1.0864575363427775,
+      "Discharge Offset Ratio": 0.5181818181818182,
+      "Backlog Accumulation Rate": 3
+    },
+    {
+      "Date": "2024-09-03T00:00:00",
+      "Total System Load": 6535,
+      "Net Daily Intake": 65,
+      "Care Load Growth Rate": 1.1296812132466805,
+      "Discharge Offset Ratio": 0.6292134831460674,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2024-09-02T00:00:00",
+      "Total System Load": 6462,
+      "Net Daily Intake": 69,
+      "Care Load Growth Rate": -0.3085467448318391,
+      "Discharge Offset Ratio": 0.6482412060301508,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2024-09-01T00:00:00",
+      "Total System Load": 6482,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.32292787944026013,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-08-31T00:00:00",
+      "Total System Load": 6503,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.33716475095785237,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-08-30T00:00:00",
+      "Total System Load": 6525,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.30557677616500634,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-08-29T00:00:00",
+      "Total System Load": 6545,
+      "Net Daily Intake": 19,
+      "Care Load Growth Rate": 0.5067567567567544,
+      "Discharge Offset Ratio": 0.8941798941798942,
+      "Backlog Accumulation Rate": 3
+    },
+    {
+      "Date": "2024-08-28T00:00:00",
+      "Total System Load": 6512,
+      "Net Daily Intake": 44,
+      "Care Load Growth Rate": 1.1651390399254336,
+      "Discharge Offset Ratio": 0.7486033519553073,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2024-08-27T00:00:00",
+      "Total System Load": 6437,
+      "Net Daily Intake": 125,
+      "Care Load Growth Rate": 0.24918237034730062,
+      "Discharge Offset Ratio": 0.4349775784753363,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2024-08-26T00:00:00",
+      "Total System Load": 6421,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.21851100358982745,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-08-25T00:00:00",
+      "Total System Load": 6407,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.25035205758097145,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-08-24T00:00:00",
+      "Total System Load": 6391,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.2195389681668436,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-08-23T00:00:00",
+      "Total System Load": 6377,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": 0.2515327778651155,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-08-22T00:00:00",
+      "Total System Load": 6361,
+      "Net Daily Intake": 34,
+      "Care Load Growth Rate": 1.4028375577873398,
+      "Discharge Offset Ratio": 0.8300970873786407,
+      "Backlog Accumulation Rate": 5
+    },
+    {
+      "Date": "2024-08-21T00:00:00",
+      "Total System Load": 6273,
+      "Net Daily Intake": 11,
+      "Care Load Growth Rate": 0.06380602966979954,
+      "Discharge Offset Ratio": 0.9285714285714286,
+      "Backlog Accumulation Rate": 4
+    },
+    {
+      "Date": "2024-08-20T00:00:00",
+      "Total System Load": 6269,
+      "Net Daily Intake": 133,
+      "Care Load Growth Rate": 2.45138094459878,
+      "Discharge Offset Ratio": 0.45528455284552843,
+      "Backlog Accumulation Rate": 3
+    },
+    {
+      "Date": "2024-08-19T00:00:00",
+      "Total System Load": 6119,
+      "Net Daily Intake": 4,
+      "Care Load Growth Rate": 0.8903544929925733,
+      "Discharge Offset Ratio": 0.9693251533742331,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2024-08-18T00:00:00",
+      "Total System Load": 6065,
+      "Net Daily Intake": 57,
+      "Care Load Growth Rate": -0.39415339136147365,
+      "Discharge Offset Ratio": 0.7542372881355932,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2024-08-17T00:00:00",
+      "Total System Load": 6089,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.3763089005235587,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-08-16T00:00:00",
+      "Total System Load": 6112,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -0.39113428943937656,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-08-15T00:00:00",
+      "Total System Load": 6136,
+      "Net Daily Intake": -64,
+      "Care Load Growth Rate": -1.2393368742958266,
+      "Discharge Offset Ratio": 1.4012738853503184,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-08-14T00:00:00",
+      "Total System Load": 6213,
+      "Net Daily Intake": 13,
+      "Care Load Growth Rate": -0.11254019292604722,
+      "Discharge Offset Ratio": 0.9270833333333334,
+      "Backlog Accumulation Rate": 3
+    },
+    {
+      "Date": "2024-08-13T00:00:00",
+      "Total System Load": 6220,
+      "Net Daily Intake": 66,
+      "Care Load Growth Rate": 1.6007840574975507,
+      "Discharge Offset Ratio": 0.6473684210526316,
+      "Backlog Accumulation Rate": 2
+    },
+    {
+      "Date": "2024-08-12T00:00:00",
+      "Total System Load": 6122,
+      "Net Daily Intake": 7,
+      "Care Load Growth Rate": 0.27846027846027965,
+      "Discharge Offset Ratio": 0.9487179487179487,
+      "Backlog Accumulation Rate": 1
+    },
+    {
+      "Date": "2024-08-11T00:00:00",
+      "Total System Load": 6105,
+      "Net Daily Intake": -109,
+      "Care Load Growth Rate": -1.1175898931001016,
+      "Discharge Offset Ratio": 1.7659574468085106,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-08-10T00:00:00",
+      "Total System Load": 6174,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -1.1369095276220986,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    },
+    {
+      "Date": "2024-08-09T00:00:00",
+      "Total System Load": 6245,
+      "Net Daily Intake": 0,
+      "Care Load Growth Rate": -1.0928096293949974,
+      "Discharge Offset Ratio": 0.0,
+      "Backlog Accumulation Rate": 0
+    }
+  ]
+}

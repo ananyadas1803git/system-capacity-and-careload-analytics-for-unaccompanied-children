@@ -1,0 +1,2023 @@
+{
+  "source": "HHS_Unaccompanied_Alien_Children_Program.csv",
+  "synthetic_data": false,
+  "config": {
+    "start_date": null,
+    "end_date": null,
+    "granularity": "Daily",
+    "backlog_threshold_days": 3
+  },
+  "kpis": {
+    "total_children_under_care": 2502,
+    "net_intake_pressure": -3,
+    "care_load_volatility_index": 1.1256254669241683,
+    "backlog_accumulation_rate": 5,
+    "discharge_offset_ratio": 1.1666666666666667
+  },
+  "operational_summary": {
+    "period_start": "2023-01-12",
+    "period_end": "2025-12-21",
+    "daily_observations": 1075,
+    "latest_system_load": 2502,
+    "average_system_load": 6231.765581395349,
+    "peak_system_load": 11762,
+    "peak_system_load_date": "2023-12-20",
+    "latest_net_intake": -3,
+    "cumulative_net_intake": -32212,
+    "positive_pressure_days": 238,
+    "care_load_volatility_index": 1.1256254669241683,
+    "longest_backlog_streak": 5,
+    "current_backlog_streak": 0,
+    "backlog_threshold_days": 3,
+    "elevated_backlog_episodes": 40,
+    "latest_discharge_offset_ratio": 1.1666666666666667,
+    "total_transfers": 92641,
+    "total_discharges": 124853,
+    "logical_anomaly_rows": 86,
+    "imputed_dates": 355
+  },
+  "backlog_episodes": [
+    {
+      "Episode Start": "2024-04-21T00:00:00",
+      "Episode End": "2024-04-25T00:00:00",
+      "Duration (Days)": 5,
+      "Cumulative Net Intake": 582,
+      "Peak Daily Pressure": 173,
+      "Average Daily Pressure": 116.4,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-04-28T00:00:00",
+      "Episode End": "2024-05-02T00:00:00",
+      "Duration (Days)": 5,
+      "Cumulative Net Intake": 446,
+      "Peak Daily Pressure": 115,
+      "Average Daily Pressure": 89.2,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-12-01T00:00:00",
+      "Episode End": "2024-12-05T00:00:00",
+      "Duration (Days)": 5,
+      "Cumulative Net Intake": 383,
+      "Peak Daily Pressure": 135,
+      "Average Daily Pressure": 76.6,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-08-18T00:00:00",
+      "Episode End": "2024-08-22T00:00:00",
+      "Duration (Days)": 5,
+      "Cumulative Net Intake": 239,
+      "Peak Daily Pressure": 133,
+      "Average Daily Pressure": 47.8,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-03-23T00:00:00",
+      "Episode End": "2025-03-27T00:00:00",
+      "Duration (Days)": 5,
+      "Cumulative Net Intake": 36,
+      "Peak Daily Pressure": 13,
+      "Average Daily Pressure": 7.2,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-02-05T00:00:00",
+      "Episode End": "2024-02-08T00:00:00",
+      "Duration (Days)": 4,
+      "Cumulative Net Intake": 399,
+      "Peak Daily Pressure": 145,
+      "Average Daily Pressure": 99.75,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-05-27T00:00:00",
+      "Episode End": "2024-05-30T00:00:00",
+      "Duration (Days)": 4,
+      "Cumulative Net Intake": 339,
+      "Peak Daily Pressure": 149,
+      "Average Daily Pressure": 84.75,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-03-04T00:00:00",
+      "Episode End": "2024-03-07T00:00:00",
+      "Duration (Days)": 4,
+      "Cumulative Net Intake": 310,
+      "Peak Daily Pressure": 131,
+      "Average Daily Pressure": 77.5,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-09-02T00:00:00",
+      "Episode End": "2024-09-05T00:00:00",
+      "Duration (Days)": 4,
+      "Cumulative Net Intake": 293,
+      "Peak Daily Pressure": 105,
+      "Average Daily Pressure": 73.25,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-11-25T00:00:00",
+      "Episode End": "2024-11-28T00:00:00",
+      "Duration (Days)": 4,
+      "Cumulative Net Intake": 276,
+      "Peak Daily Pressure": 102,
+      "Average Daily Pressure": 69.0,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-07-29T00:00:00",
+      "Episode End": "2024-08-01T00:00:00",
+      "Duration (Days)": 4,
+      "Cumulative Net Intake": 224,
+      "Peak Daily Pressure": 116,
+      "Average Daily Pressure": 56.0,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-05-20T00:00:00",
+      "Episode End": "2024-05-23T00:00:00",
+      "Duration (Days)": 4,
+      "Cumulative Net Intake": 207,
+      "Peak Daily Pressure": 87,
+      "Average Daily Pressure": 51.75,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-10-14T00:00:00",
+      "Episode End": "2024-10-17T00:00:00",
+      "Duration (Days)": 4,
+      "Cumulative Net Intake": 173,
+      "Peak Daily Pressure": 54,
+      "Average Daily Pressure": 43.25,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-10-20T00:00:00",
+      "Episode End": "2024-10-23T00:00:00",
+      "Duration (Days)": 4,
+      "Cumulative Net Intake": 163,
+      "Peak Daily Pressure": 59,
+      "Average Daily Pressure": 40.75,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-06-17T00:00:00",
+      "Episode End": "2024-06-20T00:00:00",
+      "Duration (Days)": 4,
+      "Cumulative Net Intake": 143,
+      "Peak Daily Pressure": 48,
+      "Average Daily Pressure": 35.75,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-05-12T00:00:00",
+      "Episode End": "2024-05-15T00:00:00",
+      "Duration (Days)": 4,
+      "Cumulative Net Intake": 136,
+      "Peak Daily Pressure": 76,
+      "Average Daily Pressure": 34.0,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-10-07T00:00:00",
+      "Episode End": "2024-10-10T00:00:00",
+      "Duration (Days)": 4,
+      "Cumulative Net Intake": 132,
+      "Peak Daily Pressure": 43,
+      "Average Daily Pressure": 33.0,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-05-06T00:00:00",
+      "Episode End": "2024-05-09T00:00:00",
+      "Duration (Days)": 4,
+      "Cumulative Net Intake": 116,
+      "Peak Daily Pressure": 83,
+      "Average Daily Pressure": 29.0,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-11-04T00:00:00",
+      "Episode End": "2024-11-07T00:00:00",
+      "Duration (Days)": 4,
+      "Cumulative Net Intake": 112,
+      "Peak Daily Pressure": 39,
+      "Average Daily Pressure": 28.0,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-07-07T00:00:00",
+      "Episode End": "2024-07-10T00:00:00",
+      "Duration (Days)": 4,
+      "Cumulative Net Intake": 102,
+      "Peak Daily Pressure": 52,
+      "Average Daily Pressure": 25.5,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-11-11T00:00:00",
+      "Episode End": "2024-11-14T00:00:00",
+      "Duration (Days)": 4,
+      "Cumulative Net Intake": 86,
+      "Peak Daily Pressure": 38,
+      "Average Daily Pressure": 21.5,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-04-07T00:00:00",
+      "Episode End": "2025-04-10T00:00:00",
+      "Duration (Days)": 4,
+      "Cumulative Net Intake": 23,
+      "Peak Daily Pressure": 11,
+      "Average Daily Pressure": 5.75,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-05-11T00:00:00",
+      "Episode End": "2025-05-14T00:00:00",
+      "Duration (Days)": 4,
+      "Cumulative Net Intake": 20,
+      "Peak Daily Pressure": 9,
+      "Average Daily Pressure": 5.0,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-02-12T00:00:00",
+      "Episode End": "2024-02-14T00:00:00",
+      "Duration (Days)": 3,
+      "Cumulative Net Intake": 437,
+      "Peak Daily Pressure": 206,
+      "Average Daily Pressure": 145.66666666666666,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-02-19T00:00:00",
+      "Episode End": "2024-02-21T00:00:00",
+      "Duration (Days)": 3,
+      "Cumulative Net Intake": 321,
+      "Peak Daily Pressure": 153,
+      "Average Daily Pressure": 107.0,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-12-10T00:00:00",
+      "Episode End": "2024-12-12T00:00:00",
+      "Duration (Days)": 3,
+      "Cumulative Net Intake": 236,
+      "Peak Daily Pressure": 92,
+      "Average Daily Pressure": 78.66666666666667,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-12-16T00:00:00",
+      "Episode End": "2024-12-18T00:00:00",
+      "Duration (Days)": 3,
+      "Cumulative Net Intake": 212,
+      "Peak Daily Pressure": 96,
+      "Average Daily Pressure": 70.66666666666667,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-08-27T00:00:00",
+      "Episode End": "2024-08-29T00:00:00",
+      "Duration (Days)": 3,
+      "Cumulative Net Intake": 188,
+      "Peak Daily Pressure": 125,
+      "Average Daily Pressure": 62.666666666666664,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-09-30T00:00:00",
+      "Episode End": "2024-10-02T00:00:00",
+      "Duration (Days)": 3,
+      "Cumulative Net Intake": 183,
+      "Peak Daily Pressure": 80,
+      "Average Daily Pressure": 61.0,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-02-27T00:00:00",
+      "Episode End": "2024-02-29T00:00:00",
+      "Duration (Days)": 3,
+      "Cumulative Net Intake": 172,
+      "Peak Daily Pressure": 100,
+      "Average Daily Pressure": 57.333333333333336,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-12-24T00:00:00",
+      "Episode End": "2024-12-26T00:00:00",
+      "Duration (Days)": 3,
+      "Cumulative Net Intake": 159,
+      "Peak Daily Pressure": 86,
+      "Average Daily Pressure": 53.0,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-10-28T00:00:00",
+      "Episode End": "2024-10-30T00:00:00",
+      "Duration (Days)": 3,
+      "Cumulative Net Intake": 158,
+      "Peak Daily Pressure": 103,
+      "Average Daily Pressure": 52.666666666666664,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-06-10T00:00:00",
+      "Episode End": "2024-06-12T00:00:00",
+      "Duration (Days)": 3,
+      "Cumulative Net Intake": 147,
+      "Peak Daily Pressure": 68,
+      "Average Daily Pressure": 49.0,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-08-06T00:00:00",
+      "Episode End": "2024-08-08T00:00:00",
+      "Duration (Days)": 3,
+      "Cumulative Net Intake": 129,
+      "Peak Daily Pressure": 57,
+      "Average Daily Pressure": 43.0,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-09-09T00:00:00",
+      "Episode End": "2024-09-11T00:00:00",
+      "Duration (Days)": 3,
+      "Cumulative Net Intake": 94,
+      "Peak Daily Pressure": 49,
+      "Average Daily Pressure": 31.333333333333332,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-09-23T00:00:00",
+      "Episode End": "2024-09-25T00:00:00",
+      "Duration (Days)": 3,
+      "Cumulative Net Intake": 88,
+      "Peak Daily Pressure": 51,
+      "Average Daily Pressure": 29.333333333333332,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-08-12T00:00:00",
+      "Episode End": "2024-08-14T00:00:00",
+      "Duration (Days)": 3,
+      "Cumulative Net Intake": 86,
+      "Peak Daily Pressure": 66,
+      "Average Daily Pressure": 28.666666666666668,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-11-18T00:00:00",
+      "Episode End": "2024-11-20T00:00:00",
+      "Duration (Days)": 3,
+      "Cumulative Net Intake": 64,
+      "Peak Daily Pressure": 33,
+      "Average Daily Pressure": 21.333333333333332,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-10-21T00:00:00",
+      "Episode End": "2025-10-23T00:00:00",
+      "Duration (Days)": 3,
+      "Cumulative Net Intake": 17,
+      "Peak Daily Pressure": 8,
+      "Average Daily Pressure": 5.666666666666667,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-12-15T00:00:00",
+      "Episode End": "2025-12-17T00:00:00",
+      "Duration (Days)": 3,
+      "Cumulative Net Intake": 9,
+      "Peak Daily Pressure": 6,
+      "Average Daily Pressure": 3.0,
+      "Elevated": true,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2023-07-04T00:00:00",
+      "Episode End": "2023-07-05T00:00:00",
+      "Duration (Days)": 2,
+      "Cumulative Net Intake": 156,
+      "Peak Daily Pressure": 93,
+      "Average Daily Pressure": 78.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-06-05T00:00:00",
+      "Episode End": "2024-06-06T00:00:00",
+      "Duration (Days)": 2,
+      "Cumulative Net Intake": 137,
+      "Peak Daily Pressure": 93,
+      "Average Daily Pressure": 68.5,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-03-11T00:00:00",
+      "Episode End": "2024-03-12T00:00:00",
+      "Duration (Days)": 2,
+      "Cumulative Net Intake": 114,
+      "Peak Daily Pressure": 77,
+      "Average Daily Pressure": 57.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-04-16T00:00:00",
+      "Episode End": "2024-04-17T00:00:00",
+      "Duration (Days)": 2,
+      "Cumulative Net Intake": 89,
+      "Peak Daily Pressure": 47,
+      "Average Daily Pressure": 44.5,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-01-20T00:00:00",
+      "Episode End": "2025-01-21T00:00:00",
+      "Duration (Days)": 2,
+      "Cumulative Net Intake": 72,
+      "Peak Daily Pressure": 63,
+      "Average Daily Pressure": 36.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-04-02T00:00:00",
+      "Episode End": "2024-04-03T00:00:00",
+      "Duration (Days)": 2,
+      "Cumulative Net Intake": 70,
+      "Peak Daily Pressure": 43,
+      "Average Daily Pressure": 35.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2023-04-24T00:00:00",
+      "Episode End": "2023-04-25T00:00:00",
+      "Duration (Days)": 2,
+      "Cumulative Net Intake": 49,
+      "Peak Daily Pressure": 40,
+      "Average Daily Pressure": 24.5,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-06-02T00:00:00",
+      "Episode End": "2024-06-03T00:00:00",
+      "Duration (Days)": 2,
+      "Cumulative Net Intake": 49,
+      "Peak Daily Pressure": 33,
+      "Average Daily Pressure": 24.5,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2023-07-10T00:00:00",
+      "Episode End": "2023-07-11T00:00:00",
+      "Duration (Days)": 2,
+      "Cumulative Net Intake": 29,
+      "Peak Daily Pressure": 26,
+      "Average Daily Pressure": 14.5,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-11-12T00:00:00",
+      "Episode End": "2025-11-13T00:00:00",
+      "Duration (Days)": 2,
+      "Cumulative Net Intake": 24,
+      "Peak Daily Pressure": 13,
+      "Average Daily Pressure": 12.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-04-02T00:00:00",
+      "Episode End": "2025-04-03T00:00:00",
+      "Duration (Days)": 2,
+      "Cumulative Net Intake": 23,
+      "Peak Daily Pressure": 13,
+      "Average Daily Pressure": 11.5,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-05-18T00:00:00",
+      "Episode End": "2025-05-19T00:00:00",
+      "Duration (Days)": 2,
+      "Cumulative Net Intake": 16,
+      "Peak Daily Pressure": 11,
+      "Average Daily Pressure": 8.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-04-27T00:00:00",
+      "Episode End": "2025-04-28T00:00:00",
+      "Duration (Days)": 2,
+      "Cumulative Net Intake": 12,
+      "Peak Daily Pressure": 8,
+      "Average Daily Pressure": 6.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-09-21T00:00:00",
+      "Episode End": "2025-09-22T00:00:00",
+      "Duration (Days)": 2,
+      "Cumulative Net Intake": 12,
+      "Peak Daily Pressure": 8,
+      "Average Daily Pressure": 6.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-05-07T00:00:00",
+      "Episode End": "2025-05-08T00:00:00",
+      "Duration (Days)": 2,
+      "Cumulative Net Intake": 10,
+      "Peak Daily Pressure": 5,
+      "Average Daily Pressure": 5.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-03-19T00:00:00",
+      "Episode End": "2025-03-20T00:00:00",
+      "Duration (Days)": 2,
+      "Cumulative Net Intake": 9,
+      "Peak Daily Pressure": 5,
+      "Average Daily Pressure": 4.5,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-10-13T00:00:00",
+      "Episode End": "2025-10-14T00:00:00",
+      "Duration (Days)": 2,
+      "Cumulative Net Intake": 9,
+      "Peak Daily Pressure": 8,
+      "Average Daily Pressure": 4.5,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-05-04T00:00:00",
+      "Episode End": "2025-05-05T00:00:00",
+      "Duration (Days)": 2,
+      "Cumulative Net Intake": 8,
+      "Peak Daily Pressure": 5,
+      "Average Daily Pressure": 4.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-06-08T00:00:00",
+      "Episode End": "2025-06-09T00:00:00",
+      "Duration (Days)": 2,
+      "Cumulative Net Intake": 7,
+      "Peak Daily Pressure": 5,
+      "Average Daily Pressure": 3.5,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-03-30T00:00:00",
+      "Episode End": "2025-03-31T00:00:00",
+      "Duration (Days)": 2,
+      "Cumulative Net Intake": 6,
+      "Peak Daily Pressure": 3,
+      "Average Daily Pressure": 3.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-12-07T00:00:00",
+      "Episode End": "2025-12-08T00:00:00",
+      "Duration (Days)": 2,
+      "Cumulative Net Intake": 6,
+      "Peak Daily Pressure": 5,
+      "Average Daily Pressure": 3.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-04-09T00:00:00",
+      "Episode End": "2024-04-09T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 87,
+      "Peak Daily Pressure": 87,
+      "Average Daily Pressure": 87.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-09-18T00:00:00",
+      "Episode End": "2024-09-18T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 68,
+      "Peak Daily Pressure": 68,
+      "Average Daily Pressure": 68.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2023-06-27T00:00:00",
+      "Episode End": "2023-06-27T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 65,
+      "Peak Daily Pressure": 65,
+      "Average Daily Pressure": 65.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-03-19T00:00:00",
+      "Episode End": "2024-03-19T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 59,
+      "Peak Daily Pressure": 59,
+      "Average Daily Pressure": 59.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2023-07-25T00:00:00",
+      "Episode End": "2023-07-25T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 50,
+      "Peak Daily Pressure": 50,
+      "Average Daily Pressure": 50.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-02-25T00:00:00",
+      "Episode End": "2024-02-25T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 37,
+      "Peak Daily Pressure": 37,
+      "Average Daily Pressure": 37.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2023-03-14T00:00:00",
+      "Episode End": "2023-03-14T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 33,
+      "Peak Daily Pressure": 33,
+      "Average Daily Pressure": 33.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-09-11T00:00:00",
+      "Episode End": "2025-09-11T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 23,
+      "Peak Daily Pressure": 23,
+      "Average Daily Pressure": 23.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-01-30T00:00:00",
+      "Episode End": "2024-01-30T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 21,
+      "Peak Daily Pressure": 21,
+      "Average Daily Pressure": 21.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-11-23T00:00:00",
+      "Episode End": "2025-11-23T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 21,
+      "Peak Daily Pressure": 21,
+      "Average Daily Pressure": 21.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2023-06-21T00:00:00",
+      "Episode End": "2023-06-21T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 20,
+      "Peak Daily Pressure": 20,
+      "Average Daily Pressure": 20.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-07-25T00:00:00",
+      "Episode End": "2024-07-25T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 14,
+      "Peak Daily Pressure": 14,
+      "Average Daily Pressure": 14.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-09-01T00:00:00",
+      "Episode End": "2025-09-01T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 12,
+      "Peak Daily Pressure": 12,
+      "Average Daily Pressure": 12.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-12-08T00:00:00",
+      "Episode End": "2024-12-08T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 11,
+      "Peak Daily Pressure": 11,
+      "Average Daily Pressure": 11.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-06-26T00:00:00",
+      "Episode End": "2024-06-26T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 10,
+      "Peak Daily Pressure": 10,
+      "Average Daily Pressure": 10.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-10-19T00:00:00",
+      "Episode End": "2025-10-19T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 10,
+      "Peak Daily Pressure": 10,
+      "Average Daily Pressure": 10.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-11-30T00:00:00",
+      "Episode End": "2025-11-30T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 10,
+      "Peak Daily Pressure": 10,
+      "Average Daily Pressure": 10.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-09-14T00:00:00",
+      "Episode End": "2025-09-14T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 8,
+      "Peak Daily Pressure": 8,
+      "Average Daily Pressure": 8.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-04-13T00:00:00",
+      "Episode End": "2025-04-13T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 7,
+      "Peak Daily Pressure": 7,
+      "Average Daily Pressure": 7.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-10-16T00:00:00",
+      "Episode End": "2025-10-16T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 6,
+      "Peak Daily Pressure": 6,
+      "Average Daily Pressure": 6.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2023-08-01T00:00:00",
+      "Episode End": "2023-08-01T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 5,
+      "Peak Daily Pressure": 5,
+      "Average Daily Pressure": 5.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-04-15T00:00:00",
+      "Episode End": "2025-04-15T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 5,
+      "Peak Daily Pressure": 5,
+      "Average Daily Pressure": 5.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-08-26T00:00:00",
+      "Episode End": "2025-08-26T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 5,
+      "Peak Daily Pressure": 5,
+      "Average Daily Pressure": 5.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-09-16T00:00:00",
+      "Episode End": "2025-09-16T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 5,
+      "Peak Daily Pressure": 5,
+      "Average Daily Pressure": 5.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-09-30T00:00:00",
+      "Episode End": "2025-09-30T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 5,
+      "Peak Daily Pressure": 5,
+      "Average Daily Pressure": 5.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-10-06T00:00:00",
+      "Episode End": "2025-10-06T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 5,
+      "Peak Daily Pressure": 5,
+      "Average Daily Pressure": 5.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-10-28T00:00:00",
+      "Episode End": "2025-10-28T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 5,
+      "Peak Daily Pressure": 5,
+      "Average Daily Pressure": 5.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2023-02-21T00:00:00",
+      "Episode End": "2023-02-21T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 4,
+      "Peak Daily Pressure": 4,
+      "Average Daily Pressure": 4.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2024-07-02T00:00:00",
+      "Episode End": "2024-07-02T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 4,
+      "Peak Daily Pressure": 4,
+      "Average Daily Pressure": 4.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-05-29T00:00:00",
+      "Episode End": "2025-05-29T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 4,
+      "Peak Daily Pressure": 4,
+      "Average Daily Pressure": 4.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-06-01T00:00:00",
+      "Episode End": "2025-06-01T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 4,
+      "Peak Daily Pressure": 4,
+      "Average Daily Pressure": 4.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-03-13T00:00:00",
+      "Episode End": "2025-03-13T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 3,
+      "Peak Daily Pressure": 3,
+      "Average Daily Pressure": 3.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-03-16T00:00:00",
+      "Episode End": "2025-03-16T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 3,
+      "Peak Daily Pressure": 3,
+      "Average Daily Pressure": 3.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-09-28T00:00:00",
+      "Episode End": "2025-09-28T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 3,
+      "Peak Daily Pressure": 3,
+      "Average Daily Pressure": 3.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-11-02T00:00:00",
+      "Episode End": "2025-11-02T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 3,
+      "Peak Daily Pressure": 3,
+      "Average Daily Pressure": 3.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-11-25T00:00:00",
+      "Episode End": "2025-11-25T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 3,
+      "Peak Daily Pressure": 3,
+      "Average Daily Pressure": 3.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-02-18T00:00:00",
+      "Episode End": "2025-02-18T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 2,
+      "Peak Daily Pressure": 2,
+      "Average Daily Pressure": 2.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-04-20T00:00:00",
+      "Episode End": "2025-04-20T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 2,
+      "Peak Daily Pressure": 2,
+      "Average Daily Pressure": 2.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-05-22T00:00:00",
+      "Episode End": "2025-05-22T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 2,
+      "Peak Daily Pressure": 2,
+      "Average Daily Pressure": 2.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-09-07T00:00:00",
+      "Episode End": "2025-09-07T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 2,
+      "Peak Daily Pressure": 2,
+      "Average Daily Pressure": 2.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-10-26T00:00:00",
+      "Episode End": "2025-10-26T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 2,
+      "Peak Daily Pressure": 2,
+      "Average Daily Pressure": 2.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-10-30T00:00:00",
+      "Episode End": "2025-10-30T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 2,
+      "Peak Daily Pressure": 2,
+      "Average Daily Pressure": 2.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-09-03T00:00:00",
+      "Episode End": "2025-09-03T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 1,
+      "Peak Daily Pressure": 1,
+      "Average Daily Pressure": 1.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-10-09T00:00:00",
+      "Episode End": "2025-10-09T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 1,
+      "Peak Daily Pressure": 1,
+      "Average Daily Pressure": 1.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-11-05T00:00:00",
+      "Episode End": "2025-11-05T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 1,
+      "Peak Daily Pressure": 1,
+      "Average Daily Pressure": 1.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-11-09T00:00:00",
+      "Episode End": "2025-11-09T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 1,
+      "Peak Daily Pressure": 1,
+      "Average Daily Pressure": 1.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-11-27T00:00:00",
+      "Episode End": "2025-11-27T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 1,
+      "Peak Daily Pressure": 1,
+      "Average Daily Pressure": 1.0,
+      "Elevated": false,
+      "Status": "Closed"
+    },
+    {
+      "Episode Start": "2025-12-03T00:00:00",
+      "Episode End": "2025-12-03T00:00:00",
+      "Duration (Days)": 1,
+      "Cumulative Net Intake": 1,
+      "Peak Daily Pressure": 1,
+      "Average Daily Pressure": 1.0,
+      "Elevated": false,
+      "Status": "Closed"
+    }
+  ],
+  "validation": {
+    "errors": 1,
+    "warnings": 3,
+    "findings": [
+      {
+        "Severity": "warning",
+        "Code": "EMPTY_ROWS_IGNORED",
+        "Message": "Completely empty rows were ignored.",
+        "Rows": 450
+      },
+      {
+        "Severity": "warning",
+        "Code": "CHRONOLOGY_REPAIRED",
+        "Message": "Rows were not in chronological order and have been sorted.",
+        "Rows": 0
+      },
+      {
+        "Severity": "warning",
+        "Code": "MISSING_DATES_FILLED",
+        "Message": "Missing calendar dates were inserted; stocks were interpolated and flows set to zero.",
+        "Rows": 355
+      },
+      {
+        "Severity": "error",
+        "Code": "TRANSFER_EXCEEDS_CBP",
+        "Message": "Transfers exceed active CBP custody on one or more dates.",
+        "Rows": 86
+      }
+    ]
+  },
+  "anomaly_rows": [
+    {
+      "Date": "2023-01-24T00:00:00",
+      "Children in CBP custody": 42,
+      "Children transferred out of CBP custody": 47,
+      "Children in HHS Care": 7433,
+      "Children discharged from HHS Care": 175,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-01-25T00:00:00",
+      "Children in CBP custody": 22,
+      "Children transferred out of CBP custody": 41,
+      "Children in HHS Care": 7538,
+      "Children discharged from HHS Care": 180,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-02-02T00:00:00",
+      "Children in CBP custody": 13,
+      "Children transferred out of CBP custody": 23,
+      "Children in HHS Care": 7879,
+      "Children discharged from HHS Care": 298,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-02-22T00:00:00",
+      "Children in CBP custody": 215,
+      "Children transferred out of CBP custody": 230,
+      "Children in HHS Care": 7978,
+      "Children discharged from HHS Care": 232,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-02-23T00:00:00",
+      "Children in CBP custody": 162,
+      "Children transferred out of CBP custody": 178,
+      "Children in HHS Care": 7914,
+      "Children discharged from HHS Care": 386,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-03-01T00:00:00",
+      "Children in CBP custody": 158,
+      "Children transferred out of CBP custody": 193,
+      "Children in HHS Care": 7930,
+      "Children discharged from HHS Care": 307,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-04-03T00:00:00",
+      "Children in CBP custody": 139,
+      "Children transferred out of CBP custody": 168,
+      "Children in HHS Care": 8054,
+      "Children discharged from HHS Care": 284,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-04-25T00:00:00",
+      "Children in CBP custody": 230,
+      "Children transferred out of CBP custody": 242,
+      "Children in HHS Care": 8017,
+      "Children discharged from HHS Care": 202,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-05-04T00:00:00",
+      "Children in CBP custody": 253,
+      "Children transferred out of CBP custody": 286,
+      "Children in HHS Care": 8790,
+      "Children discharged from HHS Care": 332,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-05-17T00:00:00",
+      "Children in CBP custody": 162,
+      "Children transferred out of CBP custody": 193,
+      "Children in HHS Care": 8569,
+      "Children discharged from HHS Care": 307,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-05-18T00:00:00",
+      "Children in CBP custody": 122,
+      "Children transferred out of CBP custody": 152,
+      "Children in HHS Care": 8474,
+      "Children discharged from HHS Care": 351,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-05-23T00:00:00",
+      "Children in CBP custody": 66,
+      "Children transferred out of CBP custody": 94,
+      "Children in HHS Care": 7788,
+      "Children discharged from HHS Care": 246,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-05-29T00:00:00",
+      "Children in CBP custody": 60,
+      "Children transferred out of CBP custody": 71,
+      "Children in HHS Care": 6996,
+      "Children discharged from HHS Care": 207,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-05-31T00:00:00",
+      "Children in CBP custody": 80,
+      "Children transferred out of CBP custody": 82,
+      "Children in HHS Care": 7053,
+      "Children discharged from HHS Care": 210,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-06-11T00:00:00",
+      "Children in CBP custody": 152,
+      "Children transferred out of CBP custody": 168,
+      "Children in HHS Care": 6007,
+      "Children discharged from HHS Care": 238,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-06-12T00:00:00",
+      "Children in CBP custody": 118,
+      "Children transferred out of CBP custody": 136,
+      "Children in HHS Care": 6021,
+      "Children discharged from HHS Care": 177,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-06-13T00:00:00",
+      "Children in CBP custody": 64,
+      "Children transferred out of CBP custody": 117,
+      "Children in HHS Care": 6061,
+      "Children discharged from HHS Care": 146,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-06-15T00:00:00",
+      "Children in CBP custody": 75,
+      "Children transferred out of CBP custody": 97,
+      "Children in HHS Care": 6038,
+      "Children discharged from HHS Care": 272,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-07-05T00:00:00",
+      "Children in CBP custody": 215,
+      "Children transferred out of CBP custody": 230,
+      "Children in HHS Care": 6193,
+      "Children discharged from HHS Care": 167,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-07-06T00:00:00",
+      "Children in CBP custody": 162,
+      "Children transferred out of CBP custody": 178,
+      "Children in HHS Care": 6239,
+      "Children discharged from HHS Care": 205,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-07-12T00:00:00",
+      "Children in CBP custody": 158,
+      "Children transferred out of CBP custody": 193,
+      "Children in HHS Care": 6521,
+      "Children discharged from HHS Care": 210,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-08-09T00:00:00",
+      "Children in CBP custody": 139,
+      "Children transferred out of CBP custody": 168,
+      "Children in HHS Care": 8888,
+      "Children discharged from HHS Care": 251,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-09-06T00:00:00",
+      "Children in CBP custody": 230,
+      "Children transferred out of CBP custody": 242,
+      "Children in HHS Care": 10356,
+      "Children discharged from HHS Care": 291,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-09-17T00:00:00",
+      "Children in CBP custody": 253,
+      "Children transferred out of CBP custody": 286,
+      "Children in HHS Care": 10799,
+      "Children discharged from HHS Care": 427,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-09-28T00:00:00",
+      "Children in CBP custody": 162,
+      "Children transferred out of CBP custody": 193,
+      "Children in HHS Care": 10984,
+      "Children discharged from HHS Care": 447,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-10-01T00:00:00",
+      "Children in CBP custody": 122,
+      "Children transferred out of CBP custody": 152,
+      "Children in HHS Care": 10598,
+      "Children discharged from HHS Care": 493,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-10-04T00:00:00",
+      "Children in CBP custody": 66,
+      "Children transferred out of CBP custody": 94,
+      "Children in HHS Care": 10963,
+      "Children discharged from HHS Care": 330,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-10-10T00:00:00",
+      "Children in CBP custody": 60,
+      "Children transferred out of CBP custody": 71,
+      "Children in HHS Care": 10910,
+      "Children discharged from HHS Care": 257,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-10-12T00:00:00",
+      "Children in CBP custody": 80,
+      "Children transferred out of CBP custody": 82,
+      "Children in HHS Care": 10992,
+      "Children discharged from HHS Care": 398,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-10-23T00:00:00",
+      "Children in CBP custody": 152,
+      "Children transferred out of CBP custody": 168,
+      "Children in HHS Care": 9436,
+      "Children discharged from HHS Care": 327,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-10-24T00:00:00",
+      "Children in CBP custody": 118,
+      "Children transferred out of CBP custody": 136,
+      "Children in HHS Care": 9396,
+      "Children discharged from HHS Care": 300,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-10-25T00:00:00",
+      "Children in CBP custody": 64,
+      "Children transferred out of CBP custody": 117,
+      "Children in HHS Care": 9351,
+      "Children discharged from HHS Care": 293,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-10-29T00:00:00",
+      "Children in CBP custody": 75,
+      "Children transferred out of CBP custody": 97,
+      "Children in HHS Care": 8925,
+      "Children discharged from HHS Care": 418,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-11-02T00:00:00",
+      "Children in CBP custody": 208,
+      "Children transferred out of CBP custody": 256,
+      "Children in HHS Care": 9442,
+      "Children discharged from HHS Care": 330,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-11-12T00:00:00",
+      "Children in CBP custody": 160,
+      "Children transferred out of CBP custody": 233,
+      "Children in HHS Care": 9477,
+      "Children discharged from HHS Care": 313,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-11-14T00:00:00",
+      "Children in CBP custody": 181,
+      "Children transferred out of CBP custody": 182,
+      "Children in HHS Care": 9665,
+      "Children discharged from HHS Care": 247,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-11-15T00:00:00",
+      "Children in CBP custody": 157,
+      "Children transferred out of CBP custody": 201,
+      "Children in HHS Care": 9762,
+      "Children discharged from HHS Care": 316,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-11-26T00:00:00",
+      "Children in CBP custody": 196,
+      "Children transferred out of CBP custody": 205,
+      "Children in HHS Care": 9845,
+      "Children discharged from HHS Care": 312,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-12-04T00:00:00",
+      "Children in CBP custody": 208,
+      "Children transferred out of CBP custody": 256,
+      "Children in HHS Care": 10635,
+      "Children discharged from HHS Care": 273,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-12-11T00:00:00",
+      "Children in CBP custody": 160,
+      "Children transferred out of CBP custody": 233,
+      "Children in HHS Care": 10998,
+      "Children discharged from HHS Care": 304,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-12-13T00:00:00",
+      "Children in CBP custody": 181,
+      "Children transferred out of CBP custody": 182,
+      "Children in HHS Care": 11192,
+      "Children discharged from HHS Care": 335,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-12-14T00:00:00",
+      "Children in CBP custody": 157,
+      "Children transferred out of CBP custody": 201,
+      "Children in HHS Care": 11242,
+      "Children discharged from HHS Care": 396,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2023-12-25T00:00:00",
+      "Children in CBP custody": 196,
+      "Children transferred out of CBP custody": 205,
+      "Children in HHS Care": 11144,
+      "Children discharged from HHS Care": 347,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-01-04T00:00:00",
+      "Children in CBP custody": 152,
+      "Children transferred out of CBP custody": 168,
+      "Children in HHS Care": 10558,
+      "Children discharged from HHS Care": 362,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-01-07T00:00:00",
+      "Children in CBP custody": 118,
+      "Children transferred out of CBP custody": 136,
+      "Children in HHS Care": 9670,
+      "Children discharged from HHS Care": 367,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-01-08T00:00:00",
+      "Children in CBP custody": 64,
+      "Children transferred out of CBP custody": 117,
+      "Children in HHS Care": 9670,
+      "Children discharged from HHS Care": 367,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-01-10T00:00:00",
+      "Children in CBP custody": 75,
+      "Children transferred out of CBP custody": 97,
+      "Children in HHS Care": 9144,
+      "Children discharged from HHS Care": 349,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-01-24T00:00:00",
+      "Children in CBP custody": 196,
+      "Children transferred out of CBP custody": 205,
+      "Children in HHS Care": 8212,
+      "Children discharged from HHS Care": 243,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-01-30T00:00:00",
+      "Children in CBP custody": 198,
+      "Children transferred out of CBP custody": 208,
+      "Children in HHS Care": 8182,
+      "Children discharged from HHS Care": 187,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-02-12T00:00:00",
+      "Children in CBP custody": 430,
+      "Children transferred out of CBP custody": 440,
+      "Children in HHS Care": 8092,
+      "Children discharged from HHS Care": 234,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-03-19T00:00:00",
+      "Children in CBP custody": 202,
+      "Children transferred out of CBP custody": 256,
+      "Children in HHS Care": 8390,
+      "Children discharged from HHS Care": 197,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-04-28T00:00:00",
+      "Children in CBP custody": 349,
+      "Children transferred out of CBP custody": 365,
+      "Children in HHS Care": 7298,
+      "Children discharged from HHS Care": 250,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-05-15T00:00:00",
+      "Children in CBP custody": 285,
+      "Children transferred out of CBP custody": 341,
+      "Children in HHS Care": 7589,
+      "Children discharged from HHS Care": 265,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-05-23T00:00:00",
+      "Children in CBP custody": 272,
+      "Children transferred out of CBP custody": 314,
+      "Children in HHS Care": 7494,
+      "Children discharged from HHS Care": 227,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-06-03T00:00:00",
+      "Children in CBP custody": 244,
+      "Children transferred out of CBP custody": 257,
+      "Children in HHS Care": 7596,
+      "Children discharged from HHS Care": 224,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-06-12T00:00:00",
+      "Children in CBP custody": 266,
+      "Children transferred out of CBP custody": 274,
+      "Children in HHS Care": 7548,
+      "Children discharged from HHS Care": 212,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-06-27T00:00:00",
+      "Children in CBP custody": 208,
+      "Children transferred out of CBP custody": 256,
+      "Children in HHS Care": 7248,
+      "Children discharged from HHS Care": 268,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-07-07T00:00:00",
+      "Children in CBP custody": 160,
+      "Children transferred out of CBP custody": 233,
+      "Children in HHS Care": 6599,
+      "Children discharged from HHS Care": 213,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-07-09T00:00:00",
+      "Children in CBP custody": 181,
+      "Children transferred out of CBP custody": 182,
+      "Children in HHS Care": 6651,
+      "Children discharged from HHS Care": 130,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-07-10T00:00:00",
+      "Children in CBP custody": 157,
+      "Children transferred out of CBP custody": 201,
+      "Children in HHS Care": 6649,
+      "Children discharged from HHS Care": 177,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-07-21T00:00:00",
+      "Children in CBP custody": 196,
+      "Children transferred out of CBP custody": 205,
+      "Children in HHS Care": 6058,
+      "Children discharged from HHS Care": 262,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-07-25T00:00:00",
+      "Children in CBP custody": 198,
+      "Children transferred out of CBP custody": 208,
+      "Children in HHS Care": 5954,
+      "Children discharged from HHS Care": 194,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-07-29T00:00:00",
+      "Children in CBP custody": 210,
+      "Children transferred out of CBP custody": 219,
+      "Children in HHS Care": 5819,
+      "Children discharged from HHS Care": 163,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-07-30T00:00:00",
+      "Children in CBP custody": 203,
+      "Children transferred out of CBP custody": 208,
+      "Children in HHS Care": 5930,
+      "Children discharged from HHS Care": 92,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-09-13T00:00:00",
+      "Children in CBP custody": 200,
+      "Children transferred out of CBP custody": 212,
+      "Children in HHS Care": 6326,
+      "Children discharged from HHS Care": 279,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-09-18T00:00:00",
+      "Children in CBP custody": 213,
+      "Children transferred out of CBP custody": 217,
+      "Children in HHS Care": 6245,
+      "Children discharged from HHS Care": 149,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-10-02T00:00:00",
+      "Children in CBP custody": 215,
+      "Children transferred out of CBP custody": 230,
+      "Children in HHS Care": 6091,
+      "Children discharged from HHS Care": 173,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-10-03T00:00:00",
+      "Children in CBP custody": 162,
+      "Children transferred out of CBP custody": 178,
+      "Children in HHS Care": 6118,
+      "Children discharged from HHS Care": 193,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-10-10T00:00:00",
+      "Children in CBP custody": 158,
+      "Children transferred out of CBP custody": 193,
+      "Children in HHS Care": 6075,
+      "Children discharged from HHS Care": 159,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-11-11T00:00:00",
+      "Children in CBP custody": 139,
+      "Children transferred out of CBP custody": 168,
+      "Children in HHS Care": 5963,
+      "Children discharged from HHS Care": 145,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-12-03T00:00:00",
+      "Children in CBP custody": 230,
+      "Children transferred out of CBP custody": 242,
+      "Children in HHS Care": 6192,
+      "Children discharged from HHS Care": 107,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-12-12T00:00:00",
+      "Children in CBP custody": 253,
+      "Children transferred out of CBP custody": 286,
+      "Children in HHS Care": 6481,
+      "Children discharged from HHS Care": 194,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-12-25T00:00:00",
+      "Children in CBP custody": 162,
+      "Children transferred out of CBP custody": 193,
+      "Children in HHS Care": 6689,
+      "Children discharged from HHS Care": 107,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2024-12-26T00:00:00",
+      "Children in CBP custody": 122,
+      "Children transferred out of CBP custody": 152,
+      "Children in HHS Care": 6707,
+      "Children discharged from HHS Care": 135,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2025-01-01T00:00:00",
+      "Children in CBP custody": 66,
+      "Children transferred out of CBP custody": 94,
+      "Children in HHS Care": 6405,
+      "Children discharged from HHS Care": 144,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2025-01-06T00:00:00",
+      "Children in CBP custody": 60,
+      "Children transferred out of CBP custody": 71,
+      "Children in HHS Care": 5769,
+      "Children discharged from HHS Care": 190,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2025-01-08T00:00:00",
+      "Children in CBP custody": 80,
+      "Children transferred out of CBP custody": 82,
+      "Children in HHS Care": 5605,
+      "Children discharged from HHS Care": 184,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2025-01-19T00:00:00",
+      "Children in CBP custody": 152,
+      "Children transferred out of CBP custody": 168,
+      "Children in HHS Care": 4628,
+      "Children discharged from HHS Care": 176,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2025-01-20T00:00:00",
+      "Children in CBP custody": 118,
+      "Children transferred out of CBP custody": 136,
+      "Children in HHS Care": 4638,
+      "Children discharged from HHS Care": 127,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2025-01-21T00:00:00",
+      "Children in CBP custody": 64,
+      "Children transferred out of CBP custody": 117,
+      "Children in HHS Care": 4728,
+      "Children discharged from HHS Care": 54,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2025-01-23T00:00:00",
+      "Children in CBP custody": 75,
+      "Children transferred out of CBP custody": 97,
+      "Children in HHS Care": 4621,
+      "Children discharged from HHS Care": 174,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2025-01-30T00:00:00",
+      "Children in CBP custody": 42,
+      "Children transferred out of CBP custody": 47,
+      "Children in HHS Care": 3923,
+      "Children discharged from HHS Care": 159,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2025-02-02T00:00:00",
+      "Children in CBP custody": 22,
+      "Children transferred out of CBP custody": 41,
+      "Children in HHS Care": 3483,
+      "Children discharged from HHS Care": 168,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2025-02-09T00:00:00",
+      "Children in CBP custody": 13,
+      "Children transferred out of CBP custody": 23,
+      "Children in HHS Care": 2878,
+      "Children discharged from HHS Care": 99,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2025-02-13T00:00:00",
+      "Children in CBP custody": 10,
+      "Children transferred out of CBP custody": 23,
+      "Children in HHS Care": 2703,
+      "Children discharged from HHS Care": 72,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    },
+    {
+      "Date": "2025-02-27T00:00:00",
+      "Children in CBP custody": 15,
+      "Children transferred out of CBP custody": 17,
+      "Children in HHS Care": 2391,
+      "Children discharged from HHS Care": 37,
+      "Anomaly_Transfer_Exceeds_CBP": true,
+      "Anomaly_Discharge_Exceeds_HHS": false,
+      "Data Quality Flag": "Transfer > CBP custody"
+    }
+  ]
+}

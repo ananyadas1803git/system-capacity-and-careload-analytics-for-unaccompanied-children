@@ -1,0 +1,29 @@
+{
+  "model": "NumPy ridge regression baseline",
+  "target": "target_total_load_t_plus_7d",
+  "forecast_horizon_days": 7,
+  "alpha": 10.0,
+  "training_rows": 847,
+  "test_rows": 214,
+  "gap_rows": 7,
+  "feature_count": 137,
+  "training_start": "2023-01-12",
+  "training_end": "2025-05-07",
+  "test_start": "2025-05-15",
+  "test_end": "2025-12-14",
+  "ridge": {
+    "mae": 197.1992473830921,
+    "rmse": 223.12277801633635,
+    "mape_percent": 8.736344287541716,
+    "r2": -0.5521132563923163
+  },
+  "naive_current_load": {
+    "mae": 37.546728971962615,
+    "rmse": 46.854666929603844,
+    "mape_percent": 1.6537345917697392,
+    "r2": 0.9315550672460805
+  },
+  "mae_improvement_percent": -425.21019215907546,
+  "champion_model": "naive_current_load",
+  "ridge_deployment_recommendation": "do_not_promote"
+}
