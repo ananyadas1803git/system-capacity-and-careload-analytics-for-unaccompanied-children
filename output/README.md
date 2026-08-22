@@ -3,11 +3,14 @@
 This directory contains reproducible runtime artifacts, not source data.
 
 - `charts/` contains standalone Plotly HTML figures.
-- `exports/` contains analytical JSON/CSV extracts and test predictions.
-- `models/` contains the NumPy ridge baseline and its evaluation metadata.
+- `exports/` contains analytical JSON/CSV extracts, ridge and LightGBM holdout
+  predictions, and LightGBM feature importance.
+- `models/` contains the preserved NumPy ridge benchmark, the LightGBM text
+  model, provenance metadata, evaluation metrics, and promotion decision.
 - `logs/` is reserved for runtime application or batch-pipeline logs.
 
-The baseline model predicts Total System Load seven days ahead. It is a research
-benchmark, not an official HHS forecast or an operational capacity decision.
-Regenerate analysis JSON with `python main.py analyze`, reports with
-`python main.py report`, and model artifacts by running notebook 05.
+The ridge and LightGBM candidates forecast Total System Load seven days ahead.
+They are research benchmarks, not official HHS forecasts or operational
+capacity decisions. Regenerate analysis JSON with `python main.py analyze`,
+reports with `python main.py report`, ridge artifacts with notebook 05, and
+LightGBM artifacts with `python main.py train-lightgbm --force`.

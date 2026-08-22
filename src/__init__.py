@@ -40,6 +40,96 @@ _LAZY_EXPORTS: dict[str, tuple[str, str]] = {
         "chronological_train_test_split",
     ),
     "feature_manifest": ("src.feature_engineering", "feature_manifest"),
+    # LightGBM forecasting.
+    "ABSOLUTE_TARGET_COLUMN": (
+        "src.lightgbm_forecasting",
+        "ABSOLUTE_TARGET_COLUMN",
+    ),
+    "CHANGE_TARGET_COLUMN": ("src.lightgbm_forecasting", "CHANGE_TARGET_COLUMN"),
+    "CURRENT_LOAD_FEATURE": ("src.lightgbm_forecasting", "CURRENT_LOAD_FEATURE"),
+    "DRIFT_LAG_FEATURE": ("src.lightgbm_forecasting", "DRIFT_LAG_FEATURE"),
+    "FORECAST_HORIZON_DAYS": (
+        "src.lightgbm_forecasting",
+        "FORECAST_HORIZON_DAYS",
+    ),
+    "IMPORTANCE_ARTIFACT_COLUMNS": (
+        "src.lightgbm_forecasting",
+        "IMPORTANCE_ARTIFACT_COLUMNS",
+    ),
+    "PREDICTION_ARTIFACT_COLUMNS": (
+        "src.lightgbm_forecasting",
+        "PREDICTION_ARTIFACT_COLUMNS",
+    ),
+    "ChronologicalSplit": ("src.lightgbm_forecasting", "ChronologicalSplit"),
+    "ForecastTrainingResult": (
+        "src.lightgbm_forecasting",
+        "ForecastTrainingResult",
+    ),
+    "ForecastingError": ("src.lightgbm_forecasting", "ForecastingError"),
+    "LightGBMForecastConfig": (
+        "src.lightgbm_forecasting",
+        "LightGBMForecastConfig",
+    ),
+    "PreparedForecastData": (
+        "src.lightgbm_forecasting",
+        "PreparedForecastData",
+    ),
+    "RegressionMetrics": ("src.lightgbm_forecasting", "RegressionMetrics"),
+    "WalkForwardFold": ("src.lightgbm_forecasting", "WalkForwardFold"),
+    "calculate_regression_metrics": (
+        "src.lightgbm_forecasting",
+        "calculate_regression_metrics",
+    ),
+    "chronological_holdout_split": (
+        "src.lightgbm_forecasting",
+        "chronological_holdout_split",
+    ),
+    "construct_change_target": (
+        "src.lightgbm_forecasting",
+        "construct_change_target",
+    ),
+    "default_candidate_parameters": (
+        "src.lightgbm_forecasting",
+        "default_candidate_parameters",
+    ),
+    "expanding_window_folds": (
+        "src.lightgbm_forecasting",
+        "expanding_window_folds",
+    ),
+    "find_leakage_features": (
+        "src.lightgbm_forecasting",
+        "find_leakage_features",
+    ),
+    "fit_deterministic_lightgbm": (
+        "src.lightgbm_forecasting",
+        "fit_deterministic_lightgbm",
+    ),
+    "load_feature_data": ("src.lightgbm_forecasting", "load_feature_data"),
+    "order_prediction_intervals": (
+        "src.lightgbm_forecasting",
+        "order_prediction_intervals",
+    ),
+    "prepare_forecasting_data": (
+        "src.lightgbm_forecasting",
+        "prepare_forecasting_data",
+    ),
+    "reconstruct_absolute_forecast": (
+        "src.lightgbm_forecasting",
+        "reconstruct_absolute_forecast",
+    ),
+    "select_leakage_safe_features": (
+        "src.lightgbm_forecasting",
+        "select_leakage_safe_features",
+    ),
+    "train_lightgbm_forecast": (
+        "src.lightgbm_forecasting",
+        "train_lightgbm_forecast",
+    ),
+    "training_summary": ("src.lightgbm_forecasting", "training_summary"),
+    "validate_artifact_schemas": (
+        "src.lightgbm_forecasting",
+        "validate_artifact_schemas",
+    ),
     # KPI calculation.
     "TOTAL_CARE_KEY": ("src.kpi", "TOTAL_CARE_KEY"),
     "NET_PRESSURE_KEY": ("src.kpi", "NET_PRESSURE_KEY"),

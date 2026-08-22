@@ -374,6 +374,49 @@ def command_report(arguments: argparse.Namespace) -> int:
     return EXIT_SUCCESS
 
 
+def command_train_lightgbm(arguments: argparse.Namespace) -> int:
+    """Train and evaluate the leakage-safe seven-day LightGBM candidate."""
+
+    try:
+        from src.lightgbm_forecasting import (
+            ForecastingError,
+            LightGBMForecastConfig,
+            train_lightgbm_forecast,
+            training_summary,
+        )
+    except ImportError as exc:
+        raise CommandError(
+            "LightGBM training dependencies are not installed. "
+            "Run: python -m pip install -r requirements.txt"
+        ) from exc
+    try:
+        config = LightGBMForecastConfig(
+            feature_path=arguments.features,
+            provenance_path=arguments.provenance,
+            ridge_predictions_path=arguments.ridge_predictions,
+            random_seed=arguments.seed,
+            cv_splits=arguments.cv_splits,
+            cv_validation_rows=arguments.cv_validation_rows,
+            source_label=arguments.source_label,
+            synthetic_data=arguments.synthetic_data,
+            overwrite=arguments.force,
+        )
+        result = train_lightgbm_forecast(config)
+    except (ForecastingError, OSError, TypeError, ValueError) as exc:
+        raise CommandError(f"LightGBM training failed: {exc}") from exc
+
+    sys.stdout.write(
+        json.dumps(
+            json_safe(training_summary(result)),
+            indent=2,
+            ensure_ascii=False,
+            allow_nan=False,
+        )
+        + "\n"
+    )
+    return EXIT_SUCCESS
+
+
 def build_parser() -> argparse.ArgumentParser:
     """Construct the complete command-line parser."""
     parser = argparse.ArgumentParser(
@@ -485,6 +528,54 @@ def build_parser() -> argparse.ArgumentParser:
         default=500,
     )
     report.set_defaults(handler=command_report)
+
+    lightgbm = subparsers.add_parser(
+        "train-lightgbm",
+        help="Train the leakage-safe seven-day LightGBM forecasting candidate.",
+    )
+    lightgbm.add_argument(
+        "--features",
+        type=Path,
+        default=PROJECT_ROOT
+        / "data"
+        / "processed"
+        / "uac_capacity_ml_features.parquet",
+        help="Model-ready Parquet feature artifact.",
+    )
+    lightgbm.add_argument(
+        "--provenance",
+        type=Path,
+        default=PROJECT_ROOT / "data" / "processed" / "preprocessing_report.json",
+        help="Optional preprocessing provenance JSON.",
+    )
+    lightgbm.add_argument(
+        "--ridge-predictions",
+        type=Path,
+        default=PROJECT_ROOT / "output" / "exports" / "model_test_predictions.csv",
+        help="Preserved ridge holdout prediction artifact.",
+    )
+    lightgbm.add_argument("--seed", type=int, default=42)
+    lightgbm.add_argument("--cv-splits", type=_positive_integer, default=4)
+    lightgbm.add_argument(
+        "--cv-validation-rows",
+        type=_positive_integer,
+        default=90,
+    )
+    lightgbm.add_argument(
+        "--source-label",
+        default="HHS_Unaccompanied_Alien_Children_Program.csv",
+    )
+    lightgbm.add_argument(
+        "--synthetic-data",
+        action="store_true",
+        help="Mark the selected feature artifact as synthetic in model metadata.",
+    )
+    lightgbm.add_argument(
+        "--force",
+        action="store_true",
+        help="Replace existing LightGBM artifacts; ridge artifacts remain protected.",
+    )
+    lightgbm.set_defaults(handler=command_train_lightgbm)
     return parser
 
 

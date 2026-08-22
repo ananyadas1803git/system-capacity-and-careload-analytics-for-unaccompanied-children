@@ -72,10 +72,12 @@ This project transforms daily aggregate counts into validated, decision-support 
 - Unified command-line interface
 - Feature engineering for forecasting
 - Leakage-aware chronological dataset splitting
+- Deterministic LightGBM change forecasting with quantile intervals
+- Expanding-window model selection with a seven-day embargo
 - Structured logging and audit utilities
 - HTML and JSON stakeholder reports
 - Six research notebooks
-- Baseline care-load forecasting artifacts
+- Preserved ridge, persistence, drift, and LightGBM benchmarks
 
 ---
 
@@ -91,7 +93,10 @@ flowchart LR
     E --> G[Streamlit Dashboard]
     E --> H[ASGI API]
     E --> I[HTML and JSON Reports]
-    F --> J[Research Notebooks and Baseline Model]
+    F --> J[Leakage-Safe Forecasting Pipeline]
+    J --> K[Ridge and Operational Baselines]
+    J --> L[LightGBM and Quantile Models]
+    J --> M[Model Artifacts and Evaluation]
 ```
 
 ---
@@ -147,6 +152,7 @@ All data used by this project contains aggregate operational counts. It does not
 ├── src/
 │   ├── feature_engineering.py
 │   ├── kpi.py
+│   ├── lightgbm_forecasting.py
 │   ├── logger.py
 │   ├── preprocessor.py
 │   ├── report_generator.py
@@ -162,6 +168,8 @@ All data used by this project contains aggregate operational counts. It does not
 │   ├── logs/
 │   └── models/
 ├── reports/
+├── tests/
+│   └── test_lightgbm_forecasting.py
 ├── .gitignore
 ├── app_utils.py
 ├── generate_sample_data.py
@@ -324,6 +332,97 @@ python main.py generate-data
 
 ---
 
+## Seven-Day LightGBM Forecasting
+
+The production candidate predicts the seven-day **change** in Total System Load
+rather than its absolute future level:
+
+```text
+target_change_7d = target_total_load_t_plus_7d - current_total_system_load
+final_forecast = current_total_system_load + predicted_change_7d
+```
+
+Modeling the change focuses learning on near-term movement while retaining the
+known current load as the reconstruction anchor. Features are not scaled because
+LightGBM is tree-based.
+
+Train the candidate from the repository root:
+
+```bash
+python main.py train-lightgbm
+```
+
+Use `--force` only when intentionally regenerating existing LightGBM artifacts:
+
+```bash
+python main.py train-lightgbm --force
+```
+
+### Validation strategy
+
+- The final 20% of complete observations is an untouched chronological holdout.
+- Seven observations are embargoed immediately before the holdout.
+- The earlier training period uses four expanding-window validation folds.
+- Every training/validation boundary includes a seven-day gap.
+- Five conservative, regularized hyperparameter candidates are compared by mean
+  validation MAE.
+- Random seeds, LightGBM data/feature seeds, single-threaded fitting, and
+  deterministic tree construction are fixed.
+- Promotion requires LightGBM to beat persistence on both mean walk-forward MAE
+  and untouched holdout MAE.
+
+### Leakage controls
+
+- Every `target_*` and future-derived field is excluded from model inputs.
+- Same-day transfers, discharges, intake, net-intake momentum, and operational
+  ratios are excluded.
+- Operational signals enter only through lags or rolling/EMA statistics shifted
+  to historical observations.
+- Current Total System Load is used only as a known origin feature and forecast
+  reconstruction anchor.
+- Feature order, schema, data values, and provenance are fingerprinted in model
+  metadata.
+
+### Actual evaluation results
+
+Results below were generated from the processed aggregate HHS source using 847
+training rows, a seven-day pre-holdout gap, 214 holdout rows, and 123 features.
+
+| Model | MAE | RMSE | MAPE | R² | MAE improvement vs persistence |
+|---|---:|---:|---:|---:|---:|
+| Persistence/current load | 37.547 | 46.855 | 1.654% | 0.9316 | 0.000% |
+| Seven-day drift | **26.869** | **32.780** | **1.181%** | **0.9665** | **+28.438%** |
+| LightGBM change forecast | 61.794 | 73.036 | 2.761% | 0.8337 | -64.578% |
+| LightGBM quantile median | 44.842 | 60.579 | 2.024% | 0.8856 | -19.429% |
+| Preserved ridge benchmark | 197.199 | 223.123 | 8.736% | -0.5521 | -425.210% |
+
+Mean walk-forward MAE was **205.561 for LightGBM** and **190.625 for
+persistence**. The LightGBM 10th–90th percentile interval had 37.85% empirical
+coverage against a nominal 80% target.
+
+**Promotion decision: continue research.** LightGBM failed both required
+promotion conditions, so persistence remains the champion under the predefined
+rule. The seven-day drift baseline produced the best final-holdout result and is
+retained as an important research benchmark, but it does not change the stated
+LightGBM-versus-persistence promotion gate. Likely causes include the small
+sample, non-stationary care-load regimes, and unusually strong short-horizon
+persistence.
+
+### Forecasting artifacts
+
+| Artifact | Location |
+|---|---|
+| LightGBM text model | `output/models/capacity_lightgbm_baseline.txt` |
+| Model metadata and provenance | `output/models/lightgbm_model_metadata.json` |
+| Evaluation and promotion decision | `output/models/lightgbm_evaluation_metrics.json` |
+| Holdout predictions and intervals | `output/exports/lightgbm_test_predictions.csv` |
+| Gain and split feature importance | `output/exports/lightgbm_feature_importance.csv` |
+
+The original ridge model and its prediction/evaluation artifacts remain
+unchanged for benchmark reproducibility.
+
+---
+
 ## Research Notebooks
 
 The notebooks provide a reproducible analytical workflow:
@@ -369,6 +468,14 @@ The following components have been tested successfully:
 - Data artifact generation
 - HTML and JSON report generation
 - All ASGI API endpoints
+- Eight focused LightGBM forecasting tests
+- Deterministic LightGBM training and artifact generation
+
+Run the forecasting tests with:
+
+```bash
+python -m unittest -v tests.test_lightgbm_forecasting
+```
 
 ---
 
@@ -387,11 +494,10 @@ This project concerns a vulnerable population and should be interpreted carefull
 
 ## Future Enhancements
 
-- Automated unit and integration test suite
 - GitHub Actions continuous integration
 - Containerized deployment
 - Configurable capacity thresholds
-- Probabilistic forecasting and uncertainty intervals
+- Better-calibrated probabilistic intervals and regime-aware forecasting
 - Drift and data-freshness monitoring
 - Role-based dashboard access
 - Cloud-based scheduled ingestion

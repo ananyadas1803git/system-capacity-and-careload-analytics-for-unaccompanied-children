@@ -1,0 +1,243 @@
+{
+  "model": "LightGBM seven-day change forecast candidate",
+  "target": {
+    "absolute": "target_total_load_t_plus_7d",
+    "modeled": "target_change_7d",
+    "definition": "target_total_load_t_plus_7d - Total System Load",
+    "reconstruction": "Total System Load + predicted target_change_7d"
+  },
+  "forecast_horizon_days": 7,
+  "cross_validation": {
+    "strategy": "expanding_window",
+    "optimization_metric": "mean_validation_mae",
+    "fold_count": 4,
+    "validation_rows_per_fold": 90,
+    "gap_rows": 7,
+    "best_lightgbm_mean_mae": 205.5607397580689,
+    "persistence_mean_mae": 190.62499999999997,
+    "candidate_results": [
+      {
+        "candidate": 1,
+        "parameters": {
+          "learning_rate": 0.03,
+          "n_estimators": 300,
+          "num_leaves": 7,
+          "max_depth": 3,
+          "min_child_samples": 30,
+          "colsample_bytree": 0.8,
+          "subsample": 0.8,
+          "reg_alpha": 1.0,
+          "reg_lambda": 5.0
+        },
+        "fold_mae": [
+          259.71215935327194,
+          253.84993103632283,
+          285.2240771615849,
+          65.47356883212281
+        ],
+        "mean_validation_mae": 216.06493409582563,
+        "std_validation_mae": 87.74043057229055
+      },
+      {
+        "candidate": 2,
+        "parameters": {
+          "learning_rate": 0.03,
+          "n_estimators": 500,
+          "num_leaves": 15,
+          "max_depth": 4,
+          "min_child_samples": 40,
+          "colsample_bytree": 0.8,
+          "subsample": 0.8,
+          "reg_alpha": 2.0,
+          "reg_lambda": 10.0
+        },
+        "fold_mae": [
+          239.7078910635315,
+          223.39447249459522,
+          298.00164421122565,
+          61.138951262923264
+        ],
+        "mean_validation_mae": 205.5607397580689,
+        "std_validation_mae": 87.87355087546287
+      },
+      {
+        "candidate": 3,
+        "parameters": {
+          "learning_rate": 0.05,
+          "n_estimators": 250,
+          "num_leaves": 7,
+          "max_depth": 3,
+          "min_child_samples": 40,
+          "colsample_bytree": 0.9,
+          "subsample": 0.9,
+          "reg_alpha": 2.0,
+          "reg_lambda": 10.0
+        },
+        "fold_mae": [
+          270.08660339632985,
+          218.65400737820596,
+          300.16495182608725,
+          63.36528462720387
+        ],
+        "mean_validation_mae": 213.06771180695674,
+        "std_validation_mae": 91.21280970722984
+      },
+      {
+        "candidate": 4,
+        "parameters": {
+          "learning_rate": 0.05,
+          "n_estimators": 400,
+          "num_leaves": 15,
+          "max_depth": 4,
+          "min_child_samples": 50,
+          "colsample_bytree": 0.75,
+          "subsample": 0.8,
+          "reg_alpha": 5.0,
+          "reg_lambda": 15.0
+        },
+        "fold_mae": [
+          266.5850251467453,
+          239.37768630385034,
+          297.83008072318927,
+          79.72550063741043
+        ],
+        "mean_validation_mae": 220.8795732027988,
+        "std_validation_mae": 84.07886377553561
+      },
+      {
+        "candidate": 5,
+        "parameters": {
+          "learning_rate": 0.02,
+          "n_estimators": 600,
+          "num_leaves": 15,
+          "max_depth": 5,
+          "min_child_samples": 50,
+          "colsample_bytree": 0.8,
+          "subsample": 0.8,
+          "reg_alpha": 2.0,
+          "reg_lambda": 10.0
+        },
+        "fold_mae": [
+          266.46917749253373,
+          214.1887560987793,
+          292.65264452412714,
+          61.40850466148384
+        ],
+        "mean_validation_mae": 208.679770694231,
+        "std_validation_mae": 89.59664306829119
+      }
+    ],
+    "folds": [
+      {
+        "fold": 1,
+        "training_rows": 480,
+        "validation_rows": 90,
+        "gap_rows": 7,
+        "training_start": "2023-01-12",
+        "training_end": "2024-05-05",
+        "validation_start": "2024-05-13",
+        "validation_end": "2024-08-10",
+        "persistence_mae": 184.42222222222222,
+        "best_lightgbm_mae": 239.7078910635315
+      },
+      {
+        "fold": 2,
+        "training_rows": 570,
+        "validation_rows": 90,
+        "gap_rows": 7,
+        "training_start": "2023-01-12",
+        "training_end": "2024-08-03",
+        "validation_start": "2024-08-11",
+        "validation_end": "2024-11-08",
+        "persistence_mae": 102.97777777777777,
+        "best_lightgbm_mae": 223.39447249459522
+      },
+      {
+        "fold": 3,
+        "training_rows": 660,
+        "validation_rows": 90,
+        "gap_rows": 7,
+        "training_start": "2023-01-12",
+        "training_end": "2024-11-01",
+        "validation_start": "2024-11-09",
+        "validation_end": "2025-02-06",
+        "persistence_mae": 394.93333333333334,
+        "best_lightgbm_mae": 298.00164421122565
+      },
+      {
+        "fold": 4,
+        "training_rows": 750,
+        "validation_rows": 90,
+        "gap_rows": 7,
+        "training_start": "2023-01-12",
+        "training_end": "2025-01-30",
+        "validation_start": "2025-02-07",
+        "validation_end": "2025-05-07",
+        "persistence_mae": 80.16666666666667,
+        "best_lightgbm_mae": 61.138951262923264
+      }
+    ]
+  },
+  "holdout": {
+    "rows": 214,
+    "start": "2025-05-15",
+    "end": "2025-12-14",
+    "models": {
+      "persistence": {
+        "mae": 37.546728971962615,
+        "rmse": 46.854666929603844,
+        "mape_percent": 1.6537345917697392,
+        "r2": 0.9315550672460805,
+        "mae_improvement_vs_persistence_percent": 0.0
+      },
+      "seven_day_drift": {
+        "mae": 26.869158878504674,
+        "rmse": 32.78049340177099,
+        "mape_percent": 1.1810539849412822,
+        "r2": 0.9664983217441198,
+        "mae_improvement_vs_persistence_percent": 28.43808338518979
+      },
+      "lightgbm_change_forecast": {
+        "mae": 61.793692467005485,
+        "rmse": 73.03619440303662,
+        "mape_percent": 2.7608772601786296,
+        "r2": 0.8336924893298792,
+        "mae_improvement_vs_persistence_percent": -64.57809816974704
+      },
+      "lightgbm_quantile_median": {
+        "mae": 44.841689558647914,
+        "rmse": 60.579289134681446,
+        "mape_percent": 2.0237764886624743,
+        "r2": 0.8855847439716688,
+        "mae_improvement_vs_persistence_percent": -19.429017617307455
+      },
+      "ridge": {
+        "mae": 197.1992473830921,
+        "rmse": 223.12277801633635,
+        "mape_percent": 8.736344287541716,
+        "r2": -0.5521132563923163,
+        "mae_improvement_vs_persistence_percent": -425.21019215907546
+      }
+    },
+    "prediction_interval": {
+      "nominal_lower_quantile": 0.1,
+      "median_quantile": 0.5,
+      "nominal_upper_quantile": 0.9,
+      "nominal_coverage_percent": 80.0,
+      "empirical_coverage_percent": 37.850467289719624,
+      "mean_width": 85.82816807590453,
+      "ordering_enforced": true
+    }
+  },
+  "promotion": {
+    "passed": false,
+    "cross_validation_passed": false,
+    "holdout_passed": false,
+    "champion_model": "persistence",
+    "recommendation": "continue_research",
+    "rationale": [
+      "LightGBM did not beat persistence on mean walk-forward MAE; regime changes and limited historical samples reduce generalization.",
+      "LightGBM did not beat persistence on the untouched holdout; seven-day care load was highly persistent in this period."
+    ]
+  }
+}
