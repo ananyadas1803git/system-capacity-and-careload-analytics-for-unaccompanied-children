@@ -87,9 +87,7 @@ class LoggingConfig:
     def __post_init__(self) -> None:
         normalized_level = self.level.strip().upper()
         if normalized_level not in VALID_LEVELS:
-            raise ValueError(
-                "level must be one of: " + ", ".join(sorted(VALID_LEVELS))
-            )
+            raise ValueError("level must be one of: " + ", ".join(sorted(VALID_LEVELS)))
         if not self.console_output and self.file_path is None:
             raise ValueError("At least one logging output must be configured.")
         if self.max_file_bytes < 1:
@@ -306,9 +304,7 @@ def configure_logging(
     logger.propagate = selected.propagate
 
     managed_handlers = [
-        handler
-        for handler in logger.handlers
-        if getattr(handler, "_hhs_uac_managed", False)
+        handler for handler in logger.handlers if getattr(handler, "_hhs_uac_managed", False)
     ]
     if managed_handlers and not force:
         return logger
@@ -358,10 +354,7 @@ def get_logger(
 ) -> ContextLoggerAdapter:
     """Return a configured project logger optionally bound to a component."""
     root_logger = logging.getLogger(ROOT_LOGGER_NAME)
-    if not any(
-        getattr(handler, "_hhs_uac_managed", False)
-        for handler in root_logger.handlers
-    ):
+    if not any(getattr(handler, "_hhs_uac_managed", False) for handler in root_logger.handlers):
         configure_logging(config)
 
     component_name = component.strip() if component else "application"
@@ -386,9 +379,7 @@ def log_context(**fields: Any) -> Iterator[dict[str, Any]]:
     """Temporarily bind structured fields using task/thread-safe contextvars."""
     current = dict(_log_context.get())
     sanitized = {
-        str(key): sanitize_log_value(value)
-        for key, value in fields.items()
-        if value is not None
+        str(key): sanitize_log_value(value) for key, value in fields.items() if value is not None
     }
     merged = {**current, **sanitized}
     token = _log_context.set(merged)

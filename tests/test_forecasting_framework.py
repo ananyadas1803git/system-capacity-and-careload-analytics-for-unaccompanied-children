@@ -39,6 +39,8 @@ from src.forecasting import (
     reconstruct_absolute_forecast,
     regression_metrics,
     validate_prediction_schema,
+    _frame_fingerprint,
+    _schema_fingerprint,
 )
 
 
@@ -81,15 +83,35 @@ def make_config(root: Path | None = None) -> ForecastConfig:
 class ForecastingFrameworkTests(unittest.TestCase):
     """Validate targets, leakage controls, splits, metrics, and schemas."""
 
+    def test_fingerprints_ignore_nonsemantic_dtype_and_datetime_units(self) -> None:
+        index_ns = pd.date_range("2025-01-01", periods=3, freq="D", name="Date")
+        index_us = index_ns.as_unit("us")
+        first = pd.DataFrame(
+            {
+                "count": pd.Series([1, 2, 3], index=index_ns, dtype="int64"),
+                "flag": pd.Series([True, False, True], index=index_ns),
+                "target_date": index_ns + pd.Timedelta(days=7),
+            },
+            index=index_ns,
+        )
+        second = pd.DataFrame(
+            {
+                "count": pd.Series([1.0, 2.0, 3.0], index=index_us),
+                "flag": pd.Series([True, False, True], index=index_us),
+                "target_date": (index_us + pd.Timedelta(days=7)).as_unit("us"),
+            },
+            index=index_us,
+        )
+        self.assertEqual(_frame_fingerprint(first), _frame_fingerprint(second))
+        self.assertEqual(_schema_fingerprint(first), _schema_fingerprint(second))
+
     def test_change_target_and_absolute_reconstruction(self) -> None:
         index = pd.date_range("2024-01-01", periods=3)
         current = pd.Series([100.0, 110.0, 90.0], index=index)
         future = pd.Series([108.0, 105.0, 100.0], index=index)
         change = construct_change_target(future, current)
         np.testing.assert_array_equal(change, [8.0, -5.0, 10.0])
-        np.testing.assert_array_equal(
-            reconstruct_absolute_forecast(current, change), future
-        )
+        np.testing.assert_array_equal(reconstruct_absolute_forecast(current, change), future)
 
     def test_chronological_holdout_and_seven_day_gap(self) -> None:
         config = make_config()
@@ -101,9 +123,7 @@ class ForecastingFrameworkTests(unittest.TestCase):
         folds = expanding_window_folds(len(partitions.development), config)
         self.assertEqual(len(folds), 4)
         self.assertTrue(all(fold.observed_gap == 7 for fold in folds))
-        self.assertTrue(
-            all(fold.train_indices[-1] < fold.validation_indices[0] for fold in folds)
-        )
+        self.assertTrue(all(fold.train_indices[-1] < fold.validation_indices[0] for fold in folds))
 
     def test_holdout_is_untouched_by_fold_boundaries(self) -> None:
         config = make_config()
@@ -112,9 +132,7 @@ class ForecastingFrameworkTests(unittest.TestCase):
         folds = expanding_window_folds(len(partitions.development), config)
         latest_development_position = max(fold.validation_indices[-1] for fold in folds)
         self.assertLess(latest_development_position, len(partitions.development))
-        self.assertTrue(
-            set(partitions.holdout.index).isdisjoint(partitions.development.index)
-        )
+        self.assertTrue(set(partitions.holdout.index).isdisjoint(partitions.development.index))
 
     def test_feature_availability_excludes_future_and_same_day_flows(self) -> None:
         prepared = prepare_forecast_dataset(make_source(), make_config())
@@ -145,9 +163,7 @@ class ForecastingFrameworkTests(unittest.TestCase):
         self.assertFalse(transformed.isna().any().any())
 
     def test_persistence_and_drift_formulas(self) -> None:
-        frame = pd.DataFrame(
-            {CURRENT_LOAD: [100.0, 120.0], "load_lag_7": [90.0, 125.0]}
-        )
+        frame = pd.DataFrame({CURRENT_LOAD: [100.0, 120.0], "load_lag_7": [90.0, 125.0]})
         np.testing.assert_array_equal(persistence_forecast(frame), [100.0, 120.0])
         np.testing.assert_array_equal(drift_forecast(frame), [110.0, 115.0])
 
@@ -182,9 +198,7 @@ class ForecastingFrameworkTests(unittest.TestCase):
 
     def test_ensemble_weights_are_deterministic_nonnegative_and_normalized(self) -> None:
         actual = np.array([1.0, 2.0, 3.0, 4.0])
-        predictions = np.column_stack(
-            [actual, np.array([2.0, 2.0, 2.0, 2.0]), actual + 0.5]
-        )
+        predictions = np.column_stack([actual, np.array([2.0, 2.0, 2.0, 2.0]), actual + 0.5])
         first = optimize_ensemble_weights(actual, predictions)
         second = optimize_ensemble_weights(actual, predictions)
         np.testing.assert_array_equal(first, second)

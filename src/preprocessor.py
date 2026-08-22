@@ -198,13 +198,9 @@ class PreprocessingConfig:
             "zero",
             "none",
         }:
-            raise ValueError(
-                "stock_imputation must be interpolate, forward_fill, zero, or none."
-            )
+            raise ValueError("stock_imputation must be interpolate, forward_fill, zero, or none.")
         if self.flow_imputation not in {"zero", "interpolate", "forward_fill", "none"}:
-            raise ValueError(
-                "flow_imputation must be zero, interpolate, forward_fill, or none."
-            )
+            raise ValueError("flow_imputation must be zero, interpolate, forward_fill, or none.")
         if self.maximum_rows < 1:
             raise ValueError("maximum_rows must be positive.")
         if self.maximum_csv_bytes < 1:
@@ -262,8 +258,7 @@ def _read_source(
     if isinstance(source, bytes):
         if len(source) > config.maximum_csv_bytes:
             raise PreprocessingError(
-                f"CSV contains {len(source):,} bytes; limit is "
-                f"{config.maximum_csv_bytes:,}."
+                f"CSV contains {len(source):,} bytes; limit is {config.maximum_csv_bytes:,}."
             )
         if not source.strip():
             raise PreprocessingError("CSV source is empty.")
@@ -324,10 +319,7 @@ def _normalize_schema(frame: pd.DataFrame) -> pd.DataFrame:
         raise PreprocessingError("Missing required column(s): " + ", ".join(missing))
 
     renamed = frame.rename(
-        columns={
-            original: canonical
-            for canonical, original in canonical_to_original.items()
-        }
+        columns={original: canonical for canonical, original in canonical_to_original.items()}
     )
     return renamed[REQUIRED_COLUMNS].copy()
 
@@ -504,9 +496,8 @@ class HHSDataPreprocessor:
                 affected_rows=unresolved_missing,
             )
 
-        fractional_mask = (
-            frame[NUMERIC_COLUMNS].notna()
-            & frame[NUMERIC_COLUMNS].mod(1).abs().gt(1e-9)
+        fractional_mask = frame[NUMERIC_COLUMNS].notna() & frame[NUMERIC_COLUMNS].mod(1).abs().gt(
+            1e-9
         )
         fractional_count = int(fractional_mask.sum().sum())
         if fractional_count:
@@ -555,12 +546,10 @@ class HHSDataPreprocessor:
             for column in NUMERIC_COLUMNS:
                 frame[column] = frame[column].astype("Int64")
 
-        frame[TRANSFER_ANOMALY_COLUMN] = (
-            frame[TRANSFER_COLUMN] > frame[CBP_COLUMN]
-        ).fillna(False)
-        frame[DISCHARGE_ANOMALY_COLUMN] = (
-            frame[DISCHARGE_COLUMN] > frame[HHS_COLUMN]
-        ).fillna(False)
+        frame[TRANSFER_ANOMALY_COLUMN] = (frame[TRANSFER_COLUMN] > frame[CBP_COLUMN]).fillna(False)
+        frame[DISCHARGE_ANOMALY_COLUMN] = (frame[DISCHARGE_COLUMN] > frame[HHS_COLUMN]).fillna(
+            False
+        )
         frame[NEGATIVE_COUNT_ANOMALY_COLUMN] = negative_rows.fillna(False)
         frame[ANY_ANOMALY_COLUMN] = frame[
             [
@@ -573,9 +562,7 @@ class HHSDataPreprocessor:
         transfer_anomalies = int(frame[TRANSFER_ANOMALY_COLUMN].sum())
         discharge_anomalies = int(frame[DISCHARGE_ANOMALY_COLUMN].sum())
         report.logical_anomaly_rows = int(
-            frame[
-                [TRANSFER_ANOMALY_COLUMN, DISCHARGE_ANOMALY_COLUMN]
-            ].any(axis=1).sum()
+            frame[[TRANSFER_ANOMALY_COLUMN, DISCHARGE_ANOMALY_COLUMN]].any(axis=1).sum()
         )
         if transfer_anomalies:
             report.add(
@@ -660,9 +647,7 @@ def validate_preprocessed_data(frame: pd.DataFrame) -> None:
             "Preprocessed data is missing count column(s): " + ", ".join(missing)
         )
     non_numeric = [
-        column
-        for column in NUMERIC_COLUMNS
-        if not pd.api.types.is_numeric_dtype(frame[column])
+        column for column in NUMERIC_COLUMNS if not pd.api.types.is_numeric_dtype(frame[column])
     ]
     if non_numeric:
         raise PreprocessingError(

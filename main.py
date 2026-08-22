@@ -106,9 +106,7 @@ def _read_csv_source(path: Path) -> pd.DataFrame:
     except OSError as exc:
         raise CommandError(f"Unable to inspect CSV source '{path}': {exc}") from exc
     if byte_count > MAX_CSV_BYTES:
-        raise CommandError(
-            f"CSV contains {byte_count:,} bytes; limit is {MAX_CSV_BYTES:,}."
-        )
+        raise CommandError(f"CSV contains {byte_count:,} bytes; limit is {MAX_CSV_BYTES:,}.")
     try:
         frame = pd.read_csv(path, dtype=str, encoding="utf-8-sig")
     except (
@@ -119,9 +117,7 @@ def _read_csv_source(path: Path) -> pd.DataFrame:
     ) as exc:
         raise CommandError(f"Unable to read CSV source '{path}': {exc}") from exc
     if len(frame) > MAX_CSV_ROWS:
-        raise CommandError(
-            f"CSV contains {len(frame):,} rows; limit is {MAX_CSV_ROWS:,}."
-        )
+        raise CommandError(f"CSV contains {len(frame):,} rows; limit is {MAX_CSV_ROWS:,}.")
     return frame
 
 
@@ -142,9 +138,7 @@ def _atomic_write(
     """Write bytes atomically while protecting existing artifacts by default."""
     target = target.expanduser().resolve()
     if target.exists() and not force:
-        raise CommandError(
-            f"Output already exists: {target}. Pass --force to replace it."
-        )
+        raise CommandError(f"Output already exists: {target}. Pass --force to replace it.")
     try:
         target.parent.mkdir(parents=True, exist_ok=True)
         temporary = target.with_name(f".{target.name}.tmp")
@@ -362,9 +356,7 @@ def command_report(arguments: argparse.Namespace) -> int:
     selected_format = ReportFormat.parse(arguments.format)
     output = arguments.output
     if output is None:
-        output = DEFAULT_REPORT_DIRECTORY / (
-            f"{report.filename_stem}.{selected_format.value}"
-        )
+        output = DEFAULT_REPORT_DIRECTORY / (f"{report.filename_stem}.{selected_format.value}")
     _atomic_write(
         output,
         export_report(report, selected_format),
@@ -464,9 +456,7 @@ def command_evaluate_models(arguments: argparse.Namespace) -> int:
 
     path = arguments.metrics.expanduser().resolve()
     if not path.is_file():
-        raise CommandError(
-            f"Forecast metrics not found: {path}. Run: python main.py train-models"
-        )
+        raise CommandError(f"Forecast metrics not found: {path}. Run: python main.py train-models")
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, UnicodeError, json.JSONDecodeError) as exc:
@@ -484,6 +474,73 @@ def command_evaluate_models(arguments: argparse.Namespace) -> int:
         },
     }
     sys.stdout.write(json.dumps(json_safe(summary), indent=2, allow_nan=False) + "\n")
+    return EXIT_SUCCESS
+
+
+def command_pipeline(arguments: argparse.Namespace) -> int:
+    """Run quick, approved-artifact, or full-training pipeline orchestration."""
+
+    try:
+        from src.pipeline import (
+            DEFAULT_FORECAST_OUTPUT,
+            DEFAULT_QUICK_OUTPUT,
+            PipelineConfig,
+            PipelineError,
+            run_pipeline,
+        )
+    except ImportError as exc:
+        raise CommandError(
+            "Pipeline dependencies are unavailable. Run: python -m pip install -r requirements.txt"
+        ) from exc
+    output_dir = arguments.output_dir or (
+        DEFAULT_QUICK_OUTPUT if arguments.quick else DEFAULT_FORECAST_OUTPUT
+    )
+    try:
+        result = run_pipeline(
+            PipelineConfig(
+                raw_path=arguments.source,
+                feature_path=arguments.features,
+                provenance_path=arguments.provenance,
+                output_dir=output_dir,
+                quick=arguments.quick,
+                train_models=arguments.train,
+                overwrite=arguments.force,
+                random_seed=arguments.seed,
+            )
+        )
+    except (PipelineError, OSError, TypeError, ValueError) as exc:
+        raise CommandError(f"Pipeline failed: {exc}") from exc
+    sys.stdout.write(
+        json.dumps(result.to_dict(), indent=2, ensure_ascii=False, allow_nan=False) + "\n"
+    )
+    return EXIT_SUCCESS
+
+
+def command_monitor_model(arguments: argparse.Namespace) -> int:
+    """Evaluate offline model performance and explicit fallback conditions."""
+
+    try:
+        from src.monitoring import (
+            MonitoringConfig,
+            MonitoringError,
+            evaluate_monitoring,
+        )
+    except ImportError as exc:
+        raise CommandError("Monitoring dependencies are unavailable.") from exc
+    try:
+        result = evaluate_monitoring(
+            MonitoringConfig(
+                artifact_root=arguments.artifact_root,
+                rolling_window=arguments.window,
+                degradation_ratio=arguments.degradation_ratio,
+                write_artifacts=not arguments.no_write,
+            )
+        )
+    except (MonitoringError, OSError, TypeError, ValueError) as exc:
+        raise CommandError(f"Monitoring failed: {exc}") from exc
+    sys.stdout.write(
+        json.dumps(result.to_dict(), indent=2, ensure_ascii=False, allow_nan=False) + "\n"
+    )
     return EXIT_SUCCESS
 
 
@@ -537,11 +594,7 @@ def build_parser() -> argparse.ArgumentParser:
     generate.add_argument(
         "--source",
         type=Path,
-        default=(
-            DEFAULT_PROJECT_SOURCE
-            if DEFAULT_PROJECT_SOURCE.is_file()
-            else DEFAULT_SOURCE
-        ),
+        default=(DEFAULT_PROJECT_SOURCE if DEFAULT_PROJECT_SOURCE.is_file() else DEFAULT_SOURCE),
     )
     generate.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIRECTORY)
     generate.add_argument("--output", type=Path, help="Optional JSON summary path.")
@@ -606,10 +659,7 @@ def build_parser() -> argparse.ArgumentParser:
     lightgbm.add_argument(
         "--features",
         type=Path,
-        default=PROJECT_ROOT
-        / "data"
-        / "processed"
-        / "uac_capacity_ml_features.parquet",
+        default=PROJECT_ROOT / "data" / "processed" / "uac_capacity_ml_features.parquet",
         help="Model-ready Parquet feature artifact.",
     )
     lightgbm.add_argument(
@@ -677,9 +727,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     train_models.add_argument("--seed", type=int, default=42)
     train_models.add_argument("--cv-splits", type=_positive_integer, default=5)
-    train_models.add_argument(
-        "--cv-validation-rows", type=_positive_integer, default=56
-    )
+    train_models.add_argument("--cv-validation-rows", type=_positive_integer, default=56)
     train_models.add_argument(
         "--force",
         action="store_true",
@@ -701,6 +749,63 @@ def build_parser() -> argparse.ArgumentParser:
         / "model_comparison_metrics.json",
     )
     evaluate_models.set_defaults(handler=command_evaluate_models)
+
+    pipeline = subparsers.add_parser(
+        "pipeline",
+        help="Run the reproducible workflow or its lightweight smoke mode.",
+    )
+    mode = pipeline.add_mutually_exclusive_group()
+    mode.add_argument(
+        "--quick",
+        action="store_true",
+        help="Run a fast deterministic synthetic-fixture pipeline for CI.",
+    )
+    mode.add_argument(
+        "--train",
+        action="store_true",
+        help="Retrain and evaluate the complete candidate framework.",
+    )
+    pipeline.add_argument("--source", type=Path, default=DEFAULT_PROJECT_SOURCE)
+    pipeline.add_argument(
+        "--features",
+        type=Path,
+        default=PROJECT_ROOT / "data" / "processed" / "uac_capacity_ml_features.parquet",
+    )
+    pipeline.add_argument(
+        "--provenance",
+        type=Path,
+        default=PROJECT_ROOT / "data" / "processed" / "preprocessing_report.json",
+    )
+    pipeline.add_argument(
+        "--output-dir",
+        type=Path,
+        help="Override the dedicated full or quick artifact directory.",
+    )
+    pipeline.add_argument("--seed", type=int, default=42)
+    pipeline.add_argument(
+        "--force",
+        action="store_true",
+        help="Replace artifacts only in the selected output directory.",
+    )
+    pipeline.set_defaults(handler=command_pipeline)
+
+    monitor = subparsers.add_parser(
+        "monitor-model",
+        help="Evaluate offline rolling performance and fallback status.",
+    )
+    monitor.add_argument(
+        "--artifact-root",
+        type=Path,
+        default=PROJECT_ROOT / "output" / "forecasting",
+    )
+    monitor.add_argument("--window", type=_positive_integer, default=30)
+    monitor.add_argument("--degradation-ratio", type=float, default=1.25)
+    monitor.add_argument(
+        "--no-write",
+        action="store_true",
+        help="Print monitoring results without refreshing monitoring artifacts.",
+    )
+    monitor.set_defaults(handler=command_monitor_model)
     return parser
 
 

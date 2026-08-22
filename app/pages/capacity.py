@@ -179,9 +179,7 @@ def add_capacity_metrics(
     total_capacity = cbp_capacity + hhs_capacity
     frame[CBP_UTILIZATION_COLUMN] = frame[CBP_COLUMN].div(cbp_capacity).mul(100)
     frame[HHS_UTILIZATION_COLUMN] = frame[HHS_COLUMN].div(hhs_capacity).mul(100)
-    frame[SYSTEM_UTILIZATION_COLUMN] = frame[TOTAL_LOAD_COLUMN].div(
-        total_capacity
-    ).mul(100)
+    frame[SYSTEM_UTILIZATION_COLUMN] = frame[TOTAL_LOAD_COLUMN].div(total_capacity).mul(100)
     frame[CBP_HEADROOM_COLUMN] = cbp_capacity - frame[CBP_COLUMN]
     frame[HHS_HEADROOM_COLUMN] = hhs_capacity - frame[HHS_COLUMN]
     frame[SYSTEM_HEADROOM_COLUMN] = total_capacity - frame[TOTAL_LOAD_COLUMN]
@@ -193,11 +191,7 @@ def aggregate_for_chart(metrics: pd.DataFrame, granularity: str) -> pd.DataFrame
     if granularity == "Daily":
         return metrics.copy()
 
-    frequency = (
-        pd.offsets.Week(weekday=6)
-        if granularity == "Weekly"
-        else pd.offsets.MonthEnd()
-    )
+    frequency = pd.offsets.Week(weekday=6) if granularity == "Weekly" else pd.offsets.MonthEnd()
     stock_columns = [
         CBP_COLUMN,
         HHS_COLUMN,
@@ -227,15 +221,11 @@ def build_stress_episodes(
     if metrics.empty:
         return pd.DataFrame()
 
-    working = metrics[
-        [SYSTEM_UTILIZATION_COLUMN, SYSTEM_HEADROOM_COLUMN, TOTAL_LOAD_COLUMN]
-    ].copy()
-    working["Above Threshold"] = working[SYSTEM_UTILIZATION_COLUMN].ge(
-        warning_threshold
+    working = metrics[[SYSTEM_UTILIZATION_COLUMN, SYSTEM_HEADROOM_COLUMN, TOTAL_LOAD_COLUMN]].copy()
+    working["Above Threshold"] = working[SYSTEM_UTILIZATION_COLUMN].ge(warning_threshold)
+    working["Episode Group"] = (
+        working["Above Threshold"].ne(working["Above Threshold"].shift(fill_value=False)).cumsum()
     )
-    working["Episode Group"] = working["Above Threshold"].ne(
-        working["Above Threshold"].shift(fill_value=False)
-    ).cumsum()
     stressed = working.loc[working["Above Threshold"]]
     if stressed.empty:
         return pd.DataFrame(
@@ -260,9 +250,7 @@ def build_stress_episodes(
                 "Episode Start": start,
                 "Episode End": end,
                 "Duration (Days)": int(len(episode)),
-                "Peak Utilization (%)": float(
-                    episode[SYSTEM_UTILIZATION_COLUMN].max()
-                ),
+                "Peak Utilization (%)": float(episode[SYSTEM_UTILIZATION_COLUMN].max()),
                 "Minimum Headroom": int(episode[SYSTEM_HEADROOM_COLUMN].min()),
                 "Peak System Load": int(episode[TOTAL_LOAD_COLUMN].max()),
                 "Status": "Active" if end == latest_date else "Closed",
@@ -379,18 +367,14 @@ def render_utilization_chart(
         annotation_text=f"Critical: {critical_threshold}%",
         annotation_position="top left",
     )
-    figure.update_layout(
-        **chart_layout(f"Capacity Utilization ({granularity})", "Utilization (%)")
-    )
+    figure.update_layout(**chart_layout(f"Capacity Utilization ({granularity})", "Utilization (%)"))
     figure.update_yaxes(rangemode="tozero", ticksuffix="%")
     st.plotly_chart(figure, width="stretch", config={"displaylogo": False})
 
 
 def render_headroom_chart(chart_data: pd.DataFrame, granularity: str) -> None:
     """Render combined remaining capacity, including over-capacity periods."""
-    headroom = pd.to_numeric(
-        chart_data[SYSTEM_HEADROOM_COLUMN], errors="coerce"
-    ).fillna(0)
+    headroom = pd.to_numeric(chart_data[SYSTEM_HEADROOM_COLUMN], errors="coerce").fillna(0)
     colors = np.where(headroom.lt(0), RED, GREEN)
     figure = go.Figure(
         go.Bar(
@@ -420,9 +404,7 @@ def render_anomaly_log(selected_data: pd.DataFrame) -> None:
             st.warning("Anomaly fields are unavailable: " + ", ".join(missing))
             return
 
-        flagged = selected_data.loc[
-            selected_data[anomaly_columns].fillna(False).any(axis=1)
-        ]
+        flagged = selected_data.loc[selected_data[anomaly_columns].fillna(False).any(axis=1)]
         if flagged.empty:
             st.success("No logical constraint violations were found in this period.")
             return
@@ -544,9 +526,7 @@ def main() -> None:
         st.error("The reporting-period start must be on or before the end.")
         st.stop()
 
-    selected_data = cleaned_data.loc[
-        pd.Timestamp(start_date):pd.Timestamp(end_date)
-    ].copy()
+    selected_data = cleaned_data.loc[pd.Timestamp(start_date) : pd.Timestamp(end_date)].copy()
     if selected_data.empty:
         st.warning("No data is available for the selected reporting period.")
         st.stop()
@@ -570,12 +550,8 @@ def main() -> None:
     latest = capacity_metrics.iloc[-1]
     latest_utilization = float(latest[SYSTEM_UTILIZATION_COLUMN])
     peak_utilization = float(capacity_metrics[SYSTEM_UTILIZATION_COLUMN].max())
-    warning_days = int(
-        capacity_metrics[SYSTEM_UTILIZATION_COLUMN].ge(warning_threshold).sum()
-    )
-    critical_days = int(
-        capacity_metrics[SYSTEM_UTILIZATION_COLUMN].ge(critical_threshold).sum()
-    )
+    warning_days = int(capacity_metrics[SYSTEM_UTILIZATION_COLUMN].ge(warning_threshold).sum())
+    critical_days = int(capacity_metrics[SYSTEM_UTILIZATION_COLUMN].ge(critical_threshold).sum())
 
     st.caption(
         f"Reporting period: {start_date:%d %b %Y}–{end_date:%d %b %Y} "
@@ -672,9 +648,7 @@ def main() -> None:
         render_headroom_chart(chart_data, granularity)
     with stress_tab:
         if stress_episodes.empty:
-            st.success(
-                "No sustained capacity-stress episodes reached the warning threshold."
-            )
+            st.success("No sustained capacity-stress episodes reached the warning threshold.")
         else:
             episode_display = stress_episodes.copy()
             episode_display["Episode Start"] = episode_display["Episode Start"].dt.date

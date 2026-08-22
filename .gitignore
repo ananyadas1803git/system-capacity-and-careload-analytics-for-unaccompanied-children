@@ -45,6 +45,8 @@ htmlcov/
 *.log
 output/logs/*
 !output/logs/README.md
+output/quick_pipeline/
+output/ci-quick/
 
 # Temporary and backup files
 *.tmp

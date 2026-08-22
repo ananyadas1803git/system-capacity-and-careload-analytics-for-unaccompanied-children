@@ -91,25 +91,15 @@ class KPIConfig:
         if self.trend_volatility_window_days < 2:
             raise ValueError("trend_volatility_window_days must be at least 2.")
         if not 0 <= self.load_growth_watch_percent < self.load_growth_critical_percent:
-            raise ValueError(
-                "Load thresholds must satisfy 0 <= watch < critical."
-            )
+            raise ValueError("Load thresholds must satisfy 0 <= watch < critical.")
         if not 0 <= self.net_intake_watch < self.net_intake_critical:
-            raise ValueError(
-                "Net-intake thresholds must satisfy 0 <= watch < critical."
-            )
+            raise ValueError("Net-intake thresholds must satisfy 0 <= watch < critical.")
         if not 0 <= self.volatility_watch_percent < self.volatility_critical_percent:
-            raise ValueError(
-                "Volatility thresholds must satisfy 0 <= watch < critical."
-            )
+            raise ValueError("Volatility thresholds must satisfy 0 <= watch < critical.")
         if not 1 <= self.backlog_watch_days < self.backlog_critical_days:
-            raise ValueError(
-                "Backlog thresholds must satisfy 1 <= watch < critical."
-            )
+            raise ValueError("Backlog thresholds must satisfy 1 <= watch < critical.")
         if not 0 <= self.offset_critical_ratio < self.offset_watch_ratio <= 1:
-            raise ValueError(
-                "Offset thresholds must satisfy 0 <= critical < watch <= 1."
-            )
+            raise ValueError("Offset thresholds must satisfy 0 <= critical < watch <= 1.")
 
 
 @dataclass(frozen=True)
@@ -333,18 +323,17 @@ def _comparison_baselines(
     if previous.empty:
         return {key: None for key in KPI_KEYS}
 
-    growth = pd.to_numeric(
-        previous[GROWTH_RATE_COLUMN], errors="coerce"
-    ).replace([np.inf, -np.inf], np.nan).dropna()
+    growth = (
+        pd.to_numeric(previous[GROWTH_RATE_COLUMN], errors="coerce")
+        .replace([np.inf, -np.inf], np.nan)
+        .dropna()
+    )
     return {
         TOTAL_CARE_KEY: float(previous[TOTAL_LOAD_COLUMN].mean()),
         NET_PRESSURE_KEY: float(previous[NET_INTAKE_COLUMN].mean()),
         VOLATILITY_KEY: float(growth.std(ddof=0)) if not growth.empty else 0.0,
         BACKLOG_KEY: float(_longest_positive_streak(previous[NET_INTAKE_COLUMN])),
-        OFFSET_KEY: float(
-            previous[DISCHARGE_COLUMN].sum()
-            / (previous[TRANSFER_COLUMN].sum() + 1)
-        ),
+        OFFSET_KEY: float(previous[DISCHARGE_COLUMN].sum() / (previous[TRANSFER_COLUMN].sum() + 1)),
     }
 
 
@@ -439,12 +428,10 @@ def calculate_kpi_trends(
         volatility_window_days,
         min_periods=2,
     ).std(ddof=0)
-    trend[BACKLOG_KEY] = pd.to_numeric(
-        frame[BACKLOG_STREAK_COLUMN], errors="coerce"
-    ).fillna(0)
-    trend[OFFSET_KEY] = pd.to_numeric(
-        frame[OFFSET_RATIO_COLUMN], errors="coerce"
-    ).replace([np.inf, -np.inf], np.nan)
+    trend[BACKLOG_KEY] = pd.to_numeric(frame[BACKLOG_STREAK_COLUMN], errors="coerce").fillna(0)
+    trend[OFFSET_KEY] = pd.to_numeric(frame[OFFSET_RATIO_COLUMN], errors="coerce").replace(
+        [np.inf, -np.inf], np.nan
+    )
     trend.index = pd.DatetimeIndex(trend.index, name=DATE_COLUMN)
     trend.attrs.clear()
     return trend
@@ -524,15 +511,15 @@ class CapacityKPICalculator:
             value = float(raw_value)
             comparison = comparisons[key]
             delta = (
-                value - comparison
-                if comparison is not None and np.isfinite(comparison)
-                else None
+                value - comparison if comparison is not None and np.isfinite(comparison) else None
             )
             definition = KPI_DEFINITIONS[key]
             result = KPIResult(
                 key=key,
                 name=str(definition["name"]),
-                value=int(value) if key in {TOTAL_CARE_KEY, NET_PRESSURE_KEY, BACKLOG_KEY} else value,
+                value=int(value)
+                if key in {TOTAL_CARE_KEY, NET_PRESSURE_KEY, BACKLOG_KEY}
+                else value,
                 formatted_value=_formatted_value(key, value),
                 unit=str(definition["unit"]),
                 description=str(definition["description"]),
@@ -588,8 +575,6 @@ def kpi_results_to_dict(result: KPIDashboardResult) -> dict[str, Any]:
         "alerts": [alert.to_dict() for alert in result.alerts],
         "config": {
             "comparison_window_days": result.config.comparison_window_days,
-            "trend_volatility_window_days": (
-                result.config.trend_volatility_window_days
-            ),
+            "trend_volatility_window_days": (result.config.trend_volatility_window_days),
         },
     }

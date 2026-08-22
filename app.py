@@ -94,9 +94,7 @@ def apply_theme() -> None:
 def read_uploaded_csv(file_bytes: bytes) -> pd.DataFrame:
     """Parse uploaded CSV bytes without mutating the upload object."""
     try:
-        return pd.read_csv(
-            BytesIO(file_bytes), dtype=str, encoding="utf-8-sig"
-        )
+        return pd.read_csv(BytesIO(file_bytes), dtype=str, encoding="utf-8-sig")
     except (
         UnicodeError,
         pd.errors.EmptyDataError,
@@ -113,18 +111,12 @@ def get_mock_data() -> pd.DataFrame:
     return generate_mock_data()  # noqa: F405
 
 
-def aggregate_chart_data(
-    daily_metrics: pd.DataFrame, granularity: str
-) -> pd.DataFrame:
+def aggregate_chart_data(daily_metrics: pd.DataFrame, granularity: str) -> pd.DataFrame:
     """Resample charts while preserving stock-versus-flow semantics."""
     if granularity == "Daily":
         return daily_metrics.copy()
 
-    frequency = (
-        pd.offsets.Week(weekday=6)
-        if granularity == "Weekly"
-        else pd.offsets.MonthEnd()
-    )
+    frequency = pd.offsets.Week(weekday=6) if granularity == "Weekly" else pd.offsets.MonthEnd()
     aggregations = {
         INTAKE_COLUMN: "sum",  # noqa: F405
         TRANSFER_COLUMN: "sum",  # noqa: F405
@@ -141,12 +133,7 @@ def aggregate_chart_data(
         for column, operation in aggregations.items()
         if column in daily_metrics.columns
     }
-    return (
-        daily_metrics.sort_index()
-        .resample(frequency)
-        .agg(available)
-        .dropna(how="all")
-    )
+    return daily_metrics.sort_index().resample(frequency).agg(available).dropna(how="all")
 
 
 def calculate_active_backlog_streak(daily_metrics: pd.DataFrame) -> int:
@@ -156,7 +143,8 @@ def calculate_active_backlog_streak(daily_metrics: pd.DataFrame) -> int:
 
     positive_days = (
         pd.to_numeric(
-            daily_metrics[NET_INTAKE_COLUMN], errors="coerce"  # noqa: F405
+            daily_metrics[NET_INTAKE_COLUMN],  # noqa: F405
+            errors="coerce",
         )
         .fillna(0)
         .gt(0)
@@ -258,12 +246,8 @@ def render_system_load_chart(chart_data: pd.DataFrame) -> None:
             hovertemplate="%{y:,.1f} children<extra></extra>",
         )
     )
-    figure.update_layout(
-        **base_chart_layout("System Load Overview", "Children under care")
-    )
-    st.plotly_chart(
-        figure, width="stretch", config={"displaylogo": False}
-    )
+    figure.update_layout(**base_chart_layout("System Load Overview", "Children under care"))
+    st.plotly_chart(figure, width="stretch", config={"displaylogo": False})
 
 
 def render_cbp_hhs_chart(chart_data: pd.DataFrame) -> None:
@@ -291,12 +275,8 @@ def render_cbp_hhs_chart(chart_data: pd.DataFrame) -> None:
             hovertemplate="%{y:,.0f} children<extra></extra>",
         )
     )
-    figure.update_layout(
-        **base_chart_layout("CBP vs HHS Active Care Load", "Children")
-    )
-    st.plotly_chart(
-        figure, width="stretch", config={"displaylogo": False}
-    )
+    figure.update_layout(**base_chart_layout("CBP vs HHS Active Care Load", "Children"))
+    st.plotly_chart(figure, width="stretch", config={"displaylogo": False})
 
 
 def render_net_intake_chart(
@@ -306,11 +286,10 @@ def render_net_intake_chart(
 ) -> None:
     """Render net-intake bars and active-backlog status."""
     net_intake = pd.to_numeric(
-        chart_data[NET_INTAKE_COLUMN], errors="coerce"  # noqa: F405
+        chart_data[NET_INTAKE_COLUMN],  # noqa: F405
+        errors="coerce",
     ).fillna(0)
-    colors = np.where(
-        net_intake.gt(0), PRESSURE_RED, RELIEF_GREEN
-    )
+    colors = np.where(net_intake.gt(0), PRESSURE_RED, RELIEF_GREEN)
     figure = go.Figure(
         go.Bar(
             x=chart_data.index,
@@ -327,9 +306,7 @@ def render_net_intake_chart(
             "Transfers minus discharges",
         )
     )
-    st.plotly_chart(
-        figure, width="stretch", config={"displaylogo": False}
-    )
+    st.plotly_chart(figure, width="stretch", config={"displaylogo": False})
 
     if active_backlog_streak > 0:
         st.markdown(
@@ -354,9 +331,7 @@ def render_net_intake_chart(
         )
 
 
-def render_validation_logs(
-    cleaned_data: pd.DataFrame, selected_data: pd.DataFrame
-) -> None:
+def render_validation_logs(cleaned_data: pd.DataFrame, selected_data: pd.DataFrame) -> None:
     """Display validation messages and logical-anomaly rows."""
     with st.expander("Data Quality & Validation Logs", expanded=False):
         messages = cleaned_data.attrs.get("validation_messages", [])
@@ -369,11 +344,7 @@ def render_validation_logs(
             TRANSFER_ANOMALY_COLUMN,  # noqa: F405
             DISCHARGE_ANOMALY_COLUMN,  # noqa: F405
         ]
-        available = [
-            column
-            for column in anomaly_columns
-            if column in selected_data.columns
-        ]
+        available = [column for column in anomaly_columns if column in selected_data.columns]
         if not available:
             st.warning("Logical anomaly columns are unavailable.")
             return
@@ -388,8 +359,7 @@ def render_validation_logs(
             return
 
         st.error(
-            f"{len(flagged_rows):,} flagged row(s) were found within the "
-            "selected reporting period."
+            f"{len(flagged_rows):,} flagged row(s) were found within the selected reporting period."
         )
         display_columns = [
             CBP_COLUMN,  # noqa: F405
@@ -483,9 +453,7 @@ def main() -> None:
         st.error("The start date must be on or before the end date.")
         st.stop()
 
-    selected_data = cleaned_data.loc[
-        pd.Timestamp(start_date):pd.Timestamp(end_date)
-    ].copy()
+    selected_data = cleaned_data.loc[pd.Timestamp(start_date) : pd.Timestamp(end_date)].copy()
     if selected_data.empty:
         st.warning("No observations are available for the selected range.")
         st.stop()
@@ -537,4 +505,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

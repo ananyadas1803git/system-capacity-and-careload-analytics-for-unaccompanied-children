@@ -333,9 +333,9 @@ def _current_streak(analysis: AnalysisResult) -> int:
     if analysis.daily_metrics.empty or BACKLOG_STREAK_COLUMN not in analysis.daily_metrics:
         return 0
     return int(
-        pd.to_numeric(
-            analysis.daily_metrics[BACKLOG_STREAK_COLUMN], errors="coerce"
-        ).fillna(0).iloc[-1]
+        pd.to_numeric(analysis.daily_metrics[BACKLOG_STREAK_COLUMN], errors="coerce")
+        .fillna(0)
+        .iloc[-1]
     )
 
 
@@ -346,9 +346,7 @@ def render_operational_status(
 ) -> None:
     """Render concise pressure, capacity, and quality status callouts."""
     latest_pressure = int(
-        pd.to_numeric(
-            analysis.daily_metrics[NET_INTAKE_COLUMN], errors="coerce"
-        ).fillna(0).iloc[-1]
+        pd.to_numeric(analysis.daily_metrics[NET_INTAKE_COLUMN], errors="coerce").fillna(0).iloc[-1]
     )
     current_streak = _current_streak(analysis)
     critical_alerts = sum(alert.severity == "critical" for alert in kpis.alerts)
@@ -368,8 +366,10 @@ def render_operational_status(
         unsafe_allow_html=True,
     )
 
-    alert_class = "status-critical" if critical_alerts else (
-        "status-watch" if warning_alerts else "status-positive"
+    alert_class = (
+        "status-critical"
+        if critical_alerts
+        else ("status-watch" if warning_alerts else "status-positive")
     )
     containers[1].markdown(
         f"""
@@ -382,9 +382,7 @@ def render_operational_status(
         unsafe_allow_html=True,
     )
 
-    validation_class = (
-        "status-positive" if validation.report.is_valid else "status-critical"
-    )
+    validation_class = "status-positive" if validation.report.is_valid else "status-critical"
     containers[2].markdown(
         f"""
         <div class="status-card {validation_class}">
@@ -517,9 +515,7 @@ def render_report_downloads(
 ) -> None:
     """Generate reproducible report artifacts and expose download buttons."""
     with st.expander("Download Analytical Report", expanded=False):
-        st.caption(
-            "Exports reflect the selected reporting period and current analytical results."
-        )
+        st.caption("Exports reflect the selected reporting period and current analytical results.")
         try:
             report = generate_capacity_report(
                 analysis,

@@ -1,0 +1,36 @@
+services:
+  dashboard:
+    build:
+      context: .
+    image: hhs-uac-capacity-analytics:local
+    ports:
+      - "8501:8501"
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp
+
+  api:
+    image: hhs-uac-capacity-analytics:local
+    depends_on:
+      dashboard:
+        condition: service_healthy
+    command: ["python", "main.py", "api", "--host", "0.0.0.0", "--port", "8000"]
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)",
+        ]
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+      retries: 3
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp

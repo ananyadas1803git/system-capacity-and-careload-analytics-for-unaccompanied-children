@@ -80,9 +80,7 @@ def _environment_int(
     except ValueError as exc:
         raise BackendUtilityError(f"{name} must be an integer.") from exc
     if not minimum <= parsed <= maximum:
-        raise BackendUtilityError(
-            f"{name} must be between {minimum} and {maximum}."
-        )
+        raise BackendUtilityError(f"{name} must be between {minimum} and {maximum}.")
     return parsed
 
 
@@ -125,9 +123,7 @@ def load_backend_settings(
     log_level = env.get("HHS_API_LOG_LEVEL", "INFO").strip().upper()
     if log_level not in VALID_LOG_LEVELS:
         raise BackendUtilityError(
-            "HHS_API_LOG_LEVEL must be one of: "
-            + ", ".join(sorted(VALID_LOG_LEVELS))
-            + "."
+            "HHS_API_LOG_LEVEL must be one of: " + ", ".join(sorted(VALID_LOG_LEVELS)) + "."
         )
 
     runtime_environment = env.get("HHS_API_ENVIRONMENT", "development").strip()
@@ -138,13 +134,9 @@ def load_backend_settings(
     if cors_value is None:
         cors_origins = DEFAULT_CORS_ORIGINS
     else:
-        cors_origins = tuple(
-            origin.strip() for origin in cors_value.split(",") if origin.strip()
-        )
+        cors_origins = tuple(origin.strip() for origin in cors_value.split(",") if origin.strip())
         if not cors_origins:
-            raise BackendUtilityError(
-                "HHS_API_CORS_ORIGINS must contain at least one origin."
-            )
+            raise BackendUtilityError("HHS_API_CORS_ORIGINS must contain at least one origin.")
 
     return BackendSettings(
         host=host,
@@ -195,8 +187,7 @@ def configure_logging(
         handler.setLevel(selected_level)
         handler.setFormatter(
             logging.Formatter(
-                "%(asctime)s %(levelname)s %(name)s "
-                "request_id=%(request_id)s %(message)s"
+                "%(asctime)s %(levelname)s %(name)s request_id=%(request_id)s %(message)s"
             )
         )
         handler.addFilter(_RequestIDFilter())
@@ -299,8 +290,7 @@ def dataframe_records(
     should_include_index = include_index
     if should_include_index is None:
         should_include_index = not (
-            isinstance(serializable.index, pd.RangeIndex)
-            and serializable.index.name is None
+            isinstance(serializable.index, pd.RangeIndex) and serializable.index.name is None
         )
     if should_include_index:
         index_name = serializable.index.name or "index"
@@ -350,9 +340,7 @@ def read_csv_bytes(
     if byte_limit <= 0 or row_limit <= 0:
         raise BackendUtilityError("CSV byte and row limits must be positive.")
     if len(data) > byte_limit:
-        raise BackendUtilityError(
-            f"CSV contains {len(data):,} bytes; limit is {byte_limit:,}."
-        )
+        raise BackendUtilityError(f"CSV contains {len(data):,} bytes; limit is {byte_limit:,}.")
     if b"\x00" in data:
         raise BackendUtilityError("CSV contains unsupported null bytes.")
 
@@ -369,9 +357,7 @@ def read_csv_bytes(
     ) as exc:
         raise BackendUtilityError(f"CSV could not be parsed: {exc}") from exc
     if len(frame) > row_limit:
-        raise BackendUtilityError(
-            f"CSV contains {len(frame):,} rows; limit is {row_limit:,}."
-        )
+        raise BackendUtilityError(f"CSV contains {len(frame):,} rows; limit is {row_limit:,}.")
     return frame
 
 
@@ -390,9 +376,7 @@ def paginate_dataframe(
     if maximum_limit < 1:
         raise BackendUtilityError("maximum_limit must be positive.")
     if not 1 <= limit <= maximum_limit:
-        raise BackendUtilityError(
-            f"limit must be between 1 and {maximum_limit:,}."
-        )
+        raise BackendUtilityError(f"limit must be between 1 and {maximum_limit:,}.")
 
     total = len(frame)
     page = frame.iloc[offset : offset + limit].copy()
@@ -427,9 +411,7 @@ def dataframe_fingerprint(frame: pd.DataFrame) -> str:
     except (TypeError, ValueError):
         # Fallback for unusual object columns containing unhashable values.
         records = dataframe_records(frame, include_index=True)
-        digest.update(
-            json.dumps(records, sort_keys=True, separators=(",", ":")).encode("utf-8")
-        )
+        digest.update(json.dumps(records, sort_keys=True, separators=(",", ":")).encode("utf-8"))
     return digest.hexdigest()
 
 
@@ -474,6 +456,4 @@ def require_columns(
     required = [str(column) for column in required_columns]
     missing = [column for column in required if column not in frame.columns]
     if missing:
-        raise BackendUtilityError(
-            "Missing required column(s): " + ", ".join(missing)
-        )
+        raise BackendUtilityError("Missing required column(s): " + ", ".join(missing))

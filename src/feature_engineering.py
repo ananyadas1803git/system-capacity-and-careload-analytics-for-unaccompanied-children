@@ -220,9 +220,7 @@ def _operational_features(metrics: pd.DataFrame) -> pd.DataFrame:
         metrics[HHS_COLUMN],
         metrics[TOTAL_LOAD_COLUMN],
     )
-    features["operational_intake_transfer_gap"] = (
-        metrics[INTAKE_COLUMN] - metrics[TRANSFER_COLUMN]
-    )
+    features["operational_intake_transfer_gap"] = metrics[INTAKE_COLUMN] - metrics[TRANSFER_COLUMN]
     features["operational_transfer_discharge_gap"] = (
         metrics[TRANSFER_COLUMN] - metrics[DISCHARGE_COLUMN]
     )
@@ -277,17 +275,15 @@ def _rolling_features(
             features[f"{prefix}_min"] = rolling.min()
             features[f"{prefix}_max"] = rolling.max()
 
-    load_history = pd.to_numeric(
-        metrics[TOTAL_LOAD_COLUMN], errors="coerce"
-    )
+    load_history = pd.to_numeric(metrics[TOTAL_LOAD_COLUMN], errors="coerce")
     if leakage_safe:
         load_history = load_history.shift(1)
     for window in sorted(windows):
-        features[f"rolling_{window}d_total_system_load_slope"] = (
-            load_history.rolling(window=window, min_periods=window).apply(
-                _rolling_slope,
-                raw=True,
-            )
+        features[f"rolling_{window}d_total_system_load_slope"] = load_history.rolling(
+            window=window, min_periods=window
+        ).apply(
+            _rolling_slope,
+            raw=True,
         )
     return features
 
@@ -320,11 +316,11 @@ def _momentum_features(metrics: pd.DataFrame) -> pd.DataFrame:
     features["momentum_total_load_change_1d"] = load.diff(1)
     features["momentum_total_load_change_7d"] = load.diff(7)
     features["momentum_total_load_change_14d"] = load.diff(14)
-    features["momentum_total_load_pct_change_7d"] = (
-        load.pct_change(7, fill_method=None).replace([np.inf, -np.inf], np.nan)
+    features["momentum_total_load_pct_change_7d"] = load.pct_change(7, fill_method=None).replace(
+        [np.inf, -np.inf], np.nan
     )
-    features["momentum_total_load_pct_change_14d"] = (
-        load.pct_change(14, fill_method=None).replace([np.inf, -np.inf], np.nan)
+    features["momentum_total_load_pct_change_14d"] = load.pct_change(14, fill_method=None).replace(
+        [np.inf, -np.inf], np.nan
     )
     features["momentum_net_intake_change_1d"] = net_intake.diff(1)
     features["momentum_net_intake_change_7d"] = net_intake.diff(7)
@@ -336,20 +332,24 @@ def _momentum_features(metrics: pd.DataFrame) -> pd.DataFrame:
 def _quality_features(metrics: pd.DataFrame) -> pd.DataFrame:
     """Create model-visible data-quality indicators."""
     features = pd.DataFrame(index=metrics.index)
-    transfer_anomaly = metrics.get(
-        TRANSFER_ANOMALY_COLUMN,
-        pd.Series(False, index=metrics.index),
-    ).fillna(False).astype(bool)
-    discharge_anomaly = metrics.get(
-        DISCHARGE_ANOMALY_COLUMN,
-        pd.Series(False, index=metrics.index),
-    ).fillna(False).astype(bool)
+    transfer_anomaly = (
+        metrics.get(
+            TRANSFER_ANOMALY_COLUMN,
+            pd.Series(False, index=metrics.index),
+        )
+        .fillna(False)
+        .astype(bool)
+    )
+    discharge_anomaly = (
+        metrics.get(
+            DISCHARGE_ANOMALY_COLUMN,
+            pd.Series(False, index=metrics.index),
+        )
+        .fillna(False)
+        .astype(bool)
+    )
     imputed_column = next(
-        (
-            column
-            for column in ("Is Imputed Date", "Is_Imputed_Date")
-            if column in metrics.columns
-        ),
+        (column for column in ("Is Imputed Date", "Is_Imputed_Date") if column in metrics.columns),
         None,
     )
     imputed = (
@@ -359,9 +359,7 @@ def _quality_features(metrics: pd.DataFrame) -> pd.DataFrame:
     )
     features["quality_transfer_anomaly"] = transfer_anomaly.astype("int8")
     features["quality_discharge_anomaly"] = discharge_anomaly.astype("int8")
-    features["quality_any_logical_anomaly"] = (
-        transfer_anomaly | discharge_anomaly
-    ).astype("int8")
+    features["quality_any_logical_anomaly"] = (transfer_anomaly | discharge_anomaly).astype("int8")
     features["quality_is_imputed_date"] = imputed.astype("int8")
     return features
 
@@ -379,8 +377,8 @@ def _target_features(
 
     targets[f"target_total_load_t_plus_{horizon_days}d"] = future_load
     targets[f"target_load_change_t_plus_{horizon_days}d"] = future_load - load
-    targets[f"target_load_growth_t_plus_{horizon_days}d"] = (
-        future_load.sub(load).div(load.replace(0, np.nan))
+    targets[f"target_load_growth_t_plus_{horizon_days}d"] = future_load.sub(load).div(
+        load.replace(0, np.nan)
     )
     targets[f"target_net_intake_t_plus_{horizon_days}d"] = future_net_intake
     targets[f"target_positive_pressure_t_plus_{horizon_days}d"] = (
@@ -389,8 +387,8 @@ def _target_features(
 
     future_pressure_columns = [net_intake.shift(-step) for step in range(1, horizon_days + 1)]
     future_pressure = pd.concat(future_pressure_columns, axis=1)
-    targets[f"target_cumulative_net_intake_next_{horizon_days}d"] = (
-        future_pressure.sum(axis=1, min_count=horizon_days)
+    targets[f"target_cumulative_net_intake_next_{horizon_days}d"] = future_pressure.sum(
+        axis=1, min_count=horizon_days
     )
     targets[f"target_sustained_pressure_next_{horizon_days}d"] = (
         future_pressure.gt(0)
@@ -437,11 +435,7 @@ class CapacityFeatureEngineer:
             _quality_features(metrics),
         ]
         engineered = pd.concat([metrics, *feature_parts], axis=1)
-        feature_columns = [
-            column
-            for part in feature_parts
-            for column in part.columns
-        ]
+        feature_columns = [column for part in feature_parts for column in part.columns]
 
         target_columns: list[str] = []
         if self.config.include_targets:

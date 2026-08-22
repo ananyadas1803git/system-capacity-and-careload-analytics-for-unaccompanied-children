@@ -31,30 +31,14 @@ from src.logger import PerformanceTimer, get_logger
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_FEATURE_PATH = (
-    PROJECT_ROOT / "data" / "processed" / "uac_capacity_ml_features.parquet"
-)
-DEFAULT_PROVENANCE_PATH = (
-    PROJECT_ROOT / "data" / "processed" / "preprocessing_report.json"
-)
-DEFAULT_RIDGE_PREDICTIONS_PATH = (
-    PROJECT_ROOT / "output" / "exports" / "model_test_predictions.csv"
-)
-DEFAULT_MODEL_PATH = (
-    PROJECT_ROOT / "output" / "models" / "capacity_lightgbm_baseline.txt"
-)
-DEFAULT_METADATA_PATH = (
-    PROJECT_ROOT / "output" / "models" / "lightgbm_model_metadata.json"
-)
-DEFAULT_EVALUATION_PATH = (
-    PROJECT_ROOT / "output" / "models" / "lightgbm_evaluation_metrics.json"
-)
-DEFAULT_PREDICTIONS_PATH = (
-    PROJECT_ROOT / "output" / "exports" / "lightgbm_test_predictions.csv"
-)
-DEFAULT_IMPORTANCE_PATH = (
-    PROJECT_ROOT / "output" / "exports" / "lightgbm_feature_importance.csv"
-)
+DEFAULT_FEATURE_PATH = PROJECT_ROOT / "data" / "processed" / "uac_capacity_ml_features.parquet"
+DEFAULT_PROVENANCE_PATH = PROJECT_ROOT / "data" / "processed" / "preprocessing_report.json"
+DEFAULT_RIDGE_PREDICTIONS_PATH = PROJECT_ROOT / "output" / "exports" / "model_test_predictions.csv"
+DEFAULT_MODEL_PATH = PROJECT_ROOT / "output" / "models" / "capacity_lightgbm_baseline.txt"
+DEFAULT_METADATA_PATH = PROJECT_ROOT / "output" / "models" / "lightgbm_model_metadata.json"
+DEFAULT_EVALUATION_PATH = PROJECT_ROOT / "output" / "models" / "lightgbm_evaluation_metrics.json"
+DEFAULT_PREDICTIONS_PATH = PROJECT_ROOT / "output" / "exports" / "lightgbm_test_predictions.csv"
+DEFAULT_IMPORTANCE_PATH = PROJECT_ROOT / "output" / "exports" / "lightgbm_feature_importance.csv"
 
 ABSOLUTE_TARGET_COLUMN = "target_total_load_t_plus_7d"
 CHANGE_TARGET_COLUMN = "target_change_7d"
@@ -221,9 +205,7 @@ class LightGBMForecastConfig:
         if not 0 < self.holdout_fraction < 1:
             raise ValueError("holdout_fraction must be between zero and one.")
         if self.gap_days < self.forecast_horizon_days:
-            raise ValueError(
-                "gap_days must be at least the forecast horizon to prevent leakage."
-            )
+            raise ValueError("gap_days must be at least the forecast horizon to prevent leakage.")
         if self.cv_splits < 2:
             raise ValueError("cv_splits must be at least two.")
         if self.cv_validation_rows < 1:
@@ -238,8 +220,7 @@ class LightGBMForecastConfig:
             missing = REQUIRED_PARAMETER_KEYS.difference(parameters)
             if missing:
                 raise ValueError(
-                    f"Candidate {index} is missing parameter(s): "
-                    + ", ".join(sorted(missing))
+                    f"Candidate {index} is missing parameter(s): " + ", ".join(sorted(missing))
                 )
 
     @property
@@ -268,9 +249,7 @@ class RegressionMetrics:
         """Return metrics plus MAE improvement relative to persistence."""
 
         improvement = (
-            (persistence_mae - self.mae) / persistence_mae * 100.0
-            if persistence_mae > 0
-            else None
+            (persistence_mae - self.mae) / persistence_mae * 100.0 if persistence_mae > 0 else None
         )
         return {
             "mae": self.mae,
@@ -422,9 +401,7 @@ def select_leakage_safe_features(
                 excluded[name] = "non-numeric candidate feature"
             else:
                 selected.append(name)
-        elif name.startswith("operational_") or name.startswith(
-            "momentum_net_intake_"
-        ):
+        elif name.startswith("operational_") or name.startswith("momentum_net_intake_"):
             excluded[name] = "same-day operational information; lagged form required"
         elif name.startswith("quality_"):
             excluded[name] = "same-day operational quality flag"
@@ -444,10 +421,7 @@ def select_leakage_safe_features(
 def _schema_fingerprint(frame: pd.DataFrame, columns: Sequence[str]) -> str:
     """Hash the ordered model schema separately from the full data fingerprint."""
 
-    payload = [
-        {"name": str(column), "dtype": str(frame[column].dtype)}
-        for column in columns
-    ]
+    payload = [{"name": str(column), "dtype": str(frame[column].dtype)} for column in columns]
     return hashlib.sha256(
         json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
     ).hexdigest()
@@ -541,9 +515,11 @@ def prepare_forecasting_data(
         working[config.absolute_target_column],
         working[config.current_load_column],
     )
-    complete_target = working[
-        [config.absolute_target_column, CURRENT_LOAD_FEATURE, CHANGE_TARGET_COLUMN]
-    ].notna().all(axis=1)
+    complete_target = (
+        working[[config.absolute_target_column, CURRENT_LOAD_FEATURE, CHANGE_TARGET_COLUMN]]
+        .notna()
+        .all(axis=1)
+    )
     working = working.loc[complete_target].copy()
     if working.empty:
         raise ForecastingError("No rows contain a complete current and future load.")
@@ -561,9 +537,7 @@ def prepare_forecasting_data(
         )
     date_steps = working.index.to_series().diff().dropna()
     if not date_steps.eq(pd.Timedelta(days=1)).all():
-        raise ForecastingError(
-            "Forecasting observations must form a complete daily time series."
-        )
+        raise ForecastingError("Forecasting observations must form a complete daily time series.")
     leakage = find_leakage_features(model_features)
     if leakage:
         raise ForecastingError(
@@ -597,9 +571,7 @@ def chronological_holdout_split(
     holdout_start = len(frame) - holdout_rows
     train_end = holdout_start - config.gap_days
     if train_end < config.minimum_training_rows:
-        raise ForecastingError(
-            "Holdout and gap leave too few observations for model training."
-        )
+        raise ForecastingError("Holdout and gap leave too few observations for model training.")
     train = frame.iloc[:train_end].copy()
     gap = frame.iloc[train_end:holdout_start].copy()
     holdout = frame.iloc[holdout_start:].copy()
@@ -616,11 +588,7 @@ def expanding_window_folds(
 
     if training_rows < config.minimum_training_rows:
         raise ForecastingError("Insufficient training rows for walk-forward validation.")
-    required = (
-        config.cv_splits * config.cv_validation_rows
-        + config.gap_days
-        + 1
-    )
+    required = config.cv_splits * config.cv_validation_rows + config.gap_days + 1
     if training_rows < required:
         raise ForecastingError(
             "Training data is too short for the requested walk-forward configuration."
@@ -715,17 +683,14 @@ def calculate_regression_metrics(
     predicted_values = np.asarray(predicted, dtype=float)
     if actual_values.shape != predicted_values.shape or actual_values.size == 0:
         raise ForecastingError("Actual and predicted values must be non-empty and align.")
-    if not np.isfinite(actual_values).all() or not np.isfinite(
-        predicted_values
-    ).all():
+    if not np.isfinite(actual_values).all() or not np.isfinite(predicted_values).all():
         raise ForecastingError("Metric inputs contain missing or infinite values.")
     nonzero = actual_values != 0
     mape = (
         float(
             np.mean(
                 np.abs(
-                    (actual_values[nonzero] - predicted_values[nonzero])
-                    / actual_values[nonzero]
+                    (actual_values[nonzero] - predicted_values[nonzero]) / actual_values[nonzero]
                 )
             )
             * 100.0
@@ -773,12 +738,8 @@ def _evaluate_candidates(
                 "gap_rows": fold.observed_gap_rows,
                 "training_start": train.index[fold.train_indices[0]].date().isoformat(),
                 "training_end": train.index[fold.train_indices[-1]].date().isoformat(),
-                "validation_start": train.index[
-                    fold.validation_indices[0]
-                ].date().isoformat(),
-                "validation_end": train.index[
-                    fold.validation_indices[-1]
-                ].date().isoformat(),
+                "validation_start": train.index[fold.validation_indices[0]].date().isoformat(),
+                "validation_end": train.index[fold.validation_indices[-1]].date().isoformat(),
                 "persistence_mae": persistence_fold_mae[-1],
             }
         )
@@ -821,9 +782,7 @@ def _evaluate_candidates(
         candidate_results,
         key=lambda result: (result["mean_validation_mae"], result["candidate"]),
     )
-    for manifest, persistence_mae in zip(
-        fold_manifest, persistence_fold_mae, strict=True
-    ):
+    for manifest, persistence_mae in zip(fold_manifest, persistence_fold_mae, strict=True):
         manifest["best_lightgbm_mae"] = best["fold_mae"][manifest["fold"] - 1]
     return dict(best["parameters"]), candidate_results, fold_manifest
 
@@ -854,23 +813,17 @@ def _load_ridge_forecast(
         raise ForecastingError(
             "Ridge prediction artifact is missing column(s): " + ", ".join(missing)
         )
-    ridge[RIDGE_DATE_COLUMN] = pd.to_datetime(
-        ridge[RIDGE_DATE_COLUMN], errors="coerce"
-    )
+    ridge[RIDGE_DATE_COLUMN] = pd.to_datetime(ridge[RIDGE_DATE_COLUMN], errors="coerce")
     if ridge[RIDGE_DATE_COLUMN].isna().any() or ridge[RIDGE_DATE_COLUMN].duplicated().any():
         raise ForecastingError("Ridge prediction dates are invalid or duplicated.")
     ridge = ridge.set_index(RIDGE_DATE_COLUMN).reindex(holdout.index)
     if ridge[[RIDGE_ACTUAL_COLUMN, RIDGE_PREDICTION_COLUMN]].isna().any().any():
         raise ForecastingError("Ridge predictions do not cover the final holdout dates.")
-    ridge_actual = pd.to_numeric(ridge[RIDGE_ACTUAL_COLUMN], errors="coerce").to_numpy(
-        float
-    )
+    ridge_actual = pd.to_numeric(ridge[RIDGE_ACTUAL_COLUMN], errors="coerce").to_numpy(float)
     holdout_actual = holdout[config.absolute_target_column].to_numpy(float)
     if not np.allclose(ridge_actual, holdout_actual, rtol=0, atol=1e-9):
         raise ForecastingError("Ridge artifact uses a different holdout or target.")
-    predictions = pd.to_numeric(
-        ridge[RIDGE_PREDICTION_COLUMN], errors="coerce"
-    ).to_numpy(float)
+    predictions = pd.to_numeric(ridge[RIDGE_PREDICTION_COLUMN], errors="coerce").to_numpy(float)
     if not np.isfinite(predictions).all():
         raise ForecastingError("Ridge predictions contain non-finite values.")
     return predictions
@@ -917,9 +870,7 @@ def _infer_provenance(
         "synthetic_data": config.synthetic_data,
         "source_type": "synthetic" if config.synthetic_data else "real_aggregate",
         "feature_artifact": _portable_path(feature_path),
-        "feature_artifact_sha256": (
-            _file_sha256(feature_path) if feature_path.is_file() else None
-        ),
+        "feature_artifact_sha256": (_file_sha256(feature_path) if feature_path.is_file() else None),
         "feature_rows": len(feature_frame),
         "feature_columns": len(feature_frame.columns),
     }
@@ -964,8 +915,7 @@ def _promotion_decision(
         "holdout_passed": holdout_pass,
         "champion_model": "lightgbm_change_forecast" if passed else "persistence",
         "recommendation": "promote" if passed else "continue_research",
-        "rationale": reasons
-        or ["LightGBM beat persistence in both required evaluation stages."],
+        "rationale": reasons or ["LightGBM beat persistence in both required evaluation stages."],
     }
 
 
@@ -1018,13 +968,10 @@ def validate_artifact_schemas(
         raise ForecastingError("Prediction artifact schema is invalid.")
     if predictions.empty:
         raise ForecastingError("Prediction artifact must not be empty.")
-    if not (
-        predictions[LOWER_PREDICTION_COLUMN]
-        <= predictions[MEDIAN_PREDICTION_COLUMN]
-    ).all() or not (
-        predictions[MEDIAN_PREDICTION_COLUMN]
-        <= predictions[UPPER_PREDICTION_COLUMN]
-    ).all():
+    if (
+        not (predictions[LOWER_PREDICTION_COLUMN] <= predictions[MEDIAN_PREDICTION_COLUMN]).all()
+        or not (predictions[MEDIAN_PREDICTION_COLUMN] <= predictions[UPPER_PREDICTION_COLUMN]).all()
+    ):
         raise ForecastingError("Prediction interval columns are not ordered.")
     if feature_importance is not None:
         if tuple(feature_importance.columns) != IMPORTANCE_ARTIFACT_COLUMNS:
@@ -1062,8 +1009,7 @@ def _preflight_artifacts(config: LightGBMForecastConfig) -> None:
     conflicts = [str(path) for path in resolved if path.name in protected_names]
     if conflicts:
         raise ForecastingError(
-            "LightGBM outputs cannot overwrite ridge artifacts: "
-            + ", ".join(conflicts)
+            "LightGBM outputs cannot overwrite ridge artifacts: " + ", ".join(conflicts)
         )
     existing = [str(path) for path in resolved if path.exists()]
     if existing and not config.overwrite:
@@ -1147,12 +1093,8 @@ def train_lightgbm_forecast(
         model_absolute = reconstruct_absolute_forecast(current, model_change)
         persistence = current.copy()
         if DRIFT_LAG_FEATURE not in split.holdout.columns:
-            raise ForecastingError(
-                f"Seven-day drift requires feature '{DRIFT_LAG_FEATURE}'."
-            )
-        drift = current + (
-            current - split.holdout[DRIFT_LAG_FEATURE].to_numpy(float)
-        )
+            raise ForecastingError(f"Seven-day drift requires feature '{DRIFT_LAG_FEATURE}'.")
+        drift = current + (current - split.holdout[DRIFT_LAG_FEATURE].to_numpy(float))
         if not np.isfinite(drift).all():
             raise ForecastingError("Seven-day drift forecast contains missing values.")
         ridge = _load_ridge_forecast(split.holdout, selected)
@@ -1196,9 +1138,7 @@ def train_lightgbm_forecast(
         models: dict[str, RegressionMetrics] = {
             "persistence": persistence_metrics,
             "seven_day_drift": calculate_regression_metrics(actual, drift),
-            "lightgbm_change_forecast": calculate_regression_metrics(
-                actual, model_absolute
-            ),
+            "lightgbm_change_forecast": calculate_regression_metrics(actual, model_absolute),
             "lightgbm_quantile_median": calculate_regression_metrics(actual, median),
         }
         if ridge is not None:
@@ -1208,9 +1148,7 @@ def train_lightgbm_forecast(
             candidate_results,
             key=lambda result: (result["mean_validation_mae"], result["candidate"]),
         )
-        persistence_cv_mae = float(
-            np.mean([fold["persistence_mae"] for fold in fold_manifest])
-        )
+        persistence_cv_mae = float(np.mean([fold["persistence_mae"] for fold in fold_manifest]))
         lightgbm_cv_mae = float(best_cv["mean_validation_mae"])
         promotion = _promotion_decision(
             lightgbm_cv_mae,
@@ -1220,12 +1158,9 @@ def train_lightgbm_forecast(
         )
 
         model_metrics = {
-            name: metric.to_dict(persistence_metrics.mae)
-            for name, metric in models.items()
+            name: metric.to_dict(persistence_metrics.mae) for name, metric in models.items()
         }
-        interval_coverage = float(
-            predictions["prediction_interval_covered"].mean()
-        )
+        interval_coverage = float(predictions["prediction_interval_covered"].mean())
         evaluation: dict[str, Any] = {
             "model": "LightGBM seven-day change forecast candidate",
             "target": {
@@ -1289,9 +1224,7 @@ def train_lightgbm_forecast(
             "cross_validation_scores": {
                 "lightgbm_fold_mae": best_cv["fold_mae"],
                 "lightgbm_mean_mae": lightgbm_cv_mae,
-                "persistence_fold_mae": [
-                    fold["persistence_mae"] for fold in fold_manifest
-                ],
+                "persistence_fold_mae": [fold["persistence_mae"] for fold in fold_manifest],
                 "persistence_mean_mae": persistence_cv_mae,
             },
             "dataset_provenance": provenance,
@@ -1305,9 +1238,7 @@ def train_lightgbm_forecast(
             },
             "data_fingerprint_sha256": prepared.data_fingerprint,
             "feature_schema_fingerprint_sha256": prepared.schema_fingerprint,
-            "missing_feature_values_handled_by_lightgbm": (
-                prepared.missing_feature_values
-            ),
+            "missing_feature_values_handled_by_lightgbm": (prepared.missing_feature_values),
             "leakage_controls": {
                 "chronological_holdout": True,
                 "walk_forward_gap_days": selected.gap_days,
@@ -1323,9 +1254,7 @@ def train_lightgbm_forecast(
                 "metadata": _portable_path(selected.metadata_path),
                 "evaluation": _portable_path(selected.evaluation_path),
                 "predictions": _portable_path(selected.predictions_path),
-                "feature_importance": _portable_path(
-                    selected.feature_importance_path
-                ),
+                "feature_importance": _portable_path(selected.feature_importance_path),
             },
         }
 

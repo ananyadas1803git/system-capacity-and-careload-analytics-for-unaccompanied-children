@@ -12,6 +12,7 @@ HHS input schema.
 
 from __future__ import annotations
 
+import json
 import logging
 import math
 import os
@@ -63,12 +64,15 @@ from backend.utils import (  # noqa: E402
     json_safe as serialize_json_safe,
     utc_now_iso,
 )
+from src.forecasting import validate_prediction_schema  # noqa: E402
+from src.monitoring import MonitoringConfig, evaluate_monitoring  # noqa: E402
 
 
 API_TITLE = "HHS UAC Capacity Analytics API"
-API_VERSION = "1.0.0"
+API_VERSION = "1.1.0"
 API_PREFIX = "/api/v1"
 DEFAULT_MAX_BODY_BYTES = 20 * 1024 * 1024
+DEFAULT_FORECAST_ARTIFACT_ROOT = PROJECT_ROOT / "output" / "forecasting"
 
 logger = logging.getLogger("hhs_uac.api")
 if not logger.handlers:
@@ -121,6 +125,67 @@ def _json_safe(value: Any) -> Any:
 def _dataframe_records(frame: pd.DataFrame) -> list[dict[str, Any]]:
     """Serialize a DataFrame into JSON-safe row records."""
     return serialize_dataframe_records(frame)
+
+
+def _forecast_artifact_root() -> Path:
+    """Return the trusted, operator-configured artifact directory."""
+
+    configured = os.getenv("HHS_FORECAST_ARTIFACT_ROOT", "").strip()
+    return Path(configured).expanduser().resolve() if configured else DEFAULT_FORECAST_ARTIFACT_ROOT
+
+
+def _artifact_json(relative_path: str) -> dict[str, Any]:
+    """Read a required JSON artifact without deserializing executable models."""
+
+    path = _forecast_artifact_root() / relative_path
+    if not path.is_file():
+        raise APIError(
+            503,
+            "MODEL_ARTIFACTS_UNAVAILABLE",
+            f"Required approved artifact is unavailable: {relative_path}.",
+        )
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        raise APIError(
+            503,
+            "MODEL_ARTIFACTS_INVALID",
+            f"Required approved artifact cannot be read: {relative_path}.",
+        ) from exc
+    if not isinstance(value, dict):
+        raise APIError(
+            503,
+            "MODEL_ARTIFACTS_INVALID",
+            f"Required approved artifact is not a JSON object: {relative_path}.",
+        )
+    return value
+
+
+def _holdout_predictions() -> pd.DataFrame:
+    """Load and schema-check immutable holdout predictions for read-only serving."""
+
+    relative = "predictions/final_holdout_predictions.csv"
+    path = _forecast_artifact_root() / relative
+    if not path.is_file():
+        raise APIError(
+            503,
+            "MODEL_ARTIFACTS_UNAVAILABLE",
+            f"Required approved artifact is unavailable: {relative}.",
+        )
+    try:
+        frame = pd.read_csv(path)
+        validate_prediction_schema(frame)
+        frame["forecast_origin_date"] = pd.to_datetime(
+            frame["forecast_origin_date"], errors="raise"
+        )
+        frame["target_date"] = pd.to_datetime(frame["target_date"], errors="raise")
+    except (OSError, TypeError, ValueError) as exc:
+        raise APIError(
+            503,
+            "MODEL_ARTIFACTS_INVALID",
+            "Stored holdout predictions failed schema validation.",
+        ) from exc
+    return frame
 
 
 def _request_id(request: Request) -> str:
@@ -305,15 +370,11 @@ def _analysis_payload(
     include_daily = _parse_bool(
         options.get("include_daily_metrics"), "include_daily_metrics", False
     )
-    include_chart = _parse_bool(
-        options.get("include_chart_metrics"), "include_chart_metrics", True
-    )
+    include_chart = _parse_bool(options.get("include_chart_metrics"), "include_chart_metrics", True)
     include_episodes = _parse_bool(
         options.get("include_backlog_episodes"), "include_backlog_episodes", True
     )
-    include_anomalies = _parse_bool(
-        options.get("include_anomalies"), "include_anomalies", True
-    )
+    include_anomalies = _parse_bool(options.get("include_anomalies"), "include_anomalies", True)
 
     response: dict[str, Any] = {
         "api_version": API_VERSION,
@@ -368,6 +429,11 @@ async def root_endpoint(request: Request) -> Response:
                 "json_analysis": f"{API_PREFIX}/analyze",
                 "csv_analysis": f"{API_PREFIX}/analyze/csv",
                 "capacity_scenario": f"{API_PREFIX}/capacity-scenario",
+                "model": f"{API_PREFIX}/model",
+                "model_metrics": f"{API_PREFIX}/model/metrics",
+                "model_provenance": f"{API_PREFIX}/model/provenance",
+                "model_monitoring": f"{API_PREFIX}/model/monitoring",
+                "forecast": f"{API_PREFIX}/forecast",
             },
         },
     )
@@ -558,6 +624,162 @@ async def capacity_scenario_endpoint(request: Request) -> Response:
     return _response(request, response)
 
 
+async def model_endpoint(request: Request) -> Response:
+    """Expose the approved registry and promotion state as inert metadata."""
+
+    registry = _artifact_json("models/model_registry.json")
+    promotion = _artifact_json("metrics/promotion_decision.json")
+    champion = _artifact_json("models/champion_model.json")
+    return _response(
+        request,
+        {
+            "api_version": API_VERSION,
+            "model_version": registry.get("registry_version"),
+            "champion": registry.get("champion"),
+            "promotion_status": registry.get("promotion_status"),
+            "promotion": promotion,
+            "champion_specification": champion,
+            "registry": registry,
+        },
+    )
+
+
+async def model_metrics_endpoint(request: Request) -> Response:
+    """Return frozen walk-forward, holdout, interval, and regime metrics."""
+
+    comparison = _artifact_json("metrics/model_comparison_metrics.json")
+    interval = _artifact_json("metrics/prediction_interval_metrics.json")
+    regime_path = _forecast_artifact_root() / "diagnostics" / "error_by_regime.csv"
+    if not regime_path.is_file():
+        raise APIError(
+            503,
+            "MODEL_ARTIFACTS_UNAVAILABLE",
+            "Required approved artifact is unavailable: diagnostics/error_by_regime.csv.",
+        )
+    try:
+        regimes = pd.read_csv(regime_path)
+    except (OSError, ValueError) as exc:
+        raise APIError(
+            503,
+            "MODEL_ARTIFACTS_INVALID",
+            "Stored regime metrics cannot be read.",
+        ) from exc
+    return _response(
+        request,
+        {
+            "api_version": API_VERSION,
+            "comparison": comparison,
+            "prediction_intervals": interval,
+            "error_by_regime": _dataframe_records(regimes),
+        },
+    )
+
+
+async def model_provenance_endpoint(request: Request) -> Response:
+    """Return dataset provenance, leakage audit, and artifact fingerprints."""
+
+    registry = _artifact_json("models/model_registry.json")
+    return _response(
+        request,
+        {
+            "api_version": API_VERSION,
+            "dataset": _artifact_json("audits/dataset_provenance.json"),
+            "leakage_audit": _artifact_json("audits/leakage_audit.json"),
+            "fingerprints": {
+                "source_sha256": registry.get("source_sha256"),
+                "data_fingerprint_sha256": registry.get("data_fingerprint_sha256"),
+                "schema_fingerprint_sha256": registry.get("schema_fingerprint_sha256"),
+            },
+        },
+    )
+
+
+async def model_monitoring_endpoint(request: Request) -> Response:
+    """Evaluate current artifact health without changing model artifacts."""
+
+    try:
+        result = evaluate_monitoring(
+            MonitoringConfig(
+                artifact_root=_forecast_artifact_root(),
+                write_artifacts=False,
+            )
+        )
+    except (OSError, TypeError, ValueError, RuntimeError) as exc:
+        raise APIError(
+            503,
+            "MODEL_MONITORING_UNAVAILABLE",
+            "Monitoring could not evaluate the approved artifacts.",
+        ) from exc
+    return _response(request, {"api_version": API_VERSION, **result.to_dict()})
+
+
+async def forecast_endpoint(request: Request) -> Response:
+    """Return a stored, reproducible seven-day forecast for an origin date."""
+
+    registry = _artifact_json("models/model_registry.json")
+    promotion = _artifact_json("metrics/promotion_decision.json")
+    model_name = str(registry.get("champion", ""))
+    predictions = _holdout_predictions()
+    champion = predictions.loc[predictions["model_name"].eq(model_name)].copy()
+    if champion.empty:
+        raise APIError(
+            503,
+            "CHAMPION_PREDICTIONS_UNAVAILABLE",
+            "No stored predictions match the approved champion.",
+        )
+    requested = request.query_params.get("as_of")
+    if requested:
+        try:
+            as_of = pd.Timestamp(requested)
+        except (TypeError, ValueError) as exc:
+            raise APIError(
+                422,
+                "INVALID_FORECAST_DATE",
+                "as_of must be a valid ISO date such as 2025-12-14.",
+            ) from exc
+        if as_of.tzinfo is not None:
+            as_of = as_of.tz_localize(None)
+        champion = champion.loc[champion["forecast_origin_date"].eq(as_of.normalize())]
+        if champion.empty:
+            raise APIError(
+                404,
+                "FORECAST_NOT_FOUND",
+                "No stored champion forecast exists for the requested origin date.",
+            )
+    row = champion.sort_values("forecast_origin_date").iloc[-1]
+    monitoring = evaluate_monitoring(
+        MonitoringConfig(artifact_root=_forecast_artifact_root(), write_artifacts=False)
+    )
+    forecast = {
+        "forecast_origin_date": row["forecast_origin_date"],
+        "target_date": row["target_date"],
+        "horizon_days": int((row["target_date"] - row["forecast_origin_date"]).days),
+        "prediction": row["reconstructed_absolute_prediction"],
+        "lower_interval": row["lower_interval"],
+        "median_prediction": row["median_prediction"],
+        "upper_interval": row["upper_interval"],
+        "current_load": row["current_load"],
+        "actual_value": row["actual_value"],
+        "evaluation_label": row["evaluation_label"],
+    }
+    return _response(
+        request,
+        {
+            "api_version": API_VERSION,
+            "model_version": registry.get("registry_version"),
+            "configured_model": model_name,
+            "active_model": monitoring.active_model,
+            "model_status": monitoring.model_status,
+            "promotion_status": promotion.get("recommendation"),
+            "forecast": forecast,
+            "scope_note": (
+                "This endpoint serves frozen holdout-evaluation artifacts; it does not "
+                "claim to be a live operational forecast."
+            ),
+        },
+    )
+
+
 async def api_error_handler(request: Request, exc: Exception) -> Response:
     """Return a client-safe response for explicit API errors."""
     if not isinstance(exc, APIError):
@@ -615,6 +837,19 @@ routes = [
         capacity_scenario_endpoint,
         methods=["POST"],
     ),
+    Route(f"{API_PREFIX}/model", model_endpoint, methods=["GET"]),
+    Route(f"{API_PREFIX}/model/metrics", model_metrics_endpoint, methods=["GET"]),
+    Route(
+        f"{API_PREFIX}/model/provenance",
+        model_provenance_endpoint,
+        methods=["GET"],
+    ),
+    Route(
+        f"{API_PREFIX}/model/monitoring",
+        model_monitoring_endpoint,
+        methods=["GET"],
+    ),
+    Route(f"{API_PREFIX}/forecast", forecast_endpoint, methods=["GET"]),
 ]
 
 middleware = [
@@ -626,7 +861,7 @@ middleware = [
         allow_headers=["Accept", "Content-Type", "X-Request-ID"],
         expose_headers=["X-Request-ID"],
         allow_credentials=False,
-    )
+    ),
 ]
 
 app = Starlette(

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520" role="img" aria-labelledby="title desc">
+  <title id="title">HHS UAC analytics system architecture</title>
+  <desc id="desc">Data flows from immutable aggregate CSV through validation and feature engineering into analytics, forecasting artifacts, API, dashboard, reports, and monitoring.</desc>
+  <rect width="1200" height="520" rx="18" fill="#F5F7FA"/>
+  <text x="60" y="55" fill="#163B65" font-family="Arial, sans-serif" font-size="28" font-weight="700">Research analytics architecture</text>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#66788A"/></marker></defs>
+  <g fill="none" stroke="#66788A" stroke-width="3" marker-end="url(#arrow)">
+    <path d="M250 150 H350"/><path d="M550 150 H650"/><path d="M850 150 H950"/>
+    <path d="M750 205 V270"/><path d="M750 350 V405"/>
+    <path d="M450 205 V310 H560"/><path d="M940 310 H1025"/>
+  </g>
+  <g font-family="Arial, sans-serif">
+    <g><rect x="50" y="95" width="200" height="110" rx="12" fill="#FFFFFF" stroke="#2E75B6" stroke-width="3"/><text x="150" y="135" text-anchor="middle" fill="#163B65" font-size="18" font-weight="700">Immutable input</text><text x="150" y="166" text-anchor="middle" fill="#3F5063" font-size="14">Aggregate CSV</text><text x="150" y="188" text-anchor="middle" fill="#B42318" font-size="12">Unverified provenance</text></g>
+    <g><rect x="350" y="95" width="200" height="110" rx="12" fill="#FFFFFF" stroke="#2E75B6" stroke-width="3"/><text x="450" y="135" text-anchor="middle" fill="#163B65" font-size="18" font-weight="700">Data pipeline</text><text x="450" y="166" text-anchor="middle" fill="#3F5063" font-size="14">Clean · validate · flag</text><text x="450" y="188" text-anchor="middle" fill="#3F5063" font-size="12">CSV / JSON / Parquet</text></g>
+    <g><rect x="650" y="95" width="200" height="110" rx="12" fill="#FFFFFF" stroke="#2E75B6" stroke-width="3"/><text x="750" y="135" text-anchor="middle" fill="#163B65" font-size="18" font-weight="700">Analytics layer</text><text x="750" y="166" text-anchor="middle" fill="#3F5063" font-size="14">KPIs · backlog · load</text><text x="750" y="188" text-anchor="middle" fill="#3F5063" font-size="12">Daily / weekly / monthly</text></g>
+    <g><rect x="950" y="95" width="200" height="110" rx="12" fill="#FFFFFF" stroke="#2E75B6" stroke-width="3"/><text x="1050" y="135" text-anchor="middle" fill="#163B65" font-size="18" font-weight="700">Interfaces</text><text x="1050" y="166" text-anchor="middle" fill="#3F5063" font-size="14">Streamlit · ASGI API</text><text x="1050" y="188" text-anchor="middle" fill="#3F5063" font-size="12">Reports and exports</text></g>
+    <g><rect x="560" y="270" width="380" height="80" rx="12" fill="#EAF2FA" stroke="#163B65" stroke-width="3"/><text x="750" y="303" text-anchor="middle" fill="#163B65" font-size="18" font-weight="700">Leakage-safe forecast research</text><text x="750" y="330" text-anchor="middle" fill="#3F5063" font-size="14">Walk-forward CV · embargo · baselines · intervals</text></g>
+    <g><rect x="310" y="405" width="280" height="70" rx="12" fill="#FFFFFF" stroke="#167C80" stroke-width="3"/><text x="450" y="435" text-anchor="middle" fill="#163B65" font-size="17" font-weight="700">Versioned artifacts</text><text x="450" y="458" text-anchor="middle" fill="#3F5063" font-size="13">Registry · metrics · provenance</text></g>
+    <g><rect x="610" y="405" width="280" height="70" rx="12" fill="#FFFFFF" stroke="#D97706" stroke-width="3"/><text x="750" y="435" text-anchor="middle" fill="#163B65" font-size="17" font-weight="700">Offline monitoring</text><text x="750" y="458" text-anchor="middle" fill="#3F5063" font-size="13">Drift · performance · fallback</text></g>
+    <g><rect x="1025" y="275" width="125" height="70" rx="12" fill="#FFFFFF" stroke="#163B65" stroke-width="3"/><text x="1088" y="305" text-anchor="middle" fill="#163B65" font-size="15" font-weight="700">Reviewer</text><text x="1088" y="327" text-anchor="middle" fill="#3F5063" font-size="12">read-only views</text></g>
+  </g>
+</svg>

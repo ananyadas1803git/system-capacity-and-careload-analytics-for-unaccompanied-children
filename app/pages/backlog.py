@@ -167,9 +167,9 @@ def build_backlog_episodes(metrics: pd.DataFrame) -> pd.DataFrame:
 
     working = metrics[[NET_INTAKE_COLUMN]].copy().sort_index()
     working["Is Positive"] = working[NET_INTAKE_COLUMN].fillna(0).gt(0)
-    working["Episode Group"] = working["Is Positive"].ne(
-        working["Is Positive"].shift(fill_value=False)
-    ).cumsum()
+    working["Episode Group"] = (
+        working["Is Positive"].ne(working["Is Positive"].shift(fill_value=False)).cumsum()
+    )
     positive_rows = working.loc[working["Is Positive"]].copy()
     if positive_rows.empty:
         return pd.DataFrame(
@@ -213,11 +213,7 @@ def aggregate_for_chart(metrics: pd.DataFrame, granularity: str) -> pd.DataFrame
     if granularity == "Daily":
         return metrics.copy()
 
-    frequency = (
-        pd.offsets.Week(weekday=6)
-        if granularity == "Weekly"
-        else pd.offsets.MonthEnd()
-    )
+    frequency = pd.offsets.Week(weekday=6) if granularity == "Weekly" else pd.offsets.MonthEnd()
     aggregations = {
         TRANSFER_COLUMN: "sum",
         DISCHARGE_COLUMN: "sum",
@@ -228,9 +224,7 @@ def aggregate_for_chart(metrics: pd.DataFrame, granularity: str) -> pd.DataFrame
         BACKLOG_STREAK_COLUMN: "last",
     }
     available = {
-        column: operation
-        for column, operation in aggregations.items()
-        if column in metrics.columns
+        column: operation for column, operation in aggregations.items() if column in metrics.columns
     }
     return metrics.resample(frequency).agg(available).dropna(how="all")
 
@@ -291,9 +285,7 @@ def render_pressure_timeline(
             hovertemplate="%{y:+,.0f} children<extra></extra>",
         )
     )
-    for position, (start, end) in enumerate(
-        high_pressure_intervals(episodes, threshold_days)
-    ):
+    for position, (start, end) in enumerate(high_pressure_intervals(episodes, threshold_days)):
         figure.add_vrect(
             x0=start - pd.Timedelta(hours=12),
             x1=end + pd.Timedelta(hours=12),
@@ -354,9 +346,7 @@ def render_streak_chart(
     threshold_days: int,
 ) -> None:
     """Render the daily backlog-streak counter and escalation threshold."""
-    streak = pd.to_numeric(
-        daily_metrics[BACKLOG_STREAK_COLUMN], errors="coerce"
-    ).fillna(0)
+    streak = pd.to_numeric(daily_metrics[BACKLOG_STREAK_COLUMN], errors="coerce").fillna(0)
     figure = go.Figure(
         go.Scatter(
             x=daily_metrics.index,
@@ -376,9 +366,7 @@ def render_streak_chart(
         annotation_text=f"Escalation threshold: {threshold_days} days",
         annotation_position="top left",
     )
-    figure.update_layout(
-        **chart_layout("Daily Backlog Accumulation Streak", "Consecutive days")
-    )
+    figure.update_layout(**chart_layout("Daily Backlog Accumulation Streak", "Consecutive days"))
     figure.update_yaxes(rangemode="tozero")
     st.plotly_chart(figure, width="stretch", config={"displaylogo": False})
 
@@ -490,9 +478,7 @@ def main() -> None:
         st.error("The reporting-period start must be on or before the end.")
         st.stop()
 
-    selected_data = cleaned_data.loc[
-        pd.Timestamp(start_date):pd.Timestamp(end_date)
-    ].copy()
+    selected_data = cleaned_data.loc[pd.Timestamp(start_date) : pd.Timestamp(end_date)].copy()
     if selected_data.empty:
         st.warning("No data is available for the selected reporting period.")
         st.stop()
@@ -511,9 +497,7 @@ def main() -> None:
     cumulative_pressure = int(daily_metrics[NET_INTAKE_COLUMN].sum())
     longest_streak = int(kpis["backlog_accumulation_rate"])
     high_risk_episodes = (
-        int(episodes["Duration (Days)"].ge(threshold_days).sum())
-        if not episodes.empty
-        else 0
+        int(episodes["Duration (Days)"].ge(threshold_days).sum()) if not episodes.empty else 0
     )
 
     st.caption(
@@ -606,9 +590,7 @@ def main() -> None:
                 width="stretch",
                 hide_index=True,
                 column_config={
-                    "Average Daily Pressure": st.column_config.NumberColumn(
-                        format="%.1f"
-                    )
+                    "Average Daily Pressure": st.column_config.NumberColumn(format="%.1f")
                 },
             )
             st.caption(

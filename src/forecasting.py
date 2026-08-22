@@ -17,6 +17,7 @@ import json
 import math
 import os
 import platform
+import subprocess
 import time
 import warnings
 from contextlib import contextmanager
@@ -56,15 +57,9 @@ FORECAST_HORIZON = 7
 MODEL_VERSION = "2.0.0"
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_FEATURE_PATH = (
-    PROJECT_ROOT / "data" / "processed" / "uac_capacity_ml_features.parquet"
-)
-DEFAULT_RAW_PATH = (
-    PROJECT_ROOT / "data" / "raw" / "HHS_Unaccompanied_Alien_Children_Program.csv"
-)
-DEFAULT_PROVENANCE_PATH = (
-    PROJECT_ROOT / "data" / "processed" / "preprocessing_report.json"
-)
+DEFAULT_FEATURE_PATH = PROJECT_ROOT / "data" / "processed" / "uac_capacity_ml_features.parquet"
+DEFAULT_RAW_PATH = PROJECT_ROOT / "data" / "raw" / "HHS_Unaccompanied_Alien_Children_Program.csv"
+DEFAULT_PROVENANCE_PATH = PROJECT_ROOT / "data" / "processed" / "preprocessing_report.json"
 DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "output" / "forecasting"
 
 MODEL_NAMES = (
@@ -282,9 +277,9 @@ class FeatureProcessor:
             raise ForecastingFrameworkError(
                 "Transform data is missing selected feature(s): " + ", ".join(missing)
             )
-        transformed = frame.loc[:, self.selected_columns].apply(
-            pd.to_numeric, errors="coerce"
-        ).astype(float)
+        transformed = (
+            frame.loc[:, self.selected_columns].apply(pd.to_numeric, errors="coerce").astype(float)
+        )
         transformed = transformed.replace([np.inf, -np.inf], np.nan)
         return transformed.fillna(self.medians).astype(float)
 
@@ -366,13 +361,93 @@ def _sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def _git_metadata() -> dict[str, Any]:
+    """Return the current revision and cleanliness without failing training."""
+
+    try:
+        revision = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=PROJECT_ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=5,
+        ).stdout.strip()
+        status = subprocess.run(
+            ["git", "status", "--porcelain"],
+            cwd=PROJECT_ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=5,
+        ).stdout
+    except (OSError, subprocess.SubprocessError):
+        return {"git_commit": None, "git_worktree_clean": None}
+    return {
+        "git_commit": revision or None,
+        "git_worktree_clean": not bool(status.strip()),
+    }
+
+
 def _frame_fingerprint(frame: pd.DataFrame) -> str:
-    hashed = pd.util.hash_pandas_object(frame, index=True).to_numpy(np.uint64)
-    return hashlib.sha256(hashed.tobytes()).hexdigest()
+    """Hash canonical values without depending on pandas' hash implementation.
+
+    ``hash_pandas_object`` and dtype strings can change across pandas/Arrow
+    releases even when every analytical value is identical. This explicit
+    encoding normalizes supported semantic types, datetime resolution, byte
+    order, and missing-value representation.
+    """
+
+    digest = hashlib.sha256()
+    schema = [(str(name), _semantic_dtype(series)) for name, series in frame.items()]
+    digest.update(
+        json.dumps(
+            {"index_name": str(frame.index.name or ""), "columns": schema},
+            ensure_ascii=False,
+            separators=(",", ":"),
+        ).encode("utf-8")
+    )
+    index = pd.to_datetime(frame.index, errors="raise").to_numpy(dtype="datetime64[ns]")
+    digest.update(index.astype("<i8", copy=False).tobytes(order="C"))
+    for _, series in frame.items():
+        semantic = _semantic_dtype(series)
+        if semantic == "datetime64":
+            values = pd.to_datetime(series, errors="raise").to_numpy(dtype="datetime64[ns]")
+            digest.update(values.astype("<i8", copy=False).tobytes(order="C"))
+        elif semantic == "boolean":
+            values = pd.array(series, dtype="boolean").to_numpy(dtype=np.int8, na_value=-1)
+            digest.update(values.tobytes(order="C"))
+        elif semantic == "numeric":
+            values = pd.to_numeric(series, errors="raise").to_numpy(dtype="<f8", copy=True)
+            values[np.isnan(values)] = np.float64(np.nan)
+            values[values == 0] = 0.0
+            digest.update(values.tobytes(order="C"))
+        else:
+            values = [None if pd.isna(value) else str(value) for value in series]
+            digest.update(
+                json.dumps(
+                    values,
+                    ensure_ascii=False,
+                    separators=(",", ":"),
+                ).encode("utf-8")
+            )
+    return digest.hexdigest()
+
+
+def _semantic_dtype(series: pd.Series) -> str:
+    """Return a stable cross-version dtype category for artifact hashing."""
+
+    if pd.api.types.is_datetime64_any_dtype(series.dtype):
+        return "datetime64"
+    if pd.api.types.is_bool_dtype(series.dtype):
+        return "boolean"
+    if pd.api.types.is_numeric_dtype(series.dtype):
+        return "numeric"
+    return "string"
 
 
 def _schema_fingerprint(frame: pd.DataFrame) -> str:
-    payload = "\n".join(f"{name}:{dtype}" for name, dtype in frame.dtypes.items())
+    payload = "\n".join(f"{name}:{_semantic_dtype(series)}" for name, series in frame.items())
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 
@@ -602,9 +677,7 @@ def prepare_forecast_dataset(
         available_when: str,
     ) -> None:
         model[name] = values
-        availability.append(
-            _availability_record(name, group, source_name, available_when)
-        )
+        availability.append(_availability_record(name, group, source_name, available_when))
         expanded.append(name)
         if group == "compact":
             compact.append(name)
@@ -929,7 +1002,11 @@ def regression_metrics(
 
     truth = np.asarray(actual, dtype=float)
     forecast = np.asarray(predicted, dtype=float)
-    if truth.shape != forecast.shape or not np.isfinite(truth).all() or not np.isfinite(forecast).all():
+    if (
+        truth.shape != forecast.shape
+        or not np.isfinite(truth).all()
+        or not np.isfinite(forecast).all()
+    ):
         raise ForecastingFrameworkError("Metrics require aligned finite arrays.")
     mae = float(mean_absolute_error(truth, forecast))
     rmse = float(math.sqrt(mean_squared_error(truth, forecast)))
@@ -938,9 +1015,7 @@ def regression_metrics(
     r2 = float(r2_score(truth, forecast)) if len(truth) > 1 else 0.0
     mase = float(mae / persistence_mae) if persistence_mae > 0 else math.inf
     improvement = (
-        float((persistence_mae - mae) / persistence_mae * 100)
-        if persistence_mae > 0
-        else 0.0
+        float((persistence_mae - mae) / persistence_mae * 100) if persistence_mae > 0 else 0.0
     )
     return {
         "mae": mae,
@@ -1154,7 +1229,9 @@ def _fit_ml_model(
                 **parameters,
             )
             model.fit(x_train, y_train, eval_set=[(x_validation, y_validation)], verbose=False)
-            best_iteration = int(getattr(model, "best_iteration", parameters.get("n_estimators", 0)))
+            best_iteration = int(
+                getattr(model, "best_iteration", parameters.get("n_estimators", 0))
+            )
         else:
             raise ForecastingFrameworkError(f"Unsupported ML model: {model_name}")
         warning_messages.extend(str(item.message) for item in caught)
@@ -1264,7 +1341,9 @@ def _evaluate_baseline(
                 "ok",
             )
         )
-        predictions.append(_prediction_rows(validation, forecast, model_name, "development_oof", fold.number))
+        predictions.append(
+            _prediction_rows(validation, forecast, model_name, "development_oof", fold.number)
+        )
     return CandidateResult(
         model_name=model_name,
         configuration_name=model_name,
@@ -1765,9 +1844,7 @@ def _quantile_oof_and_final(
                 )
             )
         stacked = np.vstack(absolute_predictions)
-        raw_crossings += int(
-            np.sum((stacked[0] > stacked[1]) | (stacked[1] > stacked[2]))
-        )
+        raw_crossings += int(np.sum((stacked[0] > stacked[1]) | (stacked[1] > stacked[2])))
         total_predictions += len(validation)
         ordered = np.vstack(order_prediction_intervals(*stacked))
         oof_parts.append(
@@ -1879,11 +1956,21 @@ def _quantile_oof_and_final(
     }.items():
         values = np.asarray(mask, dtype=bool)
         metrics[f"holdout_coverage_{label}_percent"] = (
-            float(np.mean((actual_holdout[values] >= lower[values]) & (actual_holdout[values] <= upper[values])) * 100)
+            float(
+                np.mean(
+                    (actual_holdout[values] >= lower[values])
+                    & (actual_holdout[values] <= upper[values])
+                )
+                * 100
+            )
             if values.any()
             else None
         )
-    bundle = {"models": final_models, "processor": processor, "feature_group": selected_lgbm.feature_group}
+    bundle = {
+        "models": final_models,
+        "processor": processor,
+        "feature_group": selected_lgbm.feature_group,
+    }
     return oof, (lower, median, upper), metrics, bundle
 
 
@@ -1904,7 +1991,9 @@ def _hybrid_model(
     residual_frame["residual_target"] = base_oof["residual"]
     if len(residual_frame) < 100:
         raise ForecastingFrameworkError("Too few SARIMAX OOF residuals for the hybrid.")
-    inner_splits = TimeSeriesSplit(n_splits=3, test_size=max(14, len(residual_frame) // 6), gap=config.gap_days)
+    inner_splits = TimeSeriesSplit(
+        n_splits=3, test_size=max(14, len(residual_frame) // 6), gap=config.gap_days
+    )
     correctors = (
         ("lightgbm", lgbm_result),
         ("catboost", catboost_result),
@@ -1914,7 +2003,9 @@ def _hybrid_model(
         columns = _feature_group(prepared, template.feature_group)
         prediction_parts: list[pd.DataFrame] = []
         metric_rows: list[dict[str, Any]] = []
-        for fold_number, (train_idx, validation_idx) in enumerate(inner_splits.split(residual_frame), 1):
+        for fold_number, (train_idx, validation_idx) in enumerate(
+            inner_splits.split(residual_frame), 1
+        ):
             train = residual_frame.iloc[train_idx]
             validation = residual_frame.iloc[validation_idx]
             processor = FeatureProcessor(
@@ -1933,7 +2024,9 @@ def _hybrid_model(
                 config.random_seed,
             )
             correction = np.asarray(model.predict(x_validation), dtype=float)
-            base = base_oof.reindex(validation.index)["reconstructed_absolute_prediction"].to_numpy(float)
+            base = base_oof.reindex(validation.index)["reconstructed_absolute_prediction"].to_numpy(
+                float
+            )
             hybrid = base + correction
             actual = validation[TARGET_ABSOLUTE].to_numpy(float)
             persistence_mae = float(mean_absolute_error(actual, validation[CURRENT_LOAD]))
@@ -1978,12 +2071,18 @@ def _hybrid_model(
                 metrics,
             )
         )
-    _, corrector_name, template, hybrid_oof, hybrid_metrics = min(evaluated, key=lambda item: item[0])
+    _, corrector_name, template, hybrid_oof, hybrid_metrics = min(
+        evaluated, key=lambda item: item[0]
+    )
     hybrid_candidate = CandidateResult(
         model_name="sarimax_boosting_hybrid",
         configuration_name=f"{sarimax_result.configuration_name}_plus_{corrector_name}",
         feature_group=template.feature_group,
-        parameters={"base": sarimax_result.parameters, "corrector": template.parameters, "corrector_name": corrector_name},
+        parameters={
+            "base": sarimax_result.parameters,
+            "corrector": template.parameters,
+            "corrector_name": corrector_name,
+        },
         predictions=hybrid_oof,
         fold_metrics=hybrid_metrics,
         warning_status="ok",
@@ -2092,13 +2191,15 @@ def _ensemble_model(
     if len(selected_names) < 2:
         selected_names = ["persistence", "seven_day_drift"]
         series = {
-            name: candidates[name].predictions.set_index("forecast_origin_date")[
-                "reconstructed_absolute_prediction"
-            ].sort_index()
+            name: candidates[name]
+            .predictions.set_index("forecast_origin_date")["reconstructed_absolute_prediction"]
+            .sort_index()
             for name in selected_names
         }
     aligned_predictions = pd.concat(series, axis=1, join="inner").dropna()
-    actual = partitions.development.reindex(aligned_predictions.index)[TARGET_ABSOLUTE].to_numpy(float)
+    actual = partitions.development.reindex(aligned_predictions.index)[TARGET_ABSOLUTE].to_numpy(
+        float
+    )
     weights = optimize_ensemble_weights(actual, aligned_predictions.to_numpy(float))
     active = weights > 0
     if int(active.sum()) >= 2:
@@ -2119,14 +2220,18 @@ def _ensemble_model(
     )
     oof["fold"] = [
         int(
-            candidates["persistence"].predictions.set_index("forecast_origin_date")
-            .reindex([date])["fold"].iloc[0]
+            candidates["persistence"]
+            .predictions.set_index("forecast_origin_date")
+            .reindex([date])["fold"]
+            .iloc[0]
         )
         for date in aligned_predictions.index
     ]
     fold_metrics: list[dict[str, Any]] = []
     for fold_number, group in oof.groupby("fold", sort=True):
-        persistence_mae = float(mean_absolute_error(group["actual_value"], group["persistence_prediction"]))
+        persistence_mae = float(
+            mean_absolute_error(group["actual_value"], group["persistence_prediction"])
+        )
         metrics = regression_metrics(
             group["actual_value"], group["reconstructed_absolute_prediction"], persistence_mae
         )
@@ -2137,8 +2242,12 @@ def _ensemble_model(
                 "fold": int(fold_number),
                 "training_start": None,
                 "training_end": None,
-                "validation_start": pd.Timestamp(group["forecast_origin_date"].min()).date().isoformat(),
-                "validation_end": pd.Timestamp(group["forecast_origin_date"].max()).date().isoformat(),
+                "validation_start": pd.Timestamp(group["forecast_origin_date"].min())
+                .date()
+                .isoformat(),
+                "validation_end": pd.Timestamp(group["forecast_origin_date"].max())
+                .date()
+                .isoformat(),
                 "gap_rows": 7,
                 "validation_rows": len(group),
                 **metrics,
@@ -2208,7 +2317,9 @@ def _audit_provenance(
             "authoritative publisher URL, acquisition timestamp, or external signature "
             "is recorded; performance does not demonstrate generalization to real HHS operations."
         ),
-        "source_file": str(config.raw_path.relative_to(PROJECT_ROOT)) if config.raw_path.is_file() else str(config.raw_path),
+        "source_file": str(config.raw_path.relative_to(PROJECT_ROOT))
+        if config.raw_path.is_file()
+        else str(config.raw_path),
         "source_sha256": source_hash,
         "recorded_source_sha256": recorded_hash,
         "local_lineage_hash_matches": provenance_verified,
@@ -2222,7 +2333,9 @@ def _audit_provenance(
         "missing_date_count_before_processing": report.get("missing_dates_inserted"),
         "missing_date_count_after_processing": len(expected.difference(dates)),
         "imputed_value_count": report.get("numeric_values_imputed"),
-        "imputed_date_count": int(pd.Series(source.get("Is Imputed Date", False)).astype(bool).sum()),
+        "imputed_date_count": int(
+            pd.Series(source.get("Is Imputed Date", False)).astype(bool).sum()
+        ),
         "duplicate_dates_after_processing": int(dates.duplicated().sum()),
         "target_available_rows": int(prepared.frame[TARGET_ABSOLUTE].notna().sum()),
         "source_feature_columns": len(source.columns),
@@ -2256,7 +2369,9 @@ def _leakage_audit(
     config: ForecastConfig,
 ) -> dict[str, Any]:
     feature_names = set(prepared.expanded_features)
-    forbidden = sorted(name for name in feature_names if "target" in name or "future" in name or "lead" in name)
+    forbidden = sorted(
+        name for name in feature_names if "target" in name or "future" in name or "lead" in name
+    )
     fold_processors_safe = all(
         processor.fitted_rows is not None
         and pd.Timestamp(processor.fitted_rows[1])
@@ -2267,7 +2382,8 @@ def _leakage_audit(
         "target_and_future_features_excluded": not forbidden,
         "current_load_available_at_origin": CURRENT_LOAD in feature_names,
         "operational_flows_lagged": all(
-            name not in feature_names for name in (INTAKE_COLUMN, TRANSFER_COLUMN, DISCHARGE_COLUMN, NET_INTAKE_COLUMN)
+            name not in feature_names
+            for name in (INTAKE_COLUMN, TRANSFER_COLUMN, DISCHARGE_COLUMN, NET_INTAKE_COLUMN)
         ),
         "fold_preprocessing_fit_on_training_only": fold_processors_safe,
         "walk_forward_chronological": all(
@@ -2275,7 +2391,8 @@ def _leakage_audit(
         ),
         "walk_forward_gap_is_seven": all(fold.observed_gap == config.gap_days for fold in folds),
         "holdout_after_development_and_embargo": (
-            partitions.development.index.max() < partitions.embargo.index.min()
+            partitions.development.index.max()
+            < partitions.embargo.index.min()
             < partitions.holdout.index.min()
         ),
         "holdout_not_used_for_tuning": True,
@@ -2315,32 +2432,47 @@ def _promotion_decision(
     fold_rows: list[dict[str, Any]] = []
     for fold, group in aligned.groupby("fold_challenger"):
         challenger_mae = float(
-            mean_absolute_error(group["actual_value"], group["reconstructed_absolute_prediction_challenger"])
+            mean_absolute_error(
+                group["actual_value"], group["reconstructed_absolute_prediction_challenger"]
+            )
         )
         persistence_mae = float(
-            mean_absolute_error(group["actual_value"], group["reconstructed_absolute_prediction_persistence"])
+            mean_absolute_error(
+                group["actual_value"], group["reconstructed_absolute_prediction_persistence"]
+            )
         )
         won = challenger_mae < persistence_mae
         fold_wins += int(won)
         fold_rows.append(
-            {"fold": str(fold), "challenger_mae": challenger_mae, "persistence_mae": persistence_mae, "won": won}
+            {
+                "fold": str(fold),
+                "challenger_mae": challenger_mae,
+                "persistence_mae": persistence_mae,
+                "won": won,
+            }
         )
     majority = math.ceil(len(fold_rows) / 2)
     challenger_cv_mae = float(
-        mean_absolute_error(aligned["actual_value"], aligned["reconstructed_absolute_prediction_challenger"])
+        mean_absolute_error(
+            aligned["actual_value"], aligned["reconstructed_absolute_prediction_challenger"]
+        )
     )
     aligned_persistence_cv_mae = float(
-        mean_absolute_error(aligned["actual_value"], aligned["reconstructed_absolute_prediction_persistence"])
+        mean_absolute_error(
+            aligned["actual_value"], aligned["reconstructed_absolute_prediction_persistence"]
+        )
     )
     worst_challenger = max(row["challenger_mae"] for row in fold_rows)
     worst_persistence = max(row["persistence_mae"] for row in fold_rows)
     checks = {
-        "mean_walk_forward_mae_better_than_persistence": challenger_cv_mae < aligned_persistence_cv_mae,
+        "mean_walk_forward_mae_better_than_persistence": challenger_cv_mae
+        < aligned_persistence_cv_mae,
         "holdout_mae_better_than_persistence": (
             holdout_metrics[challenger.model_name]["mae"] < holdout_metrics["persistence"]["mae"]
         ),
         "validation_fold_majority": fold_wins >= majority,
-        "worst_fold_within_limit": worst_challenger <= worst_persistence * config.worst_fold_ratio_limit,
+        "worst_fold_within_limit": worst_challenger
+        <= worst_persistence * config.worst_fold_ratio_limit,
         "leakage_audit_passed": leakage_passed,
         "same_eligible_dates": len(aligned) == len(challenger.predictions),
         "reproducible_fixed_seed": True,
@@ -2387,7 +2519,9 @@ def _error_diagnostics(
             "absolute_error": np.abs(actual - predictions),
             "day_of_week": holdout.index.day_name(),
             "month": holdout.index.month_name(),
-            "forecast_load_band": pd.qcut(predictions, q=3, labels=["low", "medium", "high"], duplicates="drop").astype(str),
+            "forecast_load_band": pd.qcut(
+                predictions, q=3, labels=["low", "medium", "high"], duplicates="drop"
+            ).astype(str),
             "net_intake_magnitude": pd.cut(
                 holdout["net_intake_at_origin"].abs(),
                 bins=[-np.inf, 10, 50, np.inf],
@@ -2399,8 +2533,12 @@ def _error_diagnostics(
                 bins=[-np.inf, 0.6, 0.8, np.inf],
                 labels=["normal", "watch", "stress"],
             ).astype(str),
-            "anomaly_status": holdout["has_anomaly"].map({True: "anomaly", False: "normal"}).to_numpy(),
-            "imputation_status": holdout["is_imputed_date"].map({True: "imputed", False: "observed"}).to_numpy(),
+            "anomaly_status": holdout["has_anomaly"]
+            .map({True: "anomaly", False: "normal"})
+            .to_numpy(),
+            "imputation_status": holdout["is_imputed_date"]
+            .map({True: "imputed", False: "observed"})
+            .to_numpy(),
             "pressure_regime": np.where(
                 holdout["backlog_state"] | holdout["capacity_stress"], "high_pressure", "normal"
             ),
@@ -2440,13 +2578,23 @@ def _oof_permutation_importance(
     config: ForecastConfig,
 ) -> pd.DataFrame:
     if selected.model_name not in {"ridge", "elastic_net", "lightgbm", "catboost", "xgboost"}:
-        return pd.DataFrame(columns=["feature", "mean_mae_increase", "std_mae_increase", "folds", "interpretation_note"])
+        return pd.DataFrame(
+            columns=[
+                "feature",
+                "mean_mae_increase",
+                "std_mae_increase",
+                "folds",
+                "interpretation_note",
+            ]
+        )
     columns = _feature_group(prepared, selected.feature_group)
     records: list[dict[str, Any]] = []
     for fold in folds:
         train = development.iloc[fold.train_indices]
         validation = development.iloc[fold.validation_indices]
-        processor = FeatureProcessor(config.maximum_missing_fraction, config.correlation_threshold).fit(train.loc[:, columns])
+        processor = FeatureProcessor(
+            config.maximum_missing_fraction, config.correlation_threshold
+        ).fit(train.loc[:, columns])
         x_train = processor.transform(train.loc[:, columns])
         x_validation = processor.transform(validation.loc[:, columns])
         model, _, _ = _fit_ml_model(
@@ -2474,14 +2622,26 @@ def _oof_permutation_importance(
             )
     raw = pd.DataFrame(records)
     if raw.empty:
-        return pd.DataFrame(columns=["feature", "mean_mae_increase", "std_mae_increase", "folds", "interpretation_note"])
+        return pd.DataFrame(
+            columns=[
+                "feature",
+                "mean_mae_increase",
+                "std_mae_increase",
+                "folds",
+                "interpretation_note",
+            ]
+        )
     summary = raw.groupby("feature", as_index=False).agg(
         mean_mae_increase=("mae_increase", "mean"),
         std_mae_increase=("mae_increase", lambda values: float(np.std(values, ddof=0))),
         folds=("fold", "nunique"),
     )
-    summary["interpretation_note"] = "Correlated features can divide or mask permutation importance."
-    return summary.sort_values(["mean_mae_increase", "feature"], ascending=[False, True]).reset_index(drop=True)
+    summary["interpretation_note"] = (
+        "Correlated features can divide or mask permutation importance."
+    )
+    return summary.sort_values(
+        ["mean_mae_increase", "feature"], ascending=[False, True]
+    ).reset_index(drop=True)
 
 
 def _render_report(
@@ -2514,7 +2674,12 @@ def _render_report(
         vertical_spacing=0.045,
     )
     figure.add_trace(
-        go.Scatter(x=champion_rows["target_date"], y=champion_rows["actual_value"], name="Actual", line={"color": "#163B65"}),
+        go.Scatter(
+            x=champion_rows["target_date"],
+            y=champion_rows["actual_value"],
+            name="Actual",
+            line={"color": "#163B65"},
+        ),
         row=1,
         col=1,
     )
@@ -2530,7 +2695,12 @@ def _render_report(
     )
     if champion_rows["lower_interval"].notna().any():
         figure.add_trace(
-            go.Scatter(x=champion_rows["target_date"], y=champion_rows["upper_interval"], line={"width": 0}, showlegend=False),
+            go.Scatter(
+                x=champion_rows["target_date"],
+                y=champion_rows["upper_interval"],
+                line={"width": 0},
+                showlegend=False,
+            ),
             row=1,
             col=1,
         )
@@ -2548,7 +2718,9 @@ def _render_report(
         )
     residuals = champion_rows["actual_value"] - champion_rows["reconstructed_absolute_prediction"]
     figure.add_trace(
-        go.Scatter(x=champion_rows["target_date"], y=residuals, name="Residual", line={"color": "#B42318"}),
+        go.Scatter(
+            x=champion_rows["target_date"], y=residuals, name="Residual", line={"color": "#B42318"}
+        ),
         row=2,
         col=1,
     )
@@ -2558,7 +2730,11 @@ def _render_report(
         col=1,
     )
     for model_name, group in fold_metrics.groupby("model_name"):
-        figure.add_trace(go.Scatter(x=group["fold"], y=group["mae"], mode="lines+markers", name=model_name), row=4, col=1)
+        figure.add_trace(
+            go.Scatter(x=group["fold"], y=group["mae"], mode="lines+markers", name=model_name),
+            row=4,
+            col=1,
+        )
     holdout_items = comparison["models"]
     figure.add_trace(
         go.Bar(
@@ -2612,27 +2788,39 @@ def _render_report(
             row=8,
             col=1,
         )
-    figure.update_layout(height=2450, template="plotly_white", title="Seven-Day System Capacity Forecast Research Report")
+    figure.update_layout(
+        height=2450,
+        template="plotly_white",
+        title="Seven-Day System Capacity Forecast Research Report",
+    )
     chart_html = figure.to_html(full_html=False, include_plotlyjs=True)
-    importance_html = importance.head(25).to_html(index=False) if not importance.empty else "<p>Not available.</p>"
-    comparison_table = pd.DataFrame(
-        [
-            {
-                "Model": name,
-                "CV MAE": values["walk_forward"]["mean_mae"],
-                "CV SD": values["walk_forward"]["std_mae"],
-                "Holdout MAE": values["holdout"]["mae"],
-                "Holdout MASE": values["holdout"]["mase_vs_persistence"],
-            }
-            for name, values in comparison["models"].items()
-        ]
-    ).sort_values("CV MAE").to_html(index=False)
+    importance_html = (
+        importance.head(25).to_html(index=False)
+        if not importance.empty
+        else "<p>Not available.</p>"
+    )
+    comparison_table = (
+        pd.DataFrame(
+            [
+                {
+                    "Model": name,
+                    "CV MAE": values["walk_forward"]["mean_mae"],
+                    "CV SD": values["walk_forward"]["std_mae"],
+                    "Holdout MAE": values["holdout"]["mae"],
+                    "Holdout MASE": values["holdout"]["mase_vs_persistence"],
+                }
+                for name, values in comparison["models"].items()
+            ]
+        )
+        .sort_values("CV MAE")
+        .to_html(index=False)
+    )
     regime_html = error_by_regime.to_html(index=False)
     html = f"""<!doctype html><html><head><meta charset='utf-8'><title>Forecast research report</title>
 <style>body{{font-family:Arial,sans-serif;color:#172033;max-width:1300px;margin:auto;padding:24px}}h1,h2{{color:#163B65}}.warning{{background:#fff8e6;border-left:5px solid #d97706;padding:12px}}table{{border-collapse:collapse;width:100%}}th,td{{padding:7px;border:1px solid #d9e1ea;text-align:right}}th:first-child,td:first-child{{text-align:left}}</style></head><body>
 <h1>Seven-Day System Capacity Forecast Research Report</h1>
-<div class='warning'><strong>Research output only.</strong> {provenance['generalization_warning']}</div>
-<p><strong>Champion:</strong> {champion} · <strong>Promotion:</strong> {promotion['recommendation']}</p>
+<div class='warning'><strong>Research output only.</strong> {provenance["generalization_warning"]}</div>
+<p><strong>Champion:</strong> {champion} · <strong>Promotion:</strong> {promotion["recommendation"]}</p>
 <h2>Model comparison</h2>{comparison_table}
 {chart_html}
 <h2>Prediction interval</h2><pre>{json.dumps(json_safe(interval_metrics), indent=2)}</pre>
@@ -2661,6 +2849,7 @@ def train_forecasting_models(
     """Run the full experiment and atomically persist its research artifacts."""
 
     selected = config or ForecastConfig()
+    git_metadata = _git_metadata()
     paths = selected.artifact_paths
     existing = [path for path in paths.values() if path.exists()]
     if existing and not selected.overwrite:
@@ -2830,13 +3019,31 @@ def train_forecasting_models(
         ignore_index=True,
     )
     for frame in (oof_predictions, holdout_predictions):
-        frame.loc[:, "lower_interval"] = np.tile(lower, len(frame) // len(lower)) if frame is holdout_predictions else frame["lower_interval"]
-        frame.loc[:, "median_prediction"] = np.tile(median, len(frame) // len(median)) if frame is holdout_predictions else frame["median_prediction"]
-        frame.loc[:, "upper_interval"] = np.tile(upper, len(frame) // len(upper)) if frame is holdout_predictions else frame["upper_interval"]
+        frame.loc[:, "lower_interval"] = (
+            np.tile(lower, len(frame) // len(lower))
+            if frame is holdout_predictions
+            else frame["lower_interval"]
+        )
+        frame.loc[:, "median_prediction"] = (
+            np.tile(median, len(frame) // len(median))
+            if frame is holdout_predictions
+            else frame["median_prediction"]
+        )
+        frame.loc[:, "upper_interval"] = (
+            np.tile(upper, len(frame) // len(upper))
+            if frame is holdout_predictions
+            else frame["upper_interval"]
+        )
     interval_lookup = interval_oof.set_index("forecast_origin_date")
-    oof_predictions["lower_interval"] = oof_predictions["forecast_origin_date"].map(interval_lookup["conformal_lower"])
-    oof_predictions["median_prediction"] = oof_predictions["forecast_origin_date"].map(interval_lookup["median"])
-    oof_predictions["upper_interval"] = oof_predictions["forecast_origin_date"].map(interval_lookup["conformal_upper"])
+    oof_predictions["lower_interval"] = oof_predictions["forecast_origin_date"].map(
+        interval_lookup["conformal_lower"]
+    )
+    oof_predictions["median_prediction"] = oof_predictions["forecast_origin_date"].map(
+        interval_lookup["median"]
+    )
+    oof_predictions["upper_interval"] = oof_predictions["forecast_origin_date"].map(
+        interval_lookup["conformal_upper"]
+    )
     validate_prediction_schema(oof_predictions)
     validate_prediction_schema(holdout_predictions)
 
@@ -2911,8 +3118,22 @@ def train_forecasting_models(
         },
         "data_fingerprint_sha256": prepared.data_fingerprint,
         "schema_fingerprint_sha256": prepared.schema_fingerprint,
+        "fingerprint_algorithm": "canonical-semantic-v1",
         "source_sha256": provenance["source_sha256"],
         "random_seed": selected.random_seed,
+        **git_metadata,
+        "training_configuration": {
+            "forecast_horizon_days": selected.horizon_days,
+            "holdout_fraction": selected.holdout_fraction,
+            "gap_days": selected.gap_days,
+            "cv_splits": selected.cv_splits,
+            "cv_validation_rows": selected.cv_test_size,
+            "maximum_missing_fraction": selected.maximum_missing_fraction,
+            "correlation_threshold": selected.correlation_threshold,
+            "capacity_reference": selected.capacity_reference,
+        },
+        "development_period": comparison["development"],
+        "holdout_period": comparison["holdout"],
         "library_versions": {
             "python": platform.python_version(),
             **{name: details["version"] for name, details in dependency_status().items()},

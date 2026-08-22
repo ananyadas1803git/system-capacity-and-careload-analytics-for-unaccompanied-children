@@ -1,16 +1,43 @@
 # System Capacity & Care Load Analytics for Unaccompanied Children
 
-![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.11%E2%80%933.13-3776AB?logo=python&logoColor=white)
 ![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B?logo=streamlit&logoColor=white)
 ![Plotly](https://img.shields.io/badge/Plotly-Interactive%20Charts-3F4F75?logo=plotly&logoColor=white)
 ![Starlette](https://img.shields.io/badge/Starlette-ASGI%20API-1B9AAA)
 ![Status](https://img.shields.io/badge/Status-Research%20Prototype-163B65)
+[![CI](https://github.com/ananyadas1803git/system-capacity-and-careload-analytics-for-unaccompanied-children/actions/workflows/ci.yml/badge.svg)](https://github.com/ananyadas1803git/system-capacity-and-careload-analytics-for-unaccompanied-children/actions/workflows/ci.yml)
 
 An end-to-end data engineering and analytics application for monitoring system capacity, care load, intake pressure, discharge performance, and backlog accumulation for unaccompanied children in CBP and HHS care.
 
 The project combines a production-style Python analytics backend, data-quality validation, feature engineering, KPI calculation, report generation, a multipage Streamlit dashboard, and an ASGI API.
 
 > **Important:** This project is an independent research and decision-support prototype. It is not an official HHS or CBP application, forecast, publication, or operational system.
+
+## Research Questions
+
+1. Can a model selected only from development-period evidence improve seven-day aggregate care-load forecasts over persistence?
+2. Does that improvement hold across expanding-window folds and an untouched chronological holdout?
+3. How does forecast error change across load, pressure, calendar, and data-quality regimes?
+
+## Key Findings
+
+- A development-selected ensemble (60% seven-day drift, 40% CatBoost) reduced walk-forward MAE from 188.139 for persistence to 115.547.
+- It passed the frozen-holdout gate with MAE 27.906 versus 37.547 for persistence, a 25.676% improvement.
+- Seven-day drift achieved a slightly lower holdout MAE of 26.869, but it did not replace the champion after holdout inspection; this preserves the predefined research protocol.
+- Error was larger in high-load and moderate net-intake regimes. Nominal-80% holdout intervals covered 100% with mean width 655.45, indicating conservative uncertainty.
+- These findings apply only to the included **unknown/unverified** aggregate source and do not establish real HHS operational validity.
+
+![Frozen holdout actual versus forecast](docs/assets/holdout_actual_vs_predicted.svg)
+
+[Data card](DATA_CARD.md) · [Model card](MODEL_CARD.md) · [Research report](reports/research_report.md) · [Reproducibility](REPRODUCIBILITY.md) · [Ethical use](docs/ETHICAL_USE.md)
+
+## Dashboard Preview
+
+| Capacity overview | Forecast methodology and provenance |
+|---|---|
+| ![Dashboard overview](docs/assets/screenshots/dashboard-overview.png) | ![Forecast research](docs/assets/screenshots/forecast-research.png) |
+
+![Forecast metrics and frozen holdout chart](docs/assets/screenshots/forecast-metrics.png)
 
 ---
 
@@ -82,6 +109,8 @@ This project transforms daily aggregate counts into validated, decision-support 
 ---
 
 ## System Architecture
+
+![Research analytics architecture](docs/assets/architecture.svg)
 
 ```mermaid
 flowchart LR
@@ -195,7 +224,7 @@ cd system-capacity-and-careload-analytics-for-unaccompanied-children
 ### 2. Create a virtual environment
 
 ```bash
-python3 -m venv .venv
+python3.13 -m venv .venv
 ```
 
 Activate it on macOS or Linux:
@@ -216,6 +245,30 @@ Activate it on Windows:
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
+
+Anaconda users can create the verified Python 3.13 environment instead:
+
+```bash
+conda env create -f environment.yml
+conda activate hhs-uac-analytics
+```
+
+For tests, linting, pre-commit, and reviewer-asset generation:
+
+```bash
+python -m pip install -r requirements-dev.txt
+pre-commit install
+```
+
+## Fast Reproducible Check
+
+```bash
+python main.py pipeline --quick --output-dir output/quick_pipeline --force
+python main.py pipeline
+python main.py monitor-model --no-write
+```
+
+Quick mode is a deterministic synthetic software smoke test. The default pipeline regenerates data stages and verifies approved artifacts without training. Full retraining is always explicit.
 
 ---
 
@@ -275,6 +328,11 @@ http://127.0.0.1:8000
 | `POST` | `/api/v1/analyze` | Analyze JSON records |
 | `POST` | `/api/v1/analyze/csv` | Analyze a CSV request body |
 | `POST` | `/api/v1/capacity-scenario` | Evaluate planning-capacity scenarios |
+| `GET` | `/api/v1/model` | Approved model registry and promotion metadata |
+| `GET` | `/api/v1/model/metrics` | Frozen evaluation and error-regime metrics |
+| `GET` | `/api/v1/model/provenance` | Dataset lineage, hashes, and leakage audit |
+| `GET` | `/api/v1/model/monitoring` | Offline performance, drift, and fallback status |
+| `GET` | `/api/v1/forecast` | Frozen champion holdout forecast by optional `as_of` date |
 
 Example health check:
 
@@ -356,6 +414,18 @@ Run the complete experiment from the repository root:
 python main.py train-models
 ```
 
+The unified reproducible command is:
+
+```bash
+python main.py pipeline
+```
+
+It verifies the raw-to-feature lineage and approved model artifacts without fitting. Deliberate full retraining uses:
+
+```bash
+python main.py pipeline --train --force
+```
+
 Regenerate only the dedicated multi-model artifacts intentionally with:
 
 ```bash
@@ -429,12 +499,12 @@ These values are read directly from the generated artifacts.
 | Seven-day drift | 132.004 | 70.873 | 237.625 | **26.869** | **32.780** | 0.716 | +28.438% |
 | Ridge | 261.521 | 134.478 | 412.376 | 88.894 | 101.592 | 2.368 | -136.756% |
 | Elastic Net | 282.108 | 150.752 | 487.894 | 89.856 | 102.910 | 2.393 | -139.317% |
-| ETS/Holt-Winters | 220.945 | 94.639 | 361.630 | 72.200 | 85.992 | 1.923 | -92.294% |
-| SARIMAX | 216.450 | 95.292 | 367.039 | 102.596 | 111.947 | 2.732 | -173.248% |
-| LightGBM | 162.206 | 115.259 | 348.899 | 41.047 | 51.533 | 1.093 | -9.322% |
+| ETS/Holt-Winters | 222.353 | 97.057 | 361.614 | 72.374 | 86.138 | 1.928 | -92.757% |
+| SARIMAX | 216.453 | 95.289 | 367.039 | 102.596 | 111.947 | 2.732 | -173.248% |
+| LightGBM | 157.927 | 113.208 | 348.445 | 32.834 | 42.350 | 0.874 | +12.552% |
 | CatBoost | 148.289 | 106.765 | 330.291 | 45.348 | 55.380 | 1.208 | -20.777% |
 | XGBoost | 166.646 | 123.234 | 374.019 | 35.834 | 47.353 | 0.954 | +4.561% |
-| SARIMAX + CatBoost residual hybrid | 269.158 | 214.760 | 572.062 | 111.982 | 122.167 | 2.982 | -198.248% |
+| SARIMAX + CatBoost residual hybrid | 264.994 | 217.408 | 572.091 | 111.988 | 122.171 | 2.983 | -198.262% |
 | Validation-weighted ensemble | **115.547** | **59.219** | **194.970** | 27.906 | 35.441 | **0.743** | **+25.676%** |
 
 The ensemble was selected using development OOF MAE and frozen at 60% seven-day
@@ -448,9 +518,9 @@ development-selected ensemble remains the honest champion under the predefined r
 ### Prediction intervals
 
 LightGBM quantile models generate 10th, 50th, and 90th percentile forecasts.
-Raw walk-forward coverage was 85.71%; a development-only split-conformal check
+Raw walk-forward coverage was 85.36%; a development-only split-conformal check
 covered 100.00% of its 56-row calibration-evaluation tail. Final holdout coverage
-was 100.00% with a mean width of 372.13 children. The raw crossing rate was 0%
+was 100.00% with a mean width of 655.45 children. The raw crossing rate was 0%
 for both development and holdout. These intervals are conservative and should
 not be interpreted as validated operational uncertainty bounds.
 
@@ -516,7 +586,7 @@ The following components have been tested successfully:
 - Data artifact generation
 - HTML and JSON report generation
 - All ASGI API endpoints
-- Twenty-three focused forecasting tests
+- Thirty focused forecasting, orchestration, monitoring, and API tests
 - Deterministic LightGBM and multi-model training with artifact generation
 
 Run the forecasting tests with:
@@ -524,6 +594,20 @@ Run the forecasting tests with:
 ```bash
 python -m unittest discover -s tests -v
 ```
+
+CI runs Ruff lint/format checks, the full test suite, quick end-to-end orchestration, approved-artifact verification, and monitoring on every pull request and push to `main` or `master`.
+
+---
+
+## Deployment
+
+Local containers:
+
+```bash
+docker compose up --build
+```
+
+The dashboard is available on port 8501 and the API on port 8000. The repository is also configured for Streamlit Community Cloud with `app/streamlit_app.py` as the entry point. No live deployment is claimed. See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for the complete checklist.
 
 ---
 
@@ -542,14 +626,11 @@ This project concerns a vulnerable population and should be interpreted carefull
 
 ## Future Enhancements
 
-- GitHub Actions continuous integration
-- Containerized deployment
 - Configurable capacity thresholds
 - Better-calibrated probabilistic intervals and regime-aware forecasting
-- Drift and data-freshness monitoring
 - Role-based dashboard access
 - Cloud-based scheduled ingestion
-- Model registry and experiment tracking
+- External experiment tracking and signed artifact storage
 
 ---
 

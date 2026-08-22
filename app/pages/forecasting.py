@@ -29,6 +29,9 @@ HOLDOUT_PATH = ARTIFACT_ROOT / "predictions" / "final_holdout_predictions.csv"
 FOLDS_PATH = ARTIFACT_ROOT / "metrics" / "fold_metrics.csv"
 IMPORTANCE_PATH = ARTIFACT_ROOT / "diagnostics" / "oof_permutation_importance.csv"
 REGIME_PATH = ARTIFACT_ROOT / "diagnostics" / "error_by_regime.csv"
+REGISTRY_PATH = ARTIFACT_ROOT / "models" / "model_registry.json"
+LEAKAGE_PATH = ARTIFACT_ROOT / "audits" / "leakage_audit.json"
+MONITORING_PATH = ARTIFACT_ROOT / "monitoring" / "monitoring_summary.json"
 
 NAVY = "#163B65"
 SLATE = "#3F5063"
@@ -80,6 +83,8 @@ def load_forecast_artifacts() -> dict[str, Any]:
         FOLDS_PATH,
         IMPORTANCE_PATH,
         REGIME_PATH,
+        REGISTRY_PATH,
+        LEAKAGE_PATH,
     )
     missing = [path for path in required if not path.is_file()]
     if missing:
@@ -96,6 +101,13 @@ def load_forecast_artifacts() -> dict[str, Any]:
     folds = pd.read_csv(FOLDS_PATH)
     importance = pd.read_csv(IMPORTANCE_PATH)
     regimes = pd.read_csv(REGIME_PATH)
+    registry = json.loads(REGISTRY_PATH.read_text(encoding="utf-8"))
+    leakage = json.loads(LEAKAGE_PATH.read_text(encoding="utf-8"))
+    monitoring = (
+        json.loads(MONITORING_PATH.read_text(encoding="utf-8"))
+        if MONITORING_PATH.is_file()
+        else None
+    )
     expected = {
         "target_date",
         "actual_value",
@@ -114,6 +126,9 @@ def load_forecast_artifacts() -> dict[str, Any]:
         "folds": folds,
         "importance": importance,
         "regimes": regimes,
+        "registry": registry,
+        "leakage": leakage,
+        "monitoring": monitoring,
     }
 
 
@@ -133,9 +148,7 @@ def comparison_table(metrics: dict[str, Any]) -> pd.DataFrame:
                 "Holdout MAE": holdout["mae"],
                 "Holdout RMSE": holdout["rmse"],
                 "Holdout MASE": holdout["mase_vs_persistence"],
-                "Improvement vs persistence (%)": holdout[
-                    "mae_improvement_vs_persistence_percent"
-                ],
+                "Improvement vs persistence (%)": holdout["mae_improvement_vs_persistence_percent"],
             }
         )
     return pd.DataFrame(rows).sort_values("Walk-forward MAE").reset_index(drop=True)
@@ -147,9 +160,9 @@ def render_forecast_chart(predictions: pd.DataFrame, champion: str) -> None:
     champion_rows = predictions.loc[predictions["model_name"] == champion].sort_values(
         "target_date"
     )
-    persistence = predictions.loc[
-        predictions["model_name"] == "persistence"
-    ].sort_values("target_date")
+    persistence = predictions.loc[predictions["model_name"] == "persistence"].sort_values(
+        "target_date"
+    )
     figure = go.Figure()
     figure.add_trace(
         go.Scatter(
@@ -246,13 +259,16 @@ def main() -> None:
     promotion = artifacts["promotion"]
     provenance = artifacts["provenance"]
     predictions = artifacts["predictions"]
+    registry = artifacts["registry"]
+    leakage = artifacts["leakage"]
+    monitoring = artifacts["monitoring"]
     champion = str(promotion["champion_model"])
     champion_metrics = metrics["models"][champion]
 
     st.markdown(
         f"""
         <div class="research-warning"><strong>Research output—not an official HHS
-        or CBP forecast.</strong> {provenance['generalization_warning']}</div>
+        or CBP forecast.</strong> {provenance["generalization_warning"]}</div>
         """,
         unsafe_allow_html=True,
     )
@@ -262,13 +278,37 @@ def main() -> None:
         f"{provenance['date_range']['end']} · No child-level or personal data"
     )
 
+    with st.expander("Reviewer summary and methodology", expanded=True):
+        left, right = st.columns(2)
+        with left:
+            st.markdown(
+                """
+                **Research question.** Can a forecast selected only from
+                development-period evidence improve seven-day aggregate care-load
+                prediction over persistence?
+
+                **Design.** The experiment predicts seven-day load change, uses five
+                expanding-window folds with seven-day gaps, freezes every
+                configuration and ensemble weight, then opens a 214-origin
+                chronological holdout as a promotion gate.
+                """
+            )
+        with right:
+            audit_status = "Passed" if leakage["passed"] else "Failed"
+            st.markdown(
+                f"""
+                - **Artifact version:** `{registry["registry_version"]}`
+                - **Source hash:** `{registry["source_sha256"][:16]}…`
+                - **Leakage audit:** {audit_status}
+                - **Selection rule:** {promotion["selection_rule"]}
+                """
+            )
+
     status_color = GREEN if promotion["passed"] else AMBER
     columns = st.columns(5)
-    columns[0].metric("Champion", champion.replace("_", " ").title())
-    columns[1].metric("Promotion", promotion["recommendation"].replace("_", " ").title())
-    columns[2].metric(
-        "Champion CV MAE", f"{champion_metrics['walk_forward']['mean_mae']:,.2f}"
-    )
+    columns[0].metric("Champion type", "Blend")
+    columns[1].metric("Promotion gates", "Passed" if promotion["passed"] else "Failed")
+    columns[2].metric("Champion CV MAE", f"{champion_metrics['walk_forward']['mean_mae']:,.2f}")
     columns[3].metric("Champion holdout MAE", f"{champion_metrics['holdout']['mae']:,.2f}")
     columns[4].metric("Holdout rows", f"{metrics['holdout']['rows']:,}")
     st.markdown(
@@ -277,16 +317,30 @@ def main() -> None:
         unsafe_allow_html=True,
     )
 
+    if monitoring:
+        st.caption(
+            "Offline monitor · "
+            f"status: {monitoring['model_status']} · "
+            f"active model: {monitoring['active_model'].replace('_', ' ')} · "
+            f"30-day MAE: {monitoring['metrics']['rolling_mae']:.2f} · "
+            f"persistence MAE: {monitoring['metrics']['rolling_persistence_mae']:.2f} · "
+            f"input drift flag: {monitoring['metrics']['input_drift_flag']}"
+        )
+
     render_forecast_chart(predictions, champion)
 
-    comparison_tab, folds_tab, importance_tab, regimes_tab = st.tabs(
-        ["Model Comparison", "Walk-Forward Folds", "Feature Importance", "Error by Regime"]
+    comparison_tab, folds_tab, importance_tab, regimes_tab, limitations_tab = st.tabs(
+        [
+            "Model Comparison",
+            "Walk-Forward Folds",
+            "Feature Importance",
+            "Error by Regime",
+            "Uncertainty & Limitations",
+        ]
     )
     with comparison_tab:
         table = comparison_table(metrics)
-        st.dataframe(
-            table.style.format(precision=3), width="stretch", hide_index=True
-        )
+        st.dataframe(table.style.format(precision=3), width="stretch", hide_index=True)
         chart = px.bar(
             table,
             x="Model",
@@ -342,6 +396,25 @@ def main() -> None:
         )
         st.plotly_chart(regime_chart, width="stretch")
         st.dataframe(view, width="stretch", hide_index=True)
+    with limitations_tab:
+        st.markdown(
+            """
+            **Uncertainty interpretation.** The displayed band comes from
+            LightGBM quantile models calibrated using development evidence. Wide
+            bands and unusually high holdout coverage indicate conservative
+            uncertainty, not validated operational certainty.
+
+            **Known limitations**
+
+            - The source file has no recorded authoritative publisher URL,
+              retrieval timestamp, license, or external signature.
+            - 355 dates and 1,775 numeric values were imputed in preprocessing.
+            - One aggregate series cannot represent facilities, geography,
+              staffing, case complexity, policy shifts, or child-welfare outcomes.
+            - Feature importance is predictive and conditional, never causal.
+            - Forecasts are frozen research evaluations, not live predictions.
+            """
+        )
 
     st.divider()
     st.caption(

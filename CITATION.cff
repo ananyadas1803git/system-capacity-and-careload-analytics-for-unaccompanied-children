@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this research software, please cite the repository and version."
+type: software
+title: "System Capacity & Care Load Analytics for Unaccompanied Children"
+version: 2.0.0
+authors:
+  - family-names: Das
+    given-names: Ananya
+repository-code: "https://github.com/ananyadas1803git/system-capacity-and-careload-analytics-for-unaccompanied-children"
+url: "https://github.com/ananyadas1803git/system-capacity-and-careload-analytics-for-unaccompanied-children"
+abstract: >-
+  Reproducible aggregate care-load analytics, leakage-safe seven-day forecasting,
+  monitoring, API serving, and Streamlit decision-support visualizations.
+keywords:
+  - time-series forecasting
+  - data engineering
+  - model monitoring
+  - Streamlit
+  - reproducible research

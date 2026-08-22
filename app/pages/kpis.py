@@ -168,11 +168,7 @@ def aggregate_for_chart(metrics: pd.DataFrame, granularity: str) -> pd.DataFrame
     if granularity == "Daily":
         return metrics.copy()
 
-    frequency = (
-        pd.offsets.Week(weekday=6)
-        if granularity == "Weekly"
-        else pd.offsets.MonthEnd()
-    )
+    frequency = pd.offsets.Week(weekday=6) if granularity == "Weekly" else pd.offsets.MonthEnd()
     last_columns = [
         CBP_COLUMN,
         HHS_COLUMN,
@@ -235,9 +231,7 @@ def comparison_values(
     )
     current_backlog = longest_positive_streak(current[NET_INTAKE_COLUMN])
     previous_backlog = longest_positive_streak(previous[NET_INTAKE_COLUMN])
-    current_offset = float(
-        current[DISCHARGE_COLUMN].sum() / (current[TRANSFER_COLUMN].sum() + 1)
-    )
+    current_offset = float(current[DISCHARGE_COLUMN].sum() / (current[TRANSFER_COLUMN].sum() + 1))
     previous_offset = float(
         previous[DISCHARGE_COLUMN].sum() / (previous[TRANSFER_COLUMN].sum() + 1)
     )
@@ -277,15 +271,9 @@ def build_kpi_summary(metrics: pd.DataFrame, kpis: dict[str, float | int]) -> pd
         {
             "KPI": "Care Load Volatility Index",
             "Latest": float(kpis["care_load_volatility_index"]),
-            "Period Average": float(
-                metrics[ROLLING_VOLATILITY_COLUMN].mean(skipna=True)
-            ),
-            "Period Minimum": float(
-                metrics[ROLLING_VOLATILITY_COLUMN].min(skipna=True)
-            ),
-            "Period Maximum": float(
-                metrics[ROLLING_VOLATILITY_COLUMN].max(skipna=True)
-            ),
+            "Period Average": float(metrics[ROLLING_VOLATILITY_COLUMN].mean(skipna=True)),
+            "Period Minimum": float(metrics[ROLLING_VOLATILITY_COLUMN].min(skipna=True)),
+            "Period Maximum": float(metrics[ROLLING_VOLATILITY_COLUMN].max(skipna=True)),
             "Unit": "%",
         },
         {
@@ -465,9 +453,7 @@ def render_volatility_backlog_chart(
         ),
         secondary_y=True,
     )
-    figure.update_layout(
-        **chart_layout("Volatility & Backlog Accumulation", "Volatility (%)")
-    )
+    figure.update_layout(**chart_layout("Volatility & Backlog Accumulation", "Volatility (%)"))
     figure.update_yaxes(title_text="Volatility (%)", ticksuffix="%", secondary_y=False)
     figure.update_yaxes(
         title_text="Consecutive backlog days",
@@ -553,9 +539,7 @@ def render_validation_log(selected_data: pd.DataFrame) -> None:
             st.warning("Anomaly fields are unavailable: " + ", ".join(missing))
             return
 
-        flagged = selected_data.loc[
-            selected_data[anomaly_columns].fillna(False).any(axis=1)
-        ]
+        flagged = selected_data.loc[selected_data[anomaly_columns].fillna(False).any(axis=1)]
         if flagged.empty:
             st.success("No logical constraint violations were found in this period.")
             return
@@ -656,9 +640,7 @@ def main() -> None:
         st.error("The reporting-period start must be on or before the end.")
         st.stop()
 
-    selected_data = cleaned_data.loc[
-        pd.Timestamp(start_date):pd.Timestamp(end_date)
-    ].copy()
+    selected_data = cleaned_data.loc[pd.Timestamp(start_date) : pd.Timestamp(end_date)].copy()
     if selected_data.empty:
         st.warning("No data is available for the selected reporting period.")
         st.stop()

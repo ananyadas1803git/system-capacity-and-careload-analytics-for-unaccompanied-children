@@ -1,5 +1,5 @@
 # Reproducible runtime dependencies for the dashboard, API, and analytics stack.
-# Supported Python version: 3.11 or newer.
+# Supported Python versions: 3.11 through 3.13 (CatBoost 1.2.8 has no Python 3.14 wheel).
 lightgbm==4.7.0
 catboost==1.2.8
 joblib==1.5.3

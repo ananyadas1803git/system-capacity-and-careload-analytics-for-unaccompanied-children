@@ -1,0 +1,32 @@
+{
+  "model_version": "2.0.0",
+  "configured_champion": "validation_weighted_ensemble",
+  "active_model": "validation_weighted_ensemble",
+  "model_status": "approved",
+  "reason": "Promoted model is available and within the rolling performance threshold.",
+  "evaluated_at_utc": "2026-08-22T12:12:02.919643+00:00",
+  "metrics": {
+    "rolling_window": 30,
+    "rolling_mae": 23.84437415175392,
+    "rolling_persistence_mae": 31.4,
+    "rolling_mase": 0.7593749729857937,
+    "interval_coverage_percent": 100.0,
+    "missing_feature_rate_percent": 0.0,
+    "imputation_rate_percent": 33.33333333333333,
+    "input_distribution_psi": 5.438124583542055,
+    "residual_standardized_mean_shift": 0.2915361845730697,
+    "input_drift_flag": true,
+    "residual_drift_flag": false,
+    "performance_degraded": false
+  },
+  "latest_forecast": {
+    "forecast_origin": "2025-12-14T00:00:00",
+    "target_date": "2025-12-21T00:00:00",
+    "prediction": 2559.67185416967,
+    "lower_interval": 2133.266525446349,
+    "median_prediction": 2538.4813077518575,
+    "upper_interval": 2805.00075236107,
+    "actual": 2502.0
+  },
+  "event": null
+}

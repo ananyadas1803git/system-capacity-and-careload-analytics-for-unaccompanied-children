@@ -150,9 +150,7 @@ def validate_page_registry() -> None:
 
     missing = [str(page.path) for page in PAGE_DEFINITIONS if not page.path.is_file()]
     if missing:
-        raise PageRegistryError(
-            "Registered page files are missing: " + ", ".join(missing)
-        )
+        raise PageRegistryError("Registered page files are missing: " + ", ".join(missing))
 
 
 __all__ = [

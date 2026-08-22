@@ -162,9 +162,7 @@ def recent_period_change(metrics: pd.DataFrame, window_days: int) -> float:
 
     effective_window = min(window_days, max(1, len(loads) // 2))
     current_mean = float(loads.iloc[-effective_window:].mean())
-    previous_mean = float(
-        loads.iloc[-2 * effective_window : -effective_window].mean()
-    )
+    previous_mean = float(loads.iloc[-2 * effective_window : -effective_window].mean())
     return safe_percentage_change(previous_mean, current_mean)
 
 
@@ -173,11 +171,7 @@ def aggregate_for_chart(metrics: pd.DataFrame, granularity: str) -> pd.DataFrame
     if granularity == "Daily":
         return metrics.copy()
 
-    frequency = (
-        pd.offsets.Week(weekday=6)
-        if granularity == "Weekly"
-        else pd.offsets.MonthEnd()
-    )
+    frequency = pd.offsets.Week(weekday=6) if granularity == "Weekly" else pd.offsets.MonthEnd()
     stock_columns = [
         CBP_COLUMN,
         HHS_COLUMN,
@@ -219,9 +213,15 @@ def build_risk_signals(metrics: pd.DataFrame) -> pd.DataFrame:
     records: list[dict[str, object]] = []
     for reporting_date, row in metrics.iterrows():
         signals: list[str] = []
-        row_load = float(pd.to_numeric(pd.Series([row[TOTAL_LOAD_COLUMN]]), errors="coerce").fillna(0).iloc[0])
-        row_pressure = float(pd.to_numeric(pd.Series([row[NET_INTAKE_COLUMN]]), errors="coerce").fillna(0).iloc[0])
-        row_growth = float(pd.to_numeric(pd.Series([row[GROWTH_RATE_COLUMN]]), errors="coerce").fillna(0).iloc[0])
+        row_load = float(
+            pd.to_numeric(pd.Series([row[TOTAL_LOAD_COLUMN]]), errors="coerce").fillna(0).iloc[0]
+        )
+        row_pressure = float(
+            pd.to_numeric(pd.Series([row[NET_INTAKE_COLUMN]]), errors="coerce").fillna(0).iloc[0]
+        )
+        row_growth = float(
+            pd.to_numeric(pd.Series([row[GROWTH_RATE_COLUMN]]), errors="coerce").fillna(0).iloc[0]
+        )
 
         if row_load >= load_threshold:
             signals.append("High system load")
@@ -327,11 +327,7 @@ def render_insight_cards(
     """Render four plain-language, evidence-based analytical observations."""
     latest_load = int(metrics[TOTAL_LOAD_COLUMN].iloc[-1])
     load_class = (
-        "insight-warning"
-        if recent_change > 1
-        else "insight-positive"
-        if recent_change < -1
-        else ""
+        "insight-warning" if recent_change > 1 else "insight-positive" if recent_change < -1 else ""
     )
     load_direction = (
         "increased" if recent_change > 0 else "decreased" if recent_change < 0 else "held steady"
@@ -447,17 +443,13 @@ def render_flow_chart(chart_data: pd.DataFrame, granularity: str) -> None:
             x=chart_data.index,
             y=chart_data[NET_INTAKE_COLUMN],
             name="Net intake",
-            marker_color=np.where(
-                chart_data[NET_INTAKE_COLUMN].gt(0), RED, GREEN
-            ),
+            marker_color=np.where(chart_data[NET_INTAKE_COLUMN].gt(0), RED, GREEN),
             opacity=0.35,
             hovertemplate="%{y:+,.0f}<extra></extra>",
         )
     )
     figure.add_hline(y=0, line_color=SLATE_500, line_width=1)
-    figure.update_layout(
-        **chart_layout(f"Transfer–Discharge Drivers ({granularity})", "Children")
-    )
+    figure.update_layout(**chart_layout(f"Transfer–Discharge Drivers ({granularity})", "Children"))
     st.plotly_chart(figure, width="stretch", config={"displaylogo": False})
 
 
@@ -514,9 +506,7 @@ def render_risk_timeline(metrics: pd.DataFrame, risk_signals: pd.DataFrame) -> N
             ("Watch", AMBER, 8),
             ("Critical", RED, 11),
         ):
-            subset = risk_signals.loc[
-                risk_signals["Severity"].astype("string").eq(severity)
-            ]
+            subset = risk_signals.loc[risk_signals["Severity"].astype("string").eq(severity)]
             if subset.empty:
                 continue
             figure.add_trace(
@@ -533,9 +523,7 @@ def render_risk_timeline(metrics: pd.DataFrame, risk_signals: pd.DataFrame) -> N
                     ),
                 )
             )
-    figure.update_layout(
-        **chart_layout("System Load Screening Signals", "Children under care")
-    )
+    figure.update_layout(**chart_layout("System Load Screening Signals", "Children under care"))
     figure.update_yaxes(rangemode="tozero")
     st.plotly_chart(figure, width="stretch", config={"displaylogo": False})
 
@@ -552,9 +540,7 @@ def render_validation_log(selected_data: pd.DataFrame) -> None:
             st.warning("Anomaly fields are unavailable: " + ", ".join(missing))
             return
 
-        flagged = selected_data.loc[
-            selected_data[anomaly_columns].fillna(False).any(axis=1)
-        ]
+        flagged = selected_data.loc[selected_data[anomaly_columns].fillna(False).any(axis=1)]
         if flagged.empty:
             st.success("No logical constraint violations were found in this period.")
             return
@@ -649,9 +635,7 @@ def main() -> None:
         st.error("The reporting-period start must be on or before the end.")
         st.stop()
 
-    selected_data = cleaned_data.loc[
-        pd.Timestamp(start_date):pd.Timestamp(end_date)
-    ].copy()
+    selected_data = cleaned_data.loc[pd.Timestamp(start_date) : pd.Timestamp(end_date)].copy()
     if selected_data.empty:
         st.warning("No data is available for the selected reporting period.")
         st.stop()
@@ -673,13 +657,13 @@ def main() -> None:
     recent_change = recent_period_change(daily_metrics, comparison_days)
     cumulative_net_intake = int(daily_metrics[NET_INTAKE_COLUMN].sum())
     average_offset_ratio = float(
-        daily_metrics[DISCHARGE_COLUMN].sum()
-        / (daily_metrics[TRANSFER_COLUMN].sum() + 1)
+        daily_metrics[DISCHARGE_COLUMN].sum() / (daily_metrics[TRANSFER_COLUMN].sum() + 1)
     )
     anomaly_count = int(
-        selected_data[
-            [TRANSFER_ANOMALY_COLUMN, DISCHARGE_ANOMALY_COLUMN]
-        ].fillna(False).any(axis=1).sum()
+        selected_data[[TRANSFER_ANOMALY_COLUMN, DISCHARGE_ANOMALY_COLUMN]]
+        .fillna(False)
+        .any(axis=1)
+        .sum()
     )
 
     st.caption(
@@ -752,9 +736,7 @@ def main() -> None:
                 display,
                 width="stretch",
                 hide_index=True,
-                column_config={
-                    "Growth Rate (%)": st.column_config.NumberColumn(format="%.2f%%")
-                },
+                column_config={"Growth Rate (%)": st.column_config.NumberColumn(format="%.2f%%")},
             )
             st.download_button(
                 "Download risk signal log",

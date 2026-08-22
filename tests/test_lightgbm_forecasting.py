@@ -179,9 +179,7 @@ class LightGBMForecastingTests(unittest.TestCase):
             result = train_lightgbm_forecast(config)
 
             validate_artifact_schemas(result.predictions, result.feature_importance)
-            self.assertEqual(
-                tuple(result.predictions.columns), PREDICTION_ARTIFACT_COLUMNS
-            )
+            self.assertEqual(tuple(result.predictions.columns), PREDICTION_ARTIFACT_COLUMNS)
             self.assertEqual(
                 tuple(result.feature_importance.columns),
                 IMPORTANCE_ARTIFACT_COLUMNS,

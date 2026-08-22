@@ -174,9 +174,7 @@ def _prepare_daily_metrics(data: pd.DataFrame) -> pd.DataFrame:
             frame[DATE_COLUMN] = dates
             frame = frame.set_index(DATE_COLUMN)
         elif not isinstance(frame.index, pd.DatetimeIndex):
-            raise VisualizationError(
-                "Metric input must provide Date as a column or DatetimeIndex."
-            )
+            raise VisualizationError("Metric input must provide Date as a column or DatetimeIndex.")
         frame.index = pd.DatetimeIndex(frame.index, name=DATE_COLUMN)
         if frame.index.has_duplicates:
             raise VisualizationError("Metric input contains duplicate reporting dates.")
@@ -443,8 +441,7 @@ def _net_intake_backlog_figure(prepared: VisualizationData) -> go.Figure:
             marker={"color": colors, "line": {"width": 0}},
             customdata=np.where(values.gt(0), "Pressure", "Relief"),
             hovertemplate=(
-                "%{x|%b %d, %Y}<br>Net intake: %{y:+,.0f}<br>"
-                "State: %{customdata}<extra></extra>"
+                "%{x|%b %d, %Y}<br>Net intake: %{y:+,.0f}<br>State: %{customdata}<extra></extra>"
             ),
         ),
         secondary_y=False,
@@ -684,15 +681,10 @@ def create_validation_summary_chart(
     ]
     colors = [palette.red, "#D64545", palette.amber, palette.blue]
     counts = [
-        sum(item.severity is severity for item in result.report.findings)
-        for severity in severities
+        sum(item.severity is severity for item in result.report.findings) for severity in severities
     ]
     affected = [
-        sum(
-            item.affected_rows
-            for item in result.report.findings
-            if item.severity is severity
-        )
+        sum(item.affected_rows for item in result.report.findings if item.severity is severity)
         for severity in severities
     ]
     figure = go.Figure(

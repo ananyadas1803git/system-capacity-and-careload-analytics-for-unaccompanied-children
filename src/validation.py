@@ -88,10 +88,7 @@ class ValidationConfig:
             raise ValueError("metric_absolute_tolerance must be non-negative.")
         if self.metric_relative_tolerance < 0:
             raise ValueError("metric_relative_tolerance must be non-negative.")
-        if (
-            self.outlier_robust_z_threshold is not None
-            and self.outlier_robust_z_threshold <= 0
-        ):
+        if self.outlier_robust_z_threshold is not None and self.outlier_robust_z_threshold <= 0:
             raise ValueError("outlier_robust_z_threshold must be positive or None.")
         if self.maximum_rows < 1 or self.maximum_flagged_rows < 1:
             raise ValueError("Row limits must be positive integers.")
@@ -266,9 +263,7 @@ class DatasetValidationResult:
 
     def raise_for_errors(self, *, include_warnings: bool = False) -> None:
         """Raise when the result violates the requested strictness level."""
-        failed = not self.report.is_valid or (
-            include_warnings and self.report.warning_count > 0
-        )
+        failed = not self.report.is_valid or (include_warnings and self.report.warning_count > 0)
         if failed:
             raise DatasetValidationError(
                 f"Dataset validation {self.report.status.lower()}: "
@@ -287,9 +282,7 @@ def _parse_dates(values: pd.Series) -> pd.Series:
     try:
         parsed = pd.to_datetime(values, format="mixed", errors="coerce", utc=True)
     except (TypeError, ValueError):
-        parsed = values.apply(
-            lambda value: pd.to_datetime(value, errors="coerce", utc=True)
-        )
+        parsed = values.apply(lambda value: pd.to_datetime(value, errors="coerce", utc=True))
     parsed = parsed.dt.tz_convert(None)
     return parsed.dt.normalize()
 
@@ -360,8 +353,7 @@ class CapacityDataValidator:
             raise TypeError("data must be a pandas DataFrame.")
         if len(data) > self.config.maximum_rows:
             raise DatasetValidationError(
-                f"Dataset contains {len(data):,} rows; limit is "
-                f"{self.config.maximum_rows:,}."
+                f"Dataset contains {len(data):,} rows; limit is {self.config.maximum_rows:,}."
             )
 
         report = DatasetValidationReport(
@@ -404,9 +396,7 @@ class CapacityDataValidator:
             )
             return DatasetValidationResult(report, pd.DataFrame())
 
-        missing_columns = [
-            column for column in REQUIRED_COLUMNS if column not in canonical_map
-        ]
+        missing_columns = [column for column in REQUIRED_COLUMNS if column not in canonical_map]
         if missing_columns:
             report.add(
                 ValidationSeverity.CRITICAL,
@@ -420,9 +410,11 @@ class CapacityDataValidator:
         renamed = original.rename(
             columns={source: canonical for canonical, source in canonical_map.items()}
         )
-        empty_mask = renamed[REQUIRED_COLUMNS].apply(
-            lambda column: column.isna() | column.astype("string").str.strip().eq("")
-        ).all(axis=1)
+        empty_mask = (
+            renamed[REQUIRED_COLUMNS]
+            .apply(lambda column: column.isna() | column.astype("string").str.strip().eq(""))
+            .all(axis=1)
+        )
         if empty_mask.any():
             count = int(empty_mask.sum())
             report.add(
@@ -444,9 +436,7 @@ class CapacityDataValidator:
                 "Reporting dates contain unparseable values.",
                 affected_rows=int(invalid_dates.sum()),
                 columns=(DATE_COLUMN,),
-                examples=tuple(
-                    renamed.loc[invalid_dates, DATE_COLUMN].astype(str).head(3)
-                ),
+                examples=tuple(renamed.loc[invalid_dates, DATE_COLUMN].astype(str).head(3)),
             )
             flag_rows("INVALID_DATES", invalid_dates)
 
@@ -455,9 +445,7 @@ class CapacityDataValidator:
         if not valid_dates.empty:
             report.reporting_start = valid_dates.min().date().isoformat()
             report.reporting_end = valid_dates.max().date().isoformat()
-            report.expected_daily_rows = int(
-                (valid_dates.max() - valid_dates.min()).days + 1
-            )
+            report.expected_daily_rows = int((valid_dates.max() - valid_dates.min()).days + 1)
 
             chronological = valid_dates.reset_index(drop=True).is_monotonic_increasing
             if not chronological:
@@ -478,10 +466,7 @@ class CapacityDataValidator:
                     affected_rows=int(duplicate_dates.sum()),
                     columns=(DATE_COLUMN,),
                     examples=tuple(
-                        dates.loc[duplicate_dates]
-                        .dt.date.astype(str)
-                        .drop_duplicates()
-                        .head(3)
+                        dates.loc[duplicate_dates].dt.date.astype(str).drop_duplicates().head(3)
                     ),
                 )
                 flag_rows("DUPLICATE_DATES", duplicate_dates)
@@ -509,9 +494,7 @@ class CapacityDataValidator:
             values, invalid = _numeric_values(renamed[column])
             numeric[column] = values
             missing = values.isna() & ~invalid & ~empty_mask
-            nonfinite = pd.Series(
-                np.isinf(values.astype(float).fillna(0)), index=values.index
-            )
+            nonfinite = pd.Series(np.isinf(values.astype(float).fillna(0)), index=values.index)
             fractional = values.notna() & values.mod(1).abs().gt(1e-9)
             negative = values.lt(0).fillna(False)
 
@@ -685,13 +668,11 @@ class CapacityDataValidator:
         expected: dict[str, pd.Series] = {
             TOTAL_LOAD_COLUMN: numeric[CBP_COLUMN] + numeric[HHS_COLUMN],
             NET_INTAKE_COLUMN: numeric[TRANSFER_COLUMN] - numeric[DISCHARGE_COLUMN],
-            OFFSET_RATIO_COLUMN: numeric[DISCHARGE_COLUMN].div(
-                numeric[TRANSFER_COLUMN] + 1
-            ),
+            OFFSET_RATIO_COLUMN: numeric[DISCHARGE_COLUMN].div(numeric[TRANSFER_COLUMN] + 1),
         }
-        ordered = pd.DataFrame(
-            {"Date": dates, "load": expected[TOTAL_LOAD_COLUMN]}
-        ).sort_values("Date", kind="stable")
+        ordered = pd.DataFrame({"Date": dates, "load": expected[TOTAL_LOAD_COLUMN]}).sort_values(
+            "Date", kind="stable"
+        )
         growth = ordered["load"].pct_change(fill_method=None).mul(100)
         expected[GROWTH_RATE_COLUMN] = growth.reindex(ordered.index).reindex(frame.index)
 
@@ -704,9 +685,7 @@ class CapacityDataValidator:
             ordered_load.rolling(14, min_periods=1).mean().reindex(frame.index)
         )
         ordered_net = expected[NET_INTAKE_COLUMN].loc[date_order]
-        expected[BACKLOG_STREAK_COLUMN] = _expected_backlog_streak(ordered_net).reindex(
-            frame.index
-        )
+        expected[BACKLOG_STREAK_COLUMN] = _expected_backlog_streak(ordered_net).reindex(frame.index)
 
         for column, expected_values in expected.items():
             if column not in frame.columns:
@@ -736,12 +715,16 @@ class CapacityDataValidator:
         ordered_index = dates.sort_values(kind="stable").index
         cbp = numeric[CBP_COLUMN].loc[ordered_index]
         hhs = numeric[HHS_COLUMN].loc[ordered_index]
-        expected_cbp = cbp.shift(1) + numeric[INTAKE_COLUMN].loc[ordered_index] - numeric[
-            TRANSFER_COLUMN
-        ].loc[ordered_index]
-        expected_hhs = hhs.shift(1) + numeric[TRANSFER_COLUMN].loc[ordered_index] - numeric[
-            DISCHARGE_COLUMN
-        ].loc[ordered_index]
+        expected_cbp = (
+            cbp.shift(1)
+            + numeric[INTAKE_COLUMN].loc[ordered_index]
+            - numeric[TRANSFER_COLUMN].loc[ordered_index]
+        )
+        expected_hhs = (
+            hhs.shift(1)
+            + numeric[TRANSFER_COLUMN].loc[ordered_index]
+            - numeric[DISCHARGE_COLUMN].loc[ordered_index]
+        )
         for code, residual, columns in (
             (
                 "CBP_STOCK_FLOW_RESIDUAL",

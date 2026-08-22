@@ -63,12 +63,8 @@ class ValidationReport:
 
     issues: list[ValidationIssue] = field(default_factory=list)
 
-    def add(
-        self, severity: str, code: str, message: str, affected_rows: int = 0
-    ) -> None:
-        self.issues.append(
-            ValidationIssue(severity, code, message, int(affected_rows))
-        )
+    def add(self, severity: str, code: str, message: str, affected_rows: int = 0) -> None:
+        self.issues.append(ValidationIssue(severity, code, message, int(affected_rows)))
 
     @property
     def error_count(self) -> int:
@@ -236,9 +232,7 @@ def validate_and_prepare_data(
     normalized_names = {_canonical_column_name(name): name for name in frame.columns}
     missing_columns = [name for name in REQUIRED_COLUMNS if name not in normalized_names]
     if missing_columns:
-        raise DataValidationError(
-            "Missing required column(s): " + ", ".join(missing_columns)
-        )
+        raise DataValidationError("Missing required column(s): " + ", ".join(missing_columns))
     frame = frame.rename(
         columns={original: canonical for canonical, original in normalized_names.items()}
     )[REQUIRED_COLUMNS]
@@ -283,12 +277,7 @@ def validate_and_prepare_data(
         )
 
     for column in NUMERIC_COLUMNS:
-        cleaned = (
-            frame[column]
-            .astype("string")
-            .str.replace(",", "", regex=False)
-            .str.strip()
-        )
+        cleaned = frame[column].astype("string").str.replace(",", "", regex=False).str.strip()
         cleaned = cleaned.mask(cleaned.eq(""), pd.NA)
         converted = pd.to_numeric(cleaned, errors="coerce")
         invalid_numeric = cleaned.notna() & converted.isna()
@@ -340,9 +329,7 @@ def validate_and_prepare_data(
 
     # Stocks are state variables and can be interpolated over time.  Flow values on
     # inserted dates are not observed, so zero is the least-assumptive placeholder.
-    frame[STOCK_COLUMNS] = frame[STOCK_COLUMNS].interpolate(
-        method="time", limit_direction="both"
-    )
+    frame[STOCK_COLUMNS] = frame[STOCK_COLUMNS].interpolate(method="time", limit_direction="both")
     frame[FLOW_COLUMNS] = frame[FLOW_COLUMNS].fillna(0)
     frame[NUMERIC_COLUMNS] = frame[NUMERIC_COLUMNS].fillna(0).round().astype("int64")
 
@@ -431,12 +418,8 @@ def validate_and_clean_data(raw_data: pd.DataFrame) -> pd.DataFrame:
 
     cleaned.index = pd.DatetimeIndex(cleaned.index, name=DATE_COLUMN)
     cleaned = cleaned.sort_index()
-    cleaned[TRANSFER_ANOMALY_COLUMN] = cleaned[
-        TRANSFER_ANOMALY_COLUMN
-    ].fillna(False).astype(bool)
-    cleaned[DISCHARGE_ANOMALY_COLUMN] = cleaned[
-        DISCHARGE_ANOMALY_COLUMN
-    ].fillna(False).astype(bool)
+    cleaned[TRANSFER_ANOMALY_COLUMN] = cleaned[TRANSFER_ANOMALY_COLUMN].fillna(False).astype(bool)
+    cleaned[DISCHARGE_ANOMALY_COLUMN] = cleaned[DISCHARGE_ANOMALY_COLUMN].fillna(False).astype(bool)
     cleaned.attrs["validation_report"] = report
     return cleaned
 
@@ -455,9 +438,7 @@ def calculate_metrics(prepared_data: pd.DataFrame) -> pd.DataFrame:
     )
     frame[ROLLING_7_COLUMN] = frame[TOTAL_LOAD_COLUMN].rolling(7, min_periods=1).mean()
     frame[ROLLING_14_COLUMN] = frame[TOTAL_LOAD_COLUMN].rolling(14, min_periods=1).mean()
-    frame[OFFSET_RATIO_COLUMN] = frame[DISCHARGE_COLUMN].div(
-        frame[TRANSFER_COLUMN].fillna(0) + 1
-    )
+    frame[OFFSET_RATIO_COLUMN] = frame[DISCHARGE_COLUMN].div(frame[TRANSFER_COLUMN].fillna(0) + 1)
 
     # Count each run of positive net intake and reset to zero on non-positive days.
     positive = frame[NET_INTAKE_COLUMN].gt(0)
@@ -499,23 +480,21 @@ def compute_capacity_metrics(cleaned_data: pd.DataFrame) -> pd.DataFrame:
     else:
         working = cleaned_data.copy()
 
-    missing = [column for column in [CBP_COLUMN, TRANSFER_COLUMN, HHS_COLUMN, DISCHARGE_COLUMN] if column not in working.columns]
+    missing = [
+        column
+        for column in [CBP_COLUMN, TRANSFER_COLUMN, HHS_COLUMN, DISCHARGE_COLUMN]
+        if column not in working.columns
+    ]
     if missing:
-        raise DataValidationError(
-            "Missing metric input column(s): " + ", ".join(missing)
-        )
+        raise DataValidationError("Missing metric input column(s): " + ", ".join(missing))
 
     result = calculate_metrics(working)
     # Guard explicitly against division by zero and corrupt infinite values.
-    result[GROWTH_RATE_COLUMN] = pd.to_numeric(
-        result[GROWTH_RATE_COLUMN], errors="coerce"
-    ).replace([np.inf, -np.inf], np.nan)
-    result[ROLLING_7_COLUMN] = result[ROLLING_7_COLUMN].fillna(
-        result[TOTAL_LOAD_COLUMN]
+    result[GROWTH_RATE_COLUMN] = pd.to_numeric(result[GROWTH_RATE_COLUMN], errors="coerce").replace(
+        [np.inf, -np.inf], np.nan
     )
-    result[ROLLING_14_COLUMN] = result[ROLLING_14_COLUMN].fillna(
-        result[TOTAL_LOAD_COLUMN]
-    )
+    result[ROLLING_7_COLUMN] = result[ROLLING_7_COLUMN].fillna(result[TOTAL_LOAD_COLUMN])
+    result[ROLLING_14_COLUMN] = result[ROLLING_14_COLUMN].fillna(result[TOTAL_LOAD_COLUMN])
 
     if was_date_indexed:
         result = result.set_index(DATE_COLUMN)
@@ -556,9 +535,7 @@ def calculate_kpis(analytics_data: pd.DataFrame) -> dict[str, float | int]:
     ]
     missing = [column for column in required_metrics if column not in analytics_data.columns]
     if missing:
-        raise DataValidationError(
-            "Missing KPI input column(s): " + ", ".join(missing)
-        )
+        raise DataValidationError("Missing KPI input column(s): " + ", ".join(missing))
 
     latest = analytics_data.iloc[-1]
     growth = (
@@ -568,7 +545,9 @@ def calculate_kpis(analytics_data: pd.DataFrame) -> dict[str, float | int]:
     )
     volatility = float(growth.std(ddof=0)) if not growth.empty else 0.0
     latest_transfers = pd.to_numeric(pd.Series([latest[TRANSFER_COLUMN]]), errors="coerce").iloc[0]
-    latest_discharges = pd.to_numeric(pd.Series([latest[DISCHARGE_COLUMN]]), errors="coerce").iloc[0]
+    latest_discharges = pd.to_numeric(pd.Series([latest[DISCHARGE_COLUMN]]), errors="coerce").iloc[
+        0
+    ]
     latest_transfers = 0.0 if pd.isna(latest_transfers) else float(latest_transfers)
     latest_discharges = 0.0 if pd.isna(latest_discharges) else float(latest_discharges)
     ratio = latest_discharges / (latest_transfers + 1.0)
@@ -576,26 +555,18 @@ def calculate_kpis(analytics_data: pd.DataFrame) -> dict[str, float | int]:
         ratio = 0.0
 
     positive_intake = (
-        pd.to_numeric(analytics_data[NET_INTAKE_COLUMN], errors="coerce")
-        .fillna(0)
-        .gt(0)
+        pd.to_numeric(analytics_data[NET_INTAKE_COLUMN], errors="coerce").fillna(0).gt(0)
     )
-    streak_groups = positive_intake.ne(
-        positive_intake.shift(fill_value=False)
-    ).cumsum()
+    streak_groups = positive_intake.ne(positive_intake.shift(fill_value=False)).cumsum()
     streaks = positive_intake.groupby(streak_groups).cumsum()
     longest_positive_streak = int(streaks.max()) if not streaks.empty else 0
 
     return {
         "total_children_under_care": int(
-            pd.to_numeric(pd.Series([latest[TOTAL_LOAD_COLUMN]]), errors="coerce")
-            .fillna(0)
-            .iloc[0]
+            pd.to_numeric(pd.Series([latest[TOTAL_LOAD_COLUMN]]), errors="coerce").fillna(0).iloc[0]
         ),
         "net_intake_pressure": int(
-            pd.to_numeric(pd.Series([latest[NET_INTAKE_COLUMN]]), errors="coerce")
-            .fillna(0)
-            .iloc[0]
+            pd.to_numeric(pd.Series([latest[NET_INTAKE_COLUMN]]), errors="coerce").fillna(0).iloc[0]
         ),
         "care_load_volatility_index": volatility,
         "backlog_accumulation_rate": longest_positive_streak,
@@ -603,9 +574,7 @@ def calculate_kpis(analytics_data: pd.DataFrame) -> dict[str, float | int]:
     }
 
 
-def aggregate_by_granularity(
-    prepared_data: pd.DataFrame, granularity: str
-) -> pd.DataFrame:
+def aggregate_by_granularity(prepared_data: pd.DataFrame, granularity: str) -> pd.DataFrame:
     """Aggregate for chart display, retaining end-of-period active loads.
 
     Daily flow values are summed.  CBP and HHS care loads are stocks, so the last
@@ -637,9 +606,7 @@ def aggregate_by_granularity(
     }
     aggregated = frame.resample(frequency).agg(aggregations).dropna(how="all").reset_index()
     aggregated[TOTAL_LOAD_COLUMN] = aggregated[CBP_COLUMN] + aggregated[HHS_COLUMN]
-    aggregated[NET_INTAKE_COLUMN] = (
-        aggregated[TRANSFER_COLUMN] - aggregated[DISCHARGE_COLUMN]
-    )
+    aggregated[NET_INTAKE_COLUMN] = aggregated[TRANSFER_COLUMN] - aggregated[DISCHARGE_COLUMN]
     aggregated[GROWTH_RATE_COLUMN] = (
         aggregated[TOTAL_LOAD_COLUMN]
         .pct_change(fill_method=None)

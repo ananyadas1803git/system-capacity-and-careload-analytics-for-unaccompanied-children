@@ -1,0 +1,23 @@
+[server]
+headless = true
+enableCORS = true
+enableXsrfProtection = true
+fileWatcherType = "none"
+maxUploadSize = 20
+
+[browser]
+gatherUsageStats = false
+
+[theme]
+base = "light"
+primaryColor = "#163B65"
+backgroundColor = "#F5F7FA"
+secondaryBackgroundColor = "#EDF2F7"
+textColor = "#172033"
+font = "sans serif"
+
+[theme.sidebar]
+primaryColor = "#163B65"
+backgroundColor = "#EDF2F7"
+secondaryBackgroundColor = "#FFFFFF"
+textColor = "#172033"

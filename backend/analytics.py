@@ -179,9 +179,7 @@ def filter_reporting_period(
         raise ValueError("start_date must be on or before end_date.")
     filtered = indexed.loc[start:end].copy()
     if filtered.empty:
-        raise AnalyticsError(
-            f"No observations exist between {start.date()} and {end.date()}."
-        )
+        raise AnalyticsError(f"No observations exist between {start.date()} and {end.date()}.")
     return filtered
 
 
@@ -202,9 +200,7 @@ def resample_metrics(
         return frame
 
     frequency: pd.DateOffset = (
-        pd.offsets.Week(weekday=6)
-        if level is TimeGranularity.WEEKLY
-        else pd.offsets.MonthEnd()
+        pd.offsets.Week(weekday=6) if level is TimeGranularity.WEEKLY else pd.offsets.MonthEnd()
     )
 
     stock_columns = [
@@ -242,9 +238,7 @@ def resample_metrics(
     required_loads = {CBP_COLUMN, HHS_COLUMN}
     if required_loads.issubset(aggregated.columns):
         aggregated[TOTAL_LOAD_COLUMN] = aggregated[CBP_COLUMN] + aggregated[HHS_COLUMN]
-    aggregated[NET_INTAKE_COLUMN] = (
-        aggregated[TRANSFER_COLUMN] - aggregated[DISCHARGE_COLUMN]
-    )
+    aggregated[NET_INTAKE_COLUMN] = aggregated[TRANSFER_COLUMN] - aggregated[DISCHARGE_COLUMN]
     aggregated[GROWTH_RATE_COLUMN] = (
         aggregated[TOTAL_LOAD_COLUMN]
         .pct_change(fill_method=None)
@@ -272,9 +266,9 @@ def calculate_backlog_episodes(
     pressure = pd.to_numeric(frame[NET_INTAKE_COLUMN], errors="coerce").fillna(0)
     positive = pressure.gt(0)
     groups = positive.ne(positive.shift(fill_value=False)).cumsum()
-    positive_rows = pd.DataFrame(
-        {NET_INTAKE_COLUMN: pressure, "Episode Group": groups}
-    ).loc[positive]
+    positive_rows = pd.DataFrame({NET_INTAKE_COLUMN: pressure, "Episode Group": groups}).loc[
+        positive
+    ]
 
     columns = [
         "Episode Start",
@@ -353,23 +347,15 @@ def build_operational_summary(
     """Build a JSON-friendly selected-period operational summary."""
     frame = _ensure_datetime_index(daily_metrics)
     imputed_column = next(
-        (
-            column
-            for column in ("Is Imputed Date", "Is_Imputed_Date")
-            if column in frame.columns
-        ),
+        (column for column in ("Is Imputed Date", "Is_Imputed_Date") if column in frame.columns),
         None,
     )
     imputed_dates = (
-        int(frame[imputed_column].fillna(False).astype(bool).sum())
-        if imputed_column
-        else 0
+        int(frame[imputed_column].fillna(False).astype(bool).sum()) if imputed_column else 0
     )
     peak_date = frame[TOTAL_LOAD_COLUMN].idxmax()
     elevated_episodes = (
-        int(backlog_episodes["Elevated"].fillna(False).sum())
-        if not backlog_episodes.empty
-        else 0
+        int(backlog_episodes["Elevated"].fillna(False).sum()) if not backlog_episodes.empty else 0
     )
     current_streak = int(frame[BACKLOG_STREAK_COLUMN].iloc[-1])
 
@@ -384,9 +370,7 @@ def build_operational_summary(
         "latest_net_intake": int(kpis["net_intake_pressure"]),
         "cumulative_net_intake": int(frame[NET_INTAKE_COLUMN].sum()),
         "positive_pressure_days": int(frame[NET_INTAKE_COLUMN].gt(0).sum()),
-        "care_load_volatility_index": float(
-            kpis["care_load_volatility_index"]
-        ),
+        "care_load_volatility_index": float(kpis["care_load_volatility_index"]),
         "longest_backlog_streak": int(kpis["backlog_accumulation_rate"]),
         "current_backlog_streak": current_streak,
         "backlog_threshold_days": int(backlog_threshold_days),
@@ -464,9 +448,7 @@ def calculate_capacity_scenario(
     if cbp_capacity <= 0 or hhs_capacity <= 0:
         raise ValueError("cbp_capacity and hhs_capacity must be positive integers.")
     if not 0 < warning_threshold < critical_threshold:
-        raise ValueError(
-            "Thresholds must satisfy 0 < warning_threshold < critical_threshold."
-        )
+        raise ValueError("Thresholds must satisfy 0 < warning_threshold < critical_threshold.")
 
     frame = _ensure_datetime_index(daily_metrics)
     required = [CBP_COLUMN, HHS_COLUMN, TOTAL_LOAD_COLUMN]
@@ -478,9 +460,7 @@ def calculate_capacity_scenario(
     total_capacity = cbp_capacity + hhs_capacity
     result["CBP Capacity Utilization"] = result[CBP_COLUMN].div(cbp_capacity).mul(100)
     result["HHS Capacity Utilization"] = result[HHS_COLUMN].div(hhs_capacity).mul(100)
-    result["Total Capacity Utilization"] = result[TOTAL_LOAD_COLUMN].div(
-        total_capacity
-    ).mul(100)
+    result["Total Capacity Utilization"] = result[TOTAL_LOAD_COLUMN].div(total_capacity).mul(100)
     result["CBP Capacity Headroom"] = cbp_capacity - result[CBP_COLUMN]
     result["HHS Capacity Headroom"] = hhs_capacity - result[HHS_COLUMN]
     result["Total Capacity Headroom"] = total_capacity - result[TOTAL_LOAD_COLUMN]
@@ -502,21 +482,13 @@ def calculate_capacity_scenario(
         "combined_planning_capacity": int(total_capacity),
         "warning_threshold_percent": float(warning_threshold),
         "critical_threshold_percent": float(critical_threshold),
-        "latest_total_utilization_percent": float(
-            latest["Total Capacity Utilization"]
-        ),
+        "latest_total_utilization_percent": float(latest["Total Capacity Utilization"]),
         "latest_total_headroom": int(latest["Total Capacity Headroom"]),
         "latest_capacity_status": str(latest["Capacity Status"]),
-        "peak_total_utilization_percent": float(
-            result["Total Capacity Utilization"].max()
-        ),
+        "peak_total_utilization_percent": float(result["Total Capacity Utilization"].max()),
         "peak_utilization_date": peak_date.date().isoformat(),
-        "warning_days": int(
-            result["Total Capacity Utilization"].ge(warning_threshold).sum()
-        ),
-        "critical_days": int(
-            result["Total Capacity Utilization"].ge(critical_threshold).sum()
-        ),
+        "warning_days": int(result["Total Capacity Utilization"].ge(warning_threshold).sum()),
+        "critical_days": int(result["Total Capacity Utilization"].ge(critical_threshold).sum()),
         "stress_episodes": int(len(stress_episodes)),
     }
     return CapacityScenarioResult(
@@ -540,9 +512,7 @@ class CapacityAnalyticsEngine:
 
         self._prepared_data = _ensure_datetime_index(prepared)
         report = prepared.attrs.get("validation_report")
-        self._validation_report = (
-            report if isinstance(report, ValidationReport) else None
-        )
+        self._validation_report = report if isinstance(report, ValidationReport) else None
 
     @classmethod
     def from_csv(

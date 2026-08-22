@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
+  <title id="title">Forecast evaluation methodology</title>
+  <desc id="desc">Chronological development, five expanding-window validations with seven-day gaps, embargo, frozen holdout, and promotion decision.</desc>
+  <rect width="1200" height="420" rx="18" fill="#F5F7FA"/>
+  <text x="55" y="55" fill="#163B65" font-family="Arial, sans-serif" font-size="28" font-weight="700">Leakage-safe evaluation methodology</text>
+  <defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#66788A"/></marker></defs>
+  <g stroke="#66788A" stroke-width="3" marker-end="url(#a)"><path d="M245 150 H300"/><path d="M500 150 H555"/><path d="M755 150 H810"/><path d="M1010 150 H1065"/></g>
+  <g font-family="Arial, sans-serif">
+    <g><rect x="45" y="100" width="200" height="100" rx="12" fill="#FFFFFF" stroke="#2E75B6" stroke-width="3"/><text x="145" y="138" text-anchor="middle" fill="#163B65" font-size="17" font-weight="700">Origin-safe features</text><text x="145" y="166" text-anchor="middle" fill="#3F5063" font-size="13">lags · shifted rolls</text><text x="145" y="185" text-anchor="middle" fill="#3F5063" font-size="13">no future fields</text></g>
+    <g><rect x="300" y="100" width="200" height="100" rx="12" fill="#FFFFFF" stroke="#2E75B6" stroke-width="3"/><text x="400" y="138" text-anchor="middle" fill="#163B65" font-size="17" font-weight="700">Development</text><text x="400" y="166" text-anchor="middle" fill="#3F5063" font-size="13">847 origins</text><text x="400" y="185" text-anchor="middle" fill="#3F5063" font-size="13">2023-01-12 → 2025-05-07</text></g>
+    <g><rect x="555" y="100" width="200" height="100" rx="12" fill="#EAF2FA" stroke="#163B65" stroke-width="3"/><text x="655" y="132" text-anchor="middle" fill="#163B65" font-size="17" font-weight="700">5 walk-forward folds</text><text x="655" y="159" text-anchor="middle" fill="#3F5063" font-size="13">56 validation days each</text><text x="655" y="181" text-anchor="middle" fill="#B42318" font-size="13">7-day train/validation gap</text></g>
+    <g><rect x="810" y="100" width="200" height="100" rx="12" fill="#FFF8E6" stroke="#D97706" stroke-width="3"/><text x="910" y="138" text-anchor="middle" fill="#163B65" font-size="17" font-weight="700">Freeze + embargo</text><text x="910" y="166" text-anchor="middle" fill="#3F5063" font-size="13">weights/configurations frozen</text><text x="910" y="185" text-anchor="middle" fill="#3F5063" font-size="13">7 rows excluded</text></g>
+    <g><rect x="1065" y="100" width="100" height="100" rx="12" fill="#FFFFFF" stroke="#167C80" stroke-width="3"/><text x="1115" y="137" text-anchor="middle" fill="#163B65" font-size="16" font-weight="700">Holdout</text><text x="1115" y="164" text-anchor="middle" fill="#3F5063" font-size="13">214 rows</text><text x="1115" y="185" text-anchor="middle" fill="#3F5063" font-size="12">gate only</text></g>
+    <rect x="165" y="270" width="870" height="72" rx="12" fill="#172033"/>
+    <text x="600" y="300" text-anchor="middle" fill="#FFFFFF" font-size="17" font-weight="700">Promotion rule</text>
+    <text x="600" y="327" text-anchor="middle" fill="#DCE7F2" font-size="14">Lowest development OOF MAE + fold majority + worst-fold control + holdout baseline gate + passed leakage audit</text>
+    <text x="600" y="385" text-anchor="middle" fill="#66788A" font-size="13">Final holdout ranking is reported, never used for post-hoc champion selection.</text>
+  </g>
+</svg>

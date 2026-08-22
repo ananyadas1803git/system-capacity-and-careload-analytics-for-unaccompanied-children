@@ -140,10 +140,14 @@ def load_mock_data() -> pd.DataFrame:
 def add_custom_trend(metrics: pd.DataFrame, smoothing_days: int) -> pd.DataFrame:
     """Add a user-controlled daily moving average of Total System Load."""
     frame = metrics.copy()
-    frame[CUSTOM_TREND_COLUMN] = frame[TOTAL_LOAD_COLUMN].rolling(
-        smoothing_days,
-        min_periods=1,
-    ).mean()
+    frame[CUSTOM_TREND_COLUMN] = (
+        frame[TOTAL_LOAD_COLUMN]
+        .rolling(
+            smoothing_days,
+            min_periods=1,
+        )
+        .mean()
+    )
     return frame
 
 
@@ -152,11 +156,7 @@ def aggregate_for_chart(metrics: pd.DataFrame, granularity: str) -> pd.DataFrame
     if granularity == "Daily":
         return metrics.copy()
 
-    frequency = (
-        pd.offsets.Week(weekday=6)
-        if granularity == "Weekly"
-        else pd.offsets.MonthEnd()
-    )
+    frequency = pd.offsets.Week(weekday=6) if granularity == "Weekly" else pd.offsets.MonthEnd()
     last_columns = [
         CBP_COLUMN,
         HHS_COLUMN,
@@ -210,9 +210,7 @@ def calculate_period_change(metrics: pd.DataFrame) -> float:
 def build_change_table(metrics: pd.DataFrame, number_of_rows: int = 10) -> pd.DataFrame:
     """Return the largest absolute daily care-load movements."""
     working = metrics[[TOTAL_LOAD_COLUMN, NET_INTAKE_COLUMN, GROWTH_RATE_COLUMN]].copy()
-    working["Absolute Growth"] = pd.to_numeric(
-        working[GROWTH_RATE_COLUMN], errors="coerce"
-    ).abs()
+    working["Absolute Growth"] = pd.to_numeric(working[GROWTH_RATE_COLUMN], errors="coerce").abs()
     working = working.dropna(subset=["Absolute Growth"])
     if working.empty:
         return pd.DataFrame(
@@ -240,9 +238,7 @@ def build_change_table(metrics: pd.DataFrame, number_of_rows: int = 10) -> pd.Da
 
 def weekday_profile(metrics: pd.DataFrame) -> pd.DataFrame:
     """Calculate average flows for each day of the week."""
-    working = metrics[
-        [INTAKE_COLUMN, TRANSFER_COLUMN, DISCHARGE_COLUMN, NET_INTAKE_COLUMN]
-    ].copy()
+    working = metrics[[INTAKE_COLUMN, TRANSFER_COLUMN, DISCHARGE_COLUMN, NET_INTAKE_COLUMN]].copy()
     working["Weekday Number"] = working.index.dayofweek
     grouped = working.groupby("Weekday Number").mean(numeric_only=True).reindex(range(7))
     grouped.index = [
@@ -320,9 +316,9 @@ def render_load_trend_chart(
         )
     )
     if show_linear_trend and len(chart_data) > 1:
-        y_values = pd.to_numeric(
-            chart_data[TOTAL_LOAD_COLUMN], errors="coerce"
-        ).interpolate(limit_direction="both")
+        y_values = pd.to_numeric(chart_data[TOTAL_LOAD_COLUMN], errors="coerce").interpolate(
+            limit_direction="both"
+        )
         x_values = np.arange(len(chart_data), dtype=float)
         coefficients = np.polyfit(x_values, y_values.to_numpy(dtype=float), 1)
         fitted = np.polyval(coefficients, x_values)
@@ -336,9 +332,7 @@ def render_load_trend_chart(
                 hovertemplate="%{y:,.1f} children<extra></extra>",
             )
         )
-    figure.update_layout(
-        **chart_layout(f"Long-Term System Load Trend ({granularity})", "Children")
-    )
+    figure.update_layout(**chart_layout(f"Long-Term System Load Trend ({granularity})", "Children"))
     figure.update_xaxes(
         rangeslider={"visible": granularity == "Daily"},
         rangeselector={
@@ -372,9 +366,7 @@ def render_flow_trend_chart(chart_data: pd.DataFrame, granularity: str) -> None:
                 hovertemplate="%{y:,.0f} children<extra></extra>",
             )
         )
-    figure.update_layout(
-        **chart_layout(f"System Flow Trends ({granularity})", "Children")
-    )
+    figure.update_layout(**chart_layout(f"System Flow Trends ({granularity})", "Children"))
     figure.update_yaxes(rangemode="tozero")
     st.plotly_chart(figure, width="stretch", config={"displaylogo": False})
 
@@ -384,9 +376,7 @@ def render_cumulative_pressure_chart(
     granularity: str,
 ) -> None:
     """Render cumulative transfers-minus-discharges pressure."""
-    cumulative = pd.to_numeric(
-        chart_data[NET_INTAKE_COLUMN], errors="coerce"
-    ).fillna(0).cumsum()
+    cumulative = pd.to_numeric(chart_data[NET_INTAKE_COLUMN], errors="coerce").fillna(0).cumsum()
     figure = go.Figure(
         go.Scatter(
             x=chart_data.index,
@@ -427,9 +417,7 @@ def render_weekday_profile(metrics: pd.DataFrame) -> None:
                 hovertemplate="%{y:,.1f} average<extra></extra>",
             )
         )
-    figure.update_layout(
-        **chart_layout("Average Daily Flows by Weekday", "Average children/day")
-    )
+    figure.update_layout(**chart_layout("Average Daily Flows by Weekday", "Average children/day"))
     figure.update_layout(barmode="group")
     figure.update_xaxes(title="Day of week")
     figure.update_yaxes(rangemode="tozero")
@@ -478,9 +466,9 @@ def render_monthly_heatmap(metrics: pd.DataFrame) -> None:
 
 def render_growth_distribution(chart_data: pd.DataFrame, granularity: str) -> None:
     """Render period-over-period system-load growth and its distribution."""
-    growth = pd.to_numeric(
-        chart_data[GROWTH_RATE_COLUMN], errors="coerce"
-    ).replace([np.inf, -np.inf], np.nan)
+    growth = pd.to_numeric(chart_data[GROWTH_RATE_COLUMN], errors="coerce").replace(
+        [np.inf, -np.inf], np.nan
+    )
     figure = go.Figure(
         go.Bar(
             x=chart_data.index,
@@ -510,9 +498,7 @@ def render_anomaly_log(selected_data: pd.DataFrame) -> None:
             st.warning("Anomaly fields are unavailable: " + ", ".join(missing))
             return
 
-        flagged = selected_data.loc[
-            selected_data[anomaly_columns].fillna(False).any(axis=1)
-        ]
+        flagged = selected_data.loc[selected_data[anomaly_columns].fillna(False).any(axis=1)]
         if flagged.empty:
             st.success("No logical constraint violations were found in this period.")
             return
@@ -612,9 +598,7 @@ def main() -> None:
         st.error("The reporting-period start must be on or before the end.")
         st.stop()
 
-    selected_data = cleaned_data.loc[
-        pd.Timestamp(start_date):pd.Timestamp(end_date)
-    ].copy()
+    selected_data = cleaned_data.loc[pd.Timestamp(start_date) : pd.Timestamp(end_date)].copy()
     if selected_data.empty:
         st.warning("No data is available for the selected reporting period.")
         st.stop()
@@ -634,9 +618,7 @@ def main() -> None:
     peak_load = int(daily_metrics.loc[peak_date, TOTAL_LOAD_COLUMN])
     average_net_intake = float(daily_metrics[NET_INTAKE_COLUMN].mean())
     total_transfers = float(daily_metrics[TRANSFER_COLUMN].sum())
-    period_offset = float(
-        daily_metrics[DISCHARGE_COLUMN].sum() / (total_transfers + 1)
-    )
+    period_offset = float(daily_metrics[DISCHARGE_COLUMN].sum() / (total_transfers + 1))
 
     st.caption(
         f"Reporting period: {start_date:%d %b %Y}–{end_date:%d %b %Y} "
@@ -714,9 +696,7 @@ def main() -> None:
             change_table,
             width="stretch",
             hide_index=True,
-            column_config={
-                "Growth Rate (%)": st.column_config.NumberColumn(format="%.2f%%")
-            },
+            column_config={"Growth Rate (%)": st.column_config.NumberColumn(format="%.2f%%")},
         )
 
     render_anomaly_log(selected_data)

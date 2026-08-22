@@ -51,7 +51,7 @@
   "aligned_development_rows": 280,
   "challenger_walk_forward_mae": 115.54743195654017,
   "aligned_persistence_walk_forward_mae": 188.1392857142857,
-  "challenger_holdout_mae": 27.906103416668238,
+  "challenger_holdout_mae": 27.906103416668255,
   "persistence_holdout_mae": 37.546728971962615,
   "rationale": "All predefined gates passed."
 }

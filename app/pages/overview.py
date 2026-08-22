@@ -154,11 +154,7 @@ def aggregate_for_chart(metrics: pd.DataFrame, granularity: str) -> pd.DataFrame
     if granularity == "Daily":
         return metrics.copy()
 
-    frequency = (
-        pd.offsets.Week(weekday=6)
-        if granularity == "Weekly"
-        else pd.offsets.MonthEnd()
-    )
+    frequency = pd.offsets.Week(weekday=6) if granularity == "Weekly" else pd.offsets.MonthEnd()
     last_columns = [
         CBP_COLUMN,
         HHS_COLUMN,
@@ -270,11 +266,7 @@ def render_snapshot_insights(
     flow_ratio = total_discharges / (total_transfers + 1)
 
     load_class = (
-        "snapshot-warning"
-        if load_change > 1
-        else "snapshot-positive"
-        if load_change < -1
-        else ""
+        "snapshot-warning" if load_change > 1 else "snapshot-positive" if load_change < -1 else ""
     )
     load_direction = (
         "increased" if load_change > 0 else "decreased" if load_change < 0 else "held steady"
@@ -370,9 +362,7 @@ def render_load_composition_chart(chart_data: pd.DataFrame, granularity: str) ->
             hovertemplate="%{y:,.0f} children<extra></extra>",
         )
     )
-    figure.update_layout(
-        **chart_layout(f"CBP vs HHS Care Load ({granularity})", "Children")
-    )
+    figure.update_layout(**chart_layout(f"CBP vs HHS Care Load ({granularity})", "Children"))
     figure.update_yaxes(rangemode="tozero")
     st.plotly_chart(figure, width="stretch", config={"displaylogo": False})
 
@@ -471,9 +461,7 @@ def render_data_quality_panel(
             st.warning("Anomaly fields are unavailable: " + ", ".join(missing))
             return
 
-        flagged = selected_data.loc[
-            selected_data[anomaly_columns].fillna(False).any(axis=1)
-        ]
+        flagged = selected_data.loc[selected_data[anomaly_columns].fillna(False).any(axis=1)]
         if flagged.empty:
             st.success("No selected-period logical constraint violations were found.")
             return
@@ -561,9 +549,7 @@ def main() -> None:
         st.error("The reporting-period start must be on or before the end.")
         st.stop()
 
-    selected_data = cleaned_data.loc[
-        pd.Timestamp(start_date):pd.Timestamp(end_date)
-    ].copy()
+    selected_data = cleaned_data.loc[pd.Timestamp(start_date) : pd.Timestamp(end_date)].copy()
     if selected_data.empty:
         st.warning("No data is available for the selected reporting period.")
         st.stop()
@@ -577,23 +563,16 @@ def main() -> None:
         st.stop()
 
     anomaly_count = int(
-        selected_data[
-            [TRANSFER_ANOMALY_COLUMN, DISCHARGE_ANOMALY_COLUMN]
-        ].fillna(False).any(axis=1).sum()
+        selected_data[[TRANSFER_ANOMALY_COLUMN, DISCHARGE_ANOMALY_COLUMN]]
+        .fillna(False)
+        .any(axis=1)
+        .sum()
     )
     imputed_column = next(
-        (
-            name
-            for name in ("Is_Imputed_Date", "Is Imputed Date")
-            if name in selected_data.columns
-        ),
+        (name for name in ("Is_Imputed_Date", "Is Imputed Date") if name in selected_data.columns),
         None,
     )
-    imputed_count = (
-        int(selected_data[imputed_column].fillna(False).sum())
-        if imputed_column
-        else 0
-    )
+    imputed_count = int(selected_data[imputed_column].fillna(False).sum()) if imputed_column else 0
 
     st.caption(
         f"Reporting period: {start_date:%d %b %Y}–{end_date:%d %b %Y} "

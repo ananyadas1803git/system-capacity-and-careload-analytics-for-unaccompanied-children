@@ -32,9 +32,7 @@ def get_streamlit_entrypoint() -> Path:
     """
 
     if not STREAMLIT_ENTRYPOINT.is_file():
-        raise FileNotFoundError(
-            f"Streamlit entrypoint was not found: {STREAMLIT_ENTRYPOINT}"
-        )
+        raise FileNotFoundError(f"Streamlit entrypoint was not found: {STREAMLIT_ENTRYPOINT}")
     return STREAMLIT_ENTRYPOINT
 
 
