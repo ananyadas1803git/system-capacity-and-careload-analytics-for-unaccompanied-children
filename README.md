@@ -31,6 +31,32 @@ The project combines a production-style Python analytics backend, data-quality v
 
 [Data card](DATA_CARD.md) · [Model card](MODEL_CARD.md) · [Research report](reports/research_report.md) · [Reproducibility](REPRODUCIBILITY.md) · [Ethical use](docs/ETHICAL_USE.md)
 
+## Quick Start
+
+```bash
+git clone https://github.com/ananyadas1803git/system-capacity-and-careload-analytics-for-unaccompanied-children.git
+cd system-capacity-and-careload-analytics-for-unaccompanied-children
+conda env create -f environment.yml
+conda activate hhs-uac-analytics
+python main.py pipeline --quick --output-dir output/quick_pipeline --force
+python main.py dashboard
+```
+
+Open `http://127.0.0.1:8501` after Streamlit starts. The quick pipeline uses a
+deterministic synthetic fixture and does not overwrite the approved forecasting
+artifacts.
+
+## Repository Guide
+
+- [Installation](#installation)
+- [Run the dashboard](#running-the-dashboard)
+- [Run the API](#running-the-api)
+- [Command-line workflows](#command-line-workflows)
+- [Forecasting methodology and results](#seven-day-multi-model-forecasting)
+- [Data quality](#data-quality-findings)
+- [Reproduce and verify](#verification-status)
+- [Deployment](#deployment)
+
 ## Dashboard Preview
 
 | Capacity overview | Forecast methodology and provenance |
@@ -185,6 +211,8 @@ All data used by this project contains aggregate operational counts. It does not
 │   ├── kpi.py
 │   ├── lightgbm_forecasting.py
 │   ├── logger.py
+│   ├── monitoring.py
+│   ├── pipeline.py
 │   ├── preprocessor.py
 │   ├── report_generator.py
 │   ├── validation.py
@@ -200,14 +228,24 @@ All data used by this project contains aggregate operational counts. It does not
 │   ├── models/
 │   └── forecasting/
 ├── reports/
+├── scripts/
+│   └── generate_reviewer_assets.py
 ├── tests/
+│   ├── test_forecasting_framework.py
 │   ├── test_lightgbm_forecasting.py
-│   └── test_forecasting_framework.py
+│   ├── test_model_api.py
+│   └── test_pipeline_monitoring.py
+├── .github/workflows/ci.yml
+├── Dockerfile
+├── docker-compose.yml
+├── environment.yml
+├── pyproject.toml
 ├── .gitignore
 ├── app_utils.py
 ├── generate_sample_data.py
 ├── main.py
-└── requirements.txt
+├── requirements.txt
+└── requirements-dev.txt
 ```
 
 ---
@@ -586,7 +624,7 @@ The following components have been tested successfully:
 - Data artifact generation
 - HTML and JSON report generation
 - All ASGI API endpoints
-- Thirty focused forecasting, orchestration, monitoring, and API tests
+- Thirty-one focused forecasting, orchestration, monitoring, and API tests
 - Deterministic LightGBM and multi-model training with artifact generation
 
 Run the forecasting tests with:
@@ -596,6 +634,9 @@ python -m unittest discover -s tests -v
 ```
 
 CI runs Ruff lint/format checks, the full test suite, quick end-to-end orchestration, approved-artifact verification, and monitoring on every pull request and push to `main` or `master`.
+
+For the complete reproducibility protocol, dependency assumptions, artifact
+lineage, and known platform constraints, see [REPRODUCIBILITY.md](REPRODUCIBILITY.md).
 
 ---
 
@@ -641,6 +682,17 @@ This project concerns a vulnerable population and should be interpreted carefull
 Computer Science and Engineering student focused on end-to-end data engineering, machine learning, analytics, and deployable research projects.
 
 GitHub: [@ananyadas1803git](https://github.com/ananyadas1803git)
+
+## Contributing, Security, and Citation
+
+- Contribution workflow: [CONTRIBUTING.md](CONTRIBUTING.md)
+- Responsible vulnerability reporting: [SECURITY.md](SECURITY.md)
+- Citation metadata: [CITATION.cff](CITATION.cff)
+- Release history: [CHANGELOG.md](CHANGELOG.md)
+
+No open-source license has currently been selected. Unless a license is added,
+the repository's source code and assets should not be assumed to grant reuse,
+modification, or redistribution rights.
 
 ---
 
