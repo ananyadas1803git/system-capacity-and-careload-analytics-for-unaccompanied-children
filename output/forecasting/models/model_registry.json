@@ -1,6 +1,6 @@
 {
   "registry_version": "2.0.0",
-  "created_at_utc": "2026-08-22T12:12:00.823715+00:00",
+  "created_at_utc": "2026-08-22T12:43:32.197254+00:00",
   "champion": "validation_weighted_ensemble",
   "promotion_status": "promote",
   "models": {
@@ -82,12 +82,13 @@
       "holdout_mae": 27.906103416668255
     }
   },
-  "data_fingerprint_sha256": "340c7d70cddf49837ad2b698f01e99042e3582864fcbce32200acbe03d692885",
+  "data_fingerprint_sha256": "52a994fa234fa89e6a904430afa9f9850c932b7b65d8a01a76b8ae782c4ef541",
   "schema_fingerprint_sha256": "b16014e21dc94b58d9f9bcb01c130fc30e5266a7e027c2334ed3e3610913e868",
-  "fingerprint_algorithm": "canonical-semantic-v1",
+  "fingerprint_algorithm": "canonical-semantic-v2",
+  "fingerprint_float_decimal_places": 10,
   "source_sha256": "061af0a97a1b3bda7a36f0ce8df08b6994847b0a4c402828cf2ef835d4947198",
   "random_seed": 42,
-  "git_commit": "c249fdf632af59106dc46e58406d188e7e74a61c",
+  "git_commit": "e5c7d6e3ef90141bb84e3074f61767315c8daedd",
   "git_worktree_clean": false,
   "training_configuration": {
     "forecast_horizon_days": 7,

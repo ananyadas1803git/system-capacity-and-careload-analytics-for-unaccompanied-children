@@ -2,7 +2,7 @@
 
 ## Supported environment
 
-The verified environment uses Python 3.13 with pinned runtime and development dependencies. Python 3.11–3.13 is supported; CatBoost 1.2.8 does not provide a Python 3.14 wheel. An exact reproduction should use the Python version and package versions recorded in `output/forecasting/models/model_registry.json`.
+The reproducibility target is Python 3.13 with pinned runtime and development dependencies; CatBoost 1.2.8 does not provide a Python 3.14 wheel. An exact reproduction should use Python 3.13 and the package versions recorded in `output/forecasting/models/model_registry.json`.
 
 The project was verified on macOS/Apple Silicon. CI targets Ubuntu Linux. Windows is supported through Python commands and the documented activation syntax, but shell quoting and Docker Desktop setup differ. Use a fresh environment rather than an Anaconda base environment to avoid conflicts with unrelated scientific packages.
 

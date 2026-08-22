@@ -21,6 +21,8 @@ from app_utils import (
 )
 from src.forecasting import (
     CURRENT_LOAD,
+    FINGERPRINT_ALGORITHM,
+    FINGERPRINT_FLOAT_DECIMAL_PLACES,
     PREDICTION_COLUMNS,
     TARGET_ABSOLUTE,
     TARGET_CHANGE,
@@ -83,27 +85,67 @@ def make_config(root: Path | None = None) -> ForecastConfig:
 class ForecastingFrameworkTests(unittest.TestCase):
     """Validate targets, leakage controls, splits, metrics, and schemas."""
 
-    def test_fingerprints_ignore_nonsemantic_dtype_and_datetime_units(self) -> None:
+    def test_frame_fingerprint_ignores_datetime_storage_units(self) -> None:
         index_ns = pd.date_range("2025-01-01", periods=3, freq="D", name="Date")
         index_us = index_ns.as_unit("us")
         first = pd.DataFrame(
             {
-                "count": pd.Series([1, 2, 3], index=index_ns, dtype="int64"),
-                "flag": pd.Series([True, False, True], index=index_ns),
                 "target_date": index_ns + pd.Timedelta(days=7),
             },
             index=index_ns,
         )
         second = pd.DataFrame(
             {
-                "count": pd.Series([1.0, 2.0, 3.0], index=index_us),
-                "flag": pd.Series([True, False, True], index=index_us),
                 "target_date": (index_us + pd.Timedelta(days=7)).as_unit("us"),
             },
             index=index_us,
         )
         self.assertEqual(_frame_fingerprint(first), _frame_fingerprint(second))
         self.assertEqual(_schema_fingerprint(first), _schema_fingerprint(second))
+
+    def test_frame_fingerprint_ignores_equivalent_numeric_dtypes(self) -> None:
+        index = pd.date_range("2025-01-01", periods=3, name="Date")
+        integers = pd.DataFrame({"value": pd.Series([1, 2, 3], index=index)}, index=index)
+        floats = pd.DataFrame(
+            {"value": pd.Series([1.0, 2.0, 3.0], index=index, dtype="float32")},
+            index=index,
+        )
+        self.assertEqual(_frame_fingerprint(integers), _frame_fingerprint(floats))
+        self.assertEqual(_schema_fingerprint(integers), _schema_fingerprint(floats))
+
+    def test_frame_fingerprint_ignores_platform_scale_numeric_noise(self) -> None:
+        index = pd.date_range("2025-01-01", periods=3, name="Date")
+        baseline = pd.DataFrame({"value": [1.25, -0.0, 8_000.0]}, index=index)
+        noisy = baseline.copy()
+        noisy.loc[index[0], "value"] += 1e-12
+        noisy.loc[index[1], "value"] = 0.0
+        self.assertEqual(FINGERPRINT_FLOAT_DECIMAL_PLACES, 10)
+        self.assertEqual(_frame_fingerprint(baseline), _frame_fingerprint(noisy))
+
+    def test_frame_fingerprint_detects_meaningful_numeric_change(self) -> None:
+        index = pd.date_range("2025-01-01", periods=3, name="Date")
+        baseline = pd.DataFrame({"value": [1.25, 2.5, 8_000.0]}, index=index)
+        changed = baseline.copy()
+        changed.loc[index[0], "value"] += 1e-4
+        self.assertNotEqual(_frame_fingerprint(baseline), _frame_fingerprint(changed))
+
+    def test_fingerprints_detect_column_order_and_schema_changes(self) -> None:
+        index = pd.date_range("2025-01-01", periods=2, name="Date")
+        baseline = pd.DataFrame({"count": [1, 2], "flag": [True, False]}, index=index)
+        reordered = baseline.loc[:, ["flag", "count"]]
+        renamed = baseline.rename(columns={"count": "active_count"})
+        for changed in (reordered, renamed):
+            self.assertNotEqual(_frame_fingerprint(baseline), _frame_fingerprint(changed))
+            self.assertNotEqual(_schema_fingerprint(baseline), _schema_fingerprint(changed))
+
+    def test_frame_fingerprint_detects_missing_value_location(self) -> None:
+        index = pd.date_range("2025-01-01", periods=3, name="Date")
+        first = pd.DataFrame({"value": [1.0, np.nan, 3.0]}, index=index)
+        second = pd.DataFrame({"value": [np.nan, 1.0, 3.0]}, index=index)
+        self.assertNotEqual(_frame_fingerprint(first), _frame_fingerprint(second))
+
+    def test_fingerprint_algorithm_version_is_v2(self) -> None:
+        self.assertEqual(FINGERPRINT_ALGORITHM, "canonical-semantic-v2")
 
     def test_change_target_and_absolute_reconstruction(self) -> None:
         index = pd.date_range("2024-01-01", periods=3)

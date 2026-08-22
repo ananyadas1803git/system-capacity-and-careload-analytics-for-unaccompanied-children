@@ -56,6 +56,13 @@ CURRENT_LOAD = "current_total_system_load"
 FORECAST_HORIZON = 7
 MODEL_VERSION = "2.0.0"
 
+# Cross-platform rolling and trigonometric calculations can differ at roughly
+# 1e-12 even when their analytical values are equivalent. Ten decimal places
+# remove that numerical noise while still preserving changes many orders of
+# magnitude smaller than one child in the operational count features.
+FINGERPRINT_FLOAT_DECIMAL_PLACES = 10
+FINGERPRINT_ALGORITHM = "canonical-semantic-v2"
+
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_FEATURE_PATH = PROJECT_ROOT / "data" / "processed" / "uac_capacity_ml_features.parquet"
 DEFAULT_RAW_PATH = PROJECT_ROOT / "data" / "raw" / "HHS_Unaccompanied_Alien_Children_Program.csv"
@@ -395,7 +402,8 @@ def _frame_fingerprint(frame: pd.DataFrame) -> str:
     ``hash_pandas_object`` and dtype strings can change across pandas/Arrow
     releases even when every analytical value is identical. This explicit
     encoding normalizes supported semantic types, datetime resolution, byte
-    order, and missing-value representation.
+    order, sub-precision floating-point noise, signed zero, and missing-value
+    representation. Datetimes retain nanosecond precision.
     """
 
     digest = hashlib.sha256()
@@ -419,9 +427,17 @@ def _frame_fingerprint(frame: pd.DataFrame) -> str:
             digest.update(values.tobytes(order="C"))
         elif semantic == "numeric":
             values = pd.to_numeric(series, errors="raise").to_numpy(dtype="<f8", copy=True)
-            values[np.isnan(values)] = np.float64(np.nan)
+            missing = np.isnan(values)
+            finite = np.isfinite(values)
+            values[finite] = np.round(values[finite], decimals=FINGERPRINT_FLOAT_DECIMAL_PLACES)
+            # Hash missingness independently of numeric bytes so all NaN
+            # payloads and nullable numeric dtypes have one representation.
+            digest.update(missing.astype(np.uint8, copy=False).tobytes(order="C"))
+            values[missing] = 0.0
+            # IEEE-754 distinguishes -0.0 from +0.0 even though they compare
+            # equal; canonical fingerprints intentionally do not.
             values[values == 0] = 0.0
-            digest.update(values.tobytes(order="C"))
+            digest.update(values.astype("<f8", copy=False).tobytes(order="C"))
         else:
             values = [None if pd.isna(value) else str(value) for value in series]
             digest.update(
@@ -3118,7 +3134,8 @@ def train_forecasting_models(
         },
         "data_fingerprint_sha256": prepared.data_fingerprint,
         "schema_fingerprint_sha256": prepared.schema_fingerprint,
-        "fingerprint_algorithm": "canonical-semantic-v1",
+        "fingerprint_algorithm": FINGERPRINT_ALGORITHM,
+        "fingerprint_float_decimal_places": FINGERPRINT_FLOAT_DECIMAL_PLACES,
         "source_sha256": provenance["source_sha256"],
         "random_seed": selected.random_seed,
         **git_metadata,

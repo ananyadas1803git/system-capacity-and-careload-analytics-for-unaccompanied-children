@@ -1,6 +1,6 @@
 {
   "experiment_version": "2.0.0",
-  "created_at_utc": "2026-08-22T12:11:59.344954+00:00",
+  "created_at_utc": "2026-08-22T12:43:30.720050+00:00",
   "target": {
     "change": "total_system_load[t+7] - total_system_load[t]",
     "absolute_reconstruction": "total_system_load[t] + predicted_change_7d[t]",
@@ -40,7 +40,7 @@
         "mae_improvement_vs_persistence_percent": 0.0
       },
       "training_seconds": 0.0,
-      "prediction_seconds": 9.325030259788036e-05,
+      "prediction_seconds": 0.00011279224418103695,
       "feature_count": 0,
       "warning_status": "ok"
     },
@@ -63,7 +63,7 @@
         "mae_improvement_vs_persistence_percent": 28.43808338518979
       },
       "training_seconds": 0.0,
-      "prediction_seconds": 0.00015020626597106457,
+      "prediction_seconds": 0.00016091670840978622,
       "feature_count": 0,
       "warning_status": "ok"
     },
@@ -87,8 +87,8 @@
         "mase_vs_persistence": 2.3675619865236945,
         "mae_improvement_vs_persistence_percent": -136.75619865236945
       },
-      "training_seconds": 0.06533462484367192,
-      "prediction_seconds": 0.002526042051613331,
+      "training_seconds": 0.06643791729584336,
+      "prediction_seconds": 0.002547332551330328,
       "feature_count": 42,
       "warning_status": "ok"
     },
@@ -113,8 +113,8 @@
         "mase_vs_persistence": 2.39316690453226,
         "mae_improvement_vs_persistence_percent": -139.31669045322602
       },
-      "training_seconds": 0.0741065819747746,
-      "prediction_seconds": 0.008631416829302907,
+      "training_seconds": 0.08130145771428943,
+      "prediction_seconds": 0.002537582302466035,
       "feature_count": 42,
       "warning_status": "ok"
     },
@@ -148,8 +148,8 @@
         "mase_vs_persistence": 0.874481102935942,
         "mae_improvement_vs_persistence_percent": 12.5518897064058
       },
-      "training_seconds": 0.22901395917870104,
-      "prediction_seconds": 0.003105583367869258,
+      "training_seconds": 0.22552529210224748,
+      "prediction_seconds": 0.0031940394546836615,
       "feature_count": 42,
       "warning_status": "ok"
     },
@@ -179,8 +179,8 @@
         "mase_vs_persistence": 1.2077738558263622,
         "mae_improvement_vs_persistence_percent": -20.77738558263622
       },
-      "training_seconds": 1.5275140409357846,
-      "prediction_seconds": 0.005058415932580829,
+      "training_seconds": 1.5588889988139272,
+      "prediction_seconds": 0.005431457655504346,
       "feature_count": 42,
       "warning_status": "ok"
     },
@@ -212,8 +212,8 @@
         "mase_vs_persistence": 0.9543853094359697,
         "mae_improvement_vs_persistence_percent": 4.561469056403033
       },
-      "training_seconds": 0.27526166569441557,
-      "prediction_seconds": 0.006620165891945362,
+      "training_seconds": 0.24213308398611844,
+      "prediction_seconds": 0.006709373788908124,
       "feature_count": 42,
       "warning_status": "ok"
     },
@@ -239,8 +239,8 @@
         "mase_vs_persistence": 1.9275732157207839,
         "mae_improvement_vs_persistence_percent": -92.75732157207838
       },
-      "training_seconds": 0.0921332067809999,
-      "prediction_seconds": 0.0003382901195436716,
+      "training_seconds": 0.09675737516954541,
+      "prediction_seconds": 0.00021383492276072502,
       "feature_count": 0,
       "warning_status": "warnings recorded"
     },
@@ -275,8 +275,8 @@
         "mase_vs_persistence": 2.732480327146978,
         "mae_improvement_vs_persistence_percent": -173.24803271469784
       },
-      "training_seconds": 2.7301634156610817,
-      "prediction_seconds": 0.0003687920980155468,
+      "training_seconds": 2.4777050842531025,
+      "prediction_seconds": 0.00038220686838030815,
       "feature_count": 0,
       "warning_status": "warnings recorded"
     },

@@ -28,6 +28,8 @@ from backend.utils import json_safe, utc_now_iso
 from src.feature_engineering import build_feature_matrix
 from src.forecasting import (
     CURRENT_LOAD,
+    FINGERPRINT_ALGORITHM,
+    FINGERPRINT_FLOAT_DECIMAL_PLACES,
     TARGET_ABSOLUTE,
     TARGET_CHANGE,
     FeatureProcessor,
@@ -318,6 +320,16 @@ def _load_approved_artifacts(config: PipelineConfig) -> PipelineResult:
     leakage = json.loads(required["leakage"].read_text(encoding="utf-8"))
     predictions = pd.read_csv(required["predictions"])
     validate_prediction_schema(predictions)
+    if registry.get("fingerprint_algorithm") != FINGERPRINT_ALGORITHM:
+        raise PipelineError(
+            "Approved model fingerprint algorithm is unsupported: "
+            f"expected {FINGERPRINT_ALGORITHM!r}, got "
+            f"{registry.get('fingerprint_algorithm')!r}. Retrain explicitly."
+        )
+    if registry.get("fingerprint_float_decimal_places") != FINGERPRINT_FLOAT_DECIMAL_PLACES:
+        raise PipelineError(
+            "Approved model fingerprint precision does not match the runtime. Retrain explicitly."
+        )
     if registry.get("data_fingerprint_sha256") != prepared.data_fingerprint:
         raise PipelineError(
             "Approved model data fingerprint does not match regenerated features. "
@@ -333,6 +345,7 @@ def _load_approved_artifacts(config: PipelineConfig) -> PipelineResult:
         "validation_status": validation.report.status,
         "engineered_columns": len(engineered.columns),
         "model_action": "loaded_and_verified_approved_artifacts",
+        "fingerprint_algorithm": FINGERPRINT_ALGORITHM,
         "champion": registry["champion"],
         "promotion_status": registry["promotion_status"],
         "models_compared": len(comparison["models"]),

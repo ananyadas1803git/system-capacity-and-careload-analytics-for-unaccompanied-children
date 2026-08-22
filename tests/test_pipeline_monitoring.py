@@ -10,6 +10,7 @@ from unittest.mock import patch
 
 import pandas as pd
 
+from src.forecasting import FINGERPRINT_ALGORITHM
 from src.monitoring import MonitoringConfig, evaluate_monitoring
 from src.pipeline import PipelineConfig, run_pipeline
 
@@ -42,6 +43,7 @@ class PipelineMonitoringTests(unittest.TestCase):
         result = run_pipeline(PipelineConfig())
         self.assertEqual(result.mode, "approved-artifact-verification")
         self.assertEqual(result.stages["model_action"], "loaded_and_verified_approved_artifacts")
+        self.assertEqual(result.stages["fingerprint_algorithm"], FINGERPRINT_ALGORITHM)
         self.assertTrue(result.stages["leakage_audit_passed"])
 
     def test_monitoring_is_finite_and_uses_approved_champion(self) -> None:
