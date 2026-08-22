@@ -566,6 +566,7 @@ not be interpreted as validated operational uncertainty bounds.
 
 | Artifact | Location |
 |---|---|
+| Canonical prepared training frame | `output/forecasting/audits/canonical_prepared_forecast_frame.parquet` |
 | Model registry and serialized candidates | `output/forecasting/models/` |
 | Model comparison, folds, intervals, and promotion | `output/forecasting/metrics/` |
 | Development OOF and final holdout predictions | `output/forecasting/predictions/` |
@@ -624,7 +625,7 @@ The following components have been tested successfully:
 - Data artifact generation
 - HTML and JSON report generation
 - All ASGI API endpoints
-- Thirty-seven focused forecasting, orchestration, monitoring, and API tests
+- Forty-four focused forecasting, orchestration, monitoring, and API tests
 - Deterministic LightGBM and multi-model training with artifact generation
 
 Run the forecasting tests with:
