@@ -144,8 +144,8 @@ class ForecastingFrameworkTests(unittest.TestCase):
         second = pd.DataFrame({"value": [np.nan, 1.0, 3.0]}, index=index)
         self.assertNotEqual(_frame_fingerprint(first), _frame_fingerprint(second))
 
-    def test_fingerprint_algorithm_version_is_v2(self) -> None:
-        self.assertEqual(FINGERPRINT_ALGORITHM, "canonical-semantic-v2")
+    def test_fingerprint_algorithm_version_is_v3(self) -> None:
+        self.assertEqual(FINGERPRINT_ALGORITHM, "canonical-semantic-v3")
 
     def test_change_target_and_absolute_reconstruction(self) -> None:
         index = pd.date_range("2024-01-01", periods=3)

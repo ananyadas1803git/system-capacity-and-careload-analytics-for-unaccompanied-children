@@ -1,6 +1,6 @@
 {
   "registry_version": "2.0.0",
-  "created_at_utc": "2026-08-22T12:43:32.197254+00:00",
+  "created_at_utc": "2026-08-22T13:24:59.312015+00:00",
   "champion": "validation_weighted_ensemble",
   "promotion_status": "promote",
   "models": {
@@ -84,11 +84,27 @@
   },
   "data_fingerprint_sha256": "52a994fa234fa89e6a904430afa9f9850c932b7b65d8a01a76b8ae782c4ef541",
   "schema_fingerprint_sha256": "b16014e21dc94b58d9f9bcb01c130fc30e5266a7e027c2334ed3e3610913e868",
-  "fingerprint_algorithm": "canonical-semantic-v2",
+  "fingerprint_algorithm": "canonical-semantic-v3",
   "fingerprint_float_decimal_places": 10,
+  "verification_contract_version": "canonical-prepared-dataset-v3",
+  "prepared_dataset_contract": {
+    "artifact": "output/forecasting/audits/canonical_prepared_forecast_frame.parquet",
+    "artifact_sha256": "6bd3e756a7257537f0ba9e6207d61729bd0d1efa1b58e6b9653fbe3687ad0ec2",
+    "data_fingerprint_sha256": "52a994fa234fa89e6a904430afa9f9850c932b7b65d8a01a76b8ae782c4ef541",
+    "schema_fingerprint_sha256": "b16014e21dc94b58d9f9bcb01c130fc30e5266a7e027c2334ed3e3610913e868",
+    "feature_recipe_version": "prepared-forecast-features-v1",
+    "forecast_configuration_sha256": "0141e6c9ce78ed21741cae1b3d2ca70c89a1f02a07775ba6dc32898b994a1a41",
+    "processed_feature_artifact": "data/processed/uac_capacity_ml_features.parquet",
+    "processed_feature_artifact_sha256": "a16401f0f17c4e8d65e356408652d886b7ebd4567074fbe9cf1736ce3b1f4288",
+    "row_count": 1068,
+    "date_range": {
+      "start": "2023-01-12T00:00:00",
+      "end": "2025-12-14T00:00:00"
+    }
+  },
   "source_sha256": "061af0a97a1b3bda7a36f0ce8df08b6994847b0a4c402828cf2ef835d4947198",
   "random_seed": 42,
-  "git_commit": "e5c7d6e3ef90141bb84e3074f61767315c8daedd",
+  "git_commit": "c3d221d41fad19c5629f432f35ba77a760fa48c2",
   "git_worktree_clean": false,
   "training_configuration": {
     "forecast_horizon_days": 7,

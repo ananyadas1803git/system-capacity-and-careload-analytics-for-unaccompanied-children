@@ -17,7 +17,7 @@ The data is suitable for software testing, portfolio demonstration, and methods 
 | `data/processed/preprocessing_report.json` | Transformation counts, hashes, and audit metadata |
 | `data/processed/validation_report.json` | Machine-readable validation findings |
 
-The raw file SHA-256 recorded by the approved model registry is `061af0a97a1b3bda7a36f0ce8df08b6994847b0a4c402828cf2ef835d4947198`. The canonical processed-model fingerprint is `52a994fa234fa89e6a904430afa9f9850c932b7b65d8a01a76b8ae782c4ef541`, generated with `canonical-semantic-v2` numeric canonicalization.
+The raw file SHA-256 recorded by the approved model registry is `061af0a97a1b3bda7a36f0ce8df08b6994847b0a4c402828cf2ef835d4947198`. The canonical prepared-model fingerprint is `52a994fa234fa89e6a904430afa9f9850c932b7b65d8a01a76b8ae782c4ef541`, governed by the `canonical-semantic-v3` / `canonical-prepared-dataset-v3` verification contract.
 
 ## Schema
 

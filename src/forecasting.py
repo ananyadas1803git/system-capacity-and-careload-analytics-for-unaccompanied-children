@@ -61,7 +61,9 @@ MODEL_VERSION = "2.0.0"
 # remove that numerical noise while still preserving changes many orders of
 # magnitude smaller than one child in the operational count features.
 FINGERPRINT_FLOAT_DECIMAL_PLACES = 10
-FINGERPRINT_ALGORITHM = "canonical-semantic-v2"
+FINGERPRINT_ALGORITHM = "canonical-semantic-v3"
+PREPARED_DATASET_CONTRACT_VERSION = "canonical-prepared-dataset-v3"
+PREPARED_FEATURE_RECIPE_VERSION = "prepared-forecast-features-v1"
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_FEATURE_PATH = PROJECT_ROOT / "data" / "processed" / "uac_capacity_ml_features.parquet"
@@ -151,6 +153,9 @@ class ForecastConfig:
         root = self.output_dir
         return {
             "registry": root / "models" / "model_registry.json",
+            "canonical_prepared_frame": (
+                root / "audits" / "canonical_prepared_forecast_frame.parquet"
+            ),
             "comparison": root / "metrics" / "model_comparison_metrics.json",
             "fold_metrics": root / "metrics" / "fold_metrics.csv",
             "oof_predictions": root / "predictions" / "development_oof_predictions.csv",
@@ -467,6 +472,25 @@ def _schema_fingerprint(frame: pd.DataFrame) -> str:
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 
+def forecast_configuration_fingerprint(config: ForecastConfig) -> str:
+    """Hash every analytical forecast setting independently of local paths."""
+
+    payload = {
+        "horizon_days": config.horizon_days,
+        "holdout_fraction": config.holdout_fraction,
+        "cv_splits": config.cv_splits,
+        "cv_test_size": config.cv_test_size,
+        "gap_days": config.gap_days,
+        "random_seed": config.random_seed,
+        "capacity_reference": config.capacity_reference,
+        "correlation_threshold": config.correlation_threshold,
+        "maximum_missing_fraction": config.maximum_missing_fraction,
+        "worst_fold_ratio_limit": config.worst_fold_ratio_limit,
+    }
+    encoded = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
+
+
 def _write_json(path: Path, payload: Mapping[str, Any]) -> None:
     with _atomic_target(path) as temporary:
         temporary.write_text(
@@ -480,6 +504,15 @@ def _write_csv(path: Path, frame: pd.DataFrame) -> None:
     export.attrs.clear()
     with _atomic_target(path) as temporary:
         export.to_csv(temporary, index=False, date_format="%Y-%m-%d", lineterminator="\n")
+
+
+def _write_parquet(path: Path, frame: pd.DataFrame) -> None:
+    """Atomically persist the exact training frame with its index and dtypes."""
+
+    export = frame.copy()
+    export.attrs.clear()
+    with _atomic_target(path) as temporary:
+        export.to_parquet(temporary, engine="pyarrow", index=True)
 
 
 def _read_feature_artifact(path: Path) -> pd.DataFrame:
@@ -3117,6 +3150,19 @@ def train_forecasting_models(
         joblib.dump(interval_bundle, temporary)
     model_files["lightgbm_quantiles"] = str(interval_path.relative_to(PROJECT_ROOT))
 
+    # This is the exact prepared frame consumed by model selection and final
+    # fitting. Verification compares fresh platform-derived values against this
+    # canonical artifact before trusting its stable registry fingerprint.
+    canonical_prepared_path = paths["canonical_prepared_frame"]
+    _write_parquet(canonical_prepared_path, prepared.frame)
+    canonical_prepared_artifact_sha256 = _sha256(canonical_prepared_path)
+    feature_artifact_sha256 = _sha256(selected.feature_path)
+    forecast_config_sha256 = forecast_configuration_fingerprint(selected)
+    prepared_date_range = {
+        "start": prepared.frame.index.min().isoformat(),
+        "end": prepared.frame.index.max().isoformat(),
+    }
+
     registry = {
         "registry_version": MODEL_VERSION,
         "created_at_utc": utc_now_iso(),
@@ -3136,6 +3182,19 @@ def train_forecasting_models(
         "schema_fingerprint_sha256": prepared.schema_fingerprint,
         "fingerprint_algorithm": FINGERPRINT_ALGORITHM,
         "fingerprint_float_decimal_places": FINGERPRINT_FLOAT_DECIMAL_PLACES,
+        "verification_contract_version": PREPARED_DATASET_CONTRACT_VERSION,
+        "prepared_dataset_contract": {
+            "artifact": str(canonical_prepared_path.relative_to(PROJECT_ROOT)),
+            "artifact_sha256": canonical_prepared_artifact_sha256,
+            "data_fingerprint_sha256": prepared.data_fingerprint,
+            "schema_fingerprint_sha256": prepared.schema_fingerprint,
+            "feature_recipe_version": PREPARED_FEATURE_RECIPE_VERSION,
+            "forecast_configuration_sha256": forecast_config_sha256,
+            "processed_feature_artifact": str(selected.feature_path.relative_to(PROJECT_ROOT)),
+            "processed_feature_artifact_sha256": feature_artifact_sha256,
+            "row_count": len(prepared.frame),
+            "date_range": prepared_date_range,
+        },
         "source_sha256": provenance["source_sha256"],
         "random_seed": selected.random_seed,
         **git_metadata,
@@ -3242,7 +3301,11 @@ def experiment_summary(result: ForecastExperimentResult) -> dict[str, Any]:
 __all__ = [
     "CURRENT_LOAD",
     "FORECAST_HORIZON",
+    "FINGERPRINT_ALGORITHM",
+    "FINGERPRINT_FLOAT_DECIMAL_PLACES",
     "MODEL_NAMES",
+    "PREPARED_DATASET_CONTRACT_VERSION",
+    "PREPARED_FEATURE_RECIPE_VERSION",
     "PREDICTION_COLUMNS",
     "TARGET_ABSOLUTE",
     "TARGET_CHANGE",
@@ -3261,6 +3324,7 @@ __all__ = [
     "drift_forecast",
     "expanding_window_folds",
     "experiment_summary",
+    "forecast_configuration_fingerprint",
     "optimize_ensemble_weights",
     "order_prediction_intervals",
     "persistence_forecast",
